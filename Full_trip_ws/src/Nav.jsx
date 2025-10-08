@@ -5,6 +5,7 @@ function Nav(){
             <li> Hello</li>
             <li>Hello</li>
             <li>sd</li>
+            <li>Hamada</li>
         </ul>
     )
 }
