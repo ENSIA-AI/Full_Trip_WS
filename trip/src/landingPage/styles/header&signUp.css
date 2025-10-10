@@ -1,0 +1,231 @@
+@import url('../../index.css');
+
+header {
+  background: url(../images/header.jpg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 80px;
+  border-radius: 0 0 25% 25%;
+  position: relative sticky;
+}
+
+header>.slogo {
+  display: flex;
+  gap: 10px;
+  animation: pulse-text 2.6s infinite;
+}
+
+header>.slogo>img,
+h1 {
+  width: 25px;
+  font-size: 25px;
+}
+
+header>.navBar {
+  list-style: none;
+  display: flex;
+  place-content: center;
+  gap: 20px;
+  font-weight: 600;
+}
+
+header>.navBar>li {
+  cursor: pointer;
+}
+
+header>.SignLogIn {
+  display: flex;
+  gap: 20px;
+}
+
+header>.SignLogIn>button {
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: var(--btn2-color);
+  animation: pulse 2s infinite;
+}
+
+header>.SignLogIn>button:hover {
+  scale: 1.02;
+  transition: 0.4s;
+  background-color: var(--btn2-color-hover);
+}
+
+header>.SignLogIn>button:active {
+  scale: 0.95;
+  transition: 0s;
+  background-color: var(--btn2-color);
+  animation: none;
+}
+
+
+form {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  background-color: var(--white-cl);
+  padding: 20px 50px;
+  border-radius: 20px;
+  gap: 20px;
+  width: 500px;
+  position: absolute;
+  left: 392px;
+  margin-top: 25px;
+  box-shadow: 0px 0px 10px 4px var(--bx-shadow);
+  animation: pop-up 1s ease;
+  z-index: 1;
+}
+
+@keyframes pop-up {
+  from{
+    scale: 0;
+  }
+  to{
+    scale: 1;
+  }
+}
+
+form>label,
+legend {
+  display: flex;
+  font-weight: 600;
+  font-size: 17px;
+  gap: 10px;
+}
+
+form>label>input {
+  border-radius: 20px;
+  padding: 5px 12px;
+  border: solid 1.3px var(--weak-black-cl);
+  font-size: 15px;
+  width: 300px;
+  outline: none;
+}
+
+form>label>input:focus,
+textarea:focus {
+  animation: outline-At 0.4s infinite alternate;
+}
+
+form>label>input[type=email] {
+  margin-left: 40px;
+}
+
+form>label>input[type=password] {
+  margin-left: 5px;
+}
+
+form>label>textarea {
+  border-radius: 10px;
+  padding: 5px 12px;
+  width: 400px;
+  height: 150px;
+  font-size: 15px;
+  outline: none;
+}
+
+form>button {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--btn3-color), var(--btn1-color));
+  color: var(--white-cl);
+}
+
+form>button:hover {
+  animation: jello-horizontal 1.9s both infinite;
+}
+
+@keyframes jello-horizontal {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+
+  30% {
+    transform: scale3d(1.15, 0.75, 1);
+  }
+
+  40% {
+    transform: scale3d(0.75, 1.15, 1);
+  }
+
+  50% {
+    transform: scale3d(1.05, 0.85, 1);
+  }
+
+  65% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+
+  75% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+
+@keyframes outline-At {
+  from {
+    border-top-color: var(--btn1-color);
+    border-right-color: var(--btn1-color);
+    border-bottom-color: var(--btn3-color);
+    border-left-color: var(--btn3-color);
+  }
+
+  to {
+    border-bottom-color: var(--btn1-color);
+    border-left-color: var(--btn1-color);
+    border-right-color: var(--btn3-color);
+    border-top-color: var(--btn3-color);
+  }
+}
+
+@keyframes pulse-text {
+  0% {
+    opacity: 1;
+    scale: 1;
+  }
+
+  30% {
+    scale: 0.95;
+  }
+
+  50% {
+    opacity: 0.6;
+    scale: 0.95;
+  }
+
+  100% {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0px 0px 0px 0px rgba(58, 38, 100, 1);
+  }
+
+  50% {
+    box-shadow: 0px 0px 0px 10px rgba(58, 38, 100, 0);
+  }
+
+  100% {
+    box-shadow: 0px 0px 0px 0px rgba(58, 38, 100, 0);
+  }
+}

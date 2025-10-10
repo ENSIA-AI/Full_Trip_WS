@@ -1,0 +1,23 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --btn1-color: #e74211;
+  --btn1-color-hover: #f1643a;
+  --btn2-color-hover: #9362fe;
+  --btn2-color: #b695fe;
+  --btn3-color: #ffd600;
+  --white-cl: white;
+  --strong-black-cl: black;
+  --weak-black-cl: #080808;
+  --bx-shadow: rgba(95, 39, 23, 0.68);
+}
+
+body {
+  background: url(./landingPage/images/bg.jpg);
+  line-height: 1.5;
+  font-family: 'poppins', sans-serif;
+}
