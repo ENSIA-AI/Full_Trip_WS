@@ -10,7 +10,7 @@
   background-repeat: no-repeat;
   background-position: center;
   height: fit-content;
-  padding: 100px 100px 50px;
+  padding: 70px 100px 50px;
   gap: 10px;
   border-style: none;
 }
@@ -21,7 +21,6 @@
   font-weight: bold;
   text-align: center;
   color: var(--white-cl);
-
 }
 
 .main-page>p:nth-child(2) {
@@ -75,7 +74,7 @@
 }
 
 .main-page>.popular-places-tit {
-  margin: 100px auto 20px;
+  margin: 70px auto 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,7 +103,45 @@ hr {
 }
 
 .images>img {
-  width: 250px;
+  width: 240px;
+  height: 140px;
   border-radius: 20px;
   cursor: pointer;
+}
+
+.review {
+  background-color:var(--transparent-bg-cl);
+  border-radius: 50px;
+  margin:82px 100px;
+  padding:72px 100px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review >li{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: space-between;
+  width: 100px;
+  gap: 10px;
+}
+
+.review >li:nth-child(2){
+  gap: 45px;
+}
+.review >li:nth-child(3){
+  gap: 55px;
+}
+
+.review >li >h1{
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.review >li >small{
+  font-size: 13px;
+  font-weight: 100;
 }
