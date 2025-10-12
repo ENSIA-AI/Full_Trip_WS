@@ -1,0 +1,115 @@
+@import url('../../index.css');
+
+.explore-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.explore-page>p {
+  color: red;
+  font-size: 14px;
+  font-weight: 550;
+}
+
+.explore-page>h1 {
+  width: 600px;
+  font-size: 2.5rem;
+  margin-bottom: 70px;
+  animation: smothAppearing 1s linear;
+  animation-timeline: view();
+  animation-range: entry 0 cover 30%;
+}
+
+.explore-page>form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 30px 150px;
+  gap: 20px;
+}
+
+.explore-page>form>label {
+  background-color: var(--transparent-bg-cl);
+  border-radius: 20px;
+  padding: 10px 15px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+}
+
+.explore-page>form>label>input {
+  font-size: 14px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: 200px;
+}
+
+.explore-page>form>label>input[type=number]::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  display: none;
+}
+
+.explore-page>form>button {
+  width: 220px;
+  background: linear-gradient(135deg, var(--btn1-color), var(--btn3-color));
+  cursor: pointer;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  padding: 10px 25px;
+}
+
+.explore-page>form>button:active {
+  background: linear-gradient(135deg, var(--btn3-color), var(--btn1-color));
+  transition: 100ms;
+}
+
+.explore-page>nav {
+  display: flex;
+  align-items: flex-start;
+  margin: 30px 100px 15px;
+  gap: 30px;
+}
+
+.explore-page>nav>button {
+  border: 2px dotted transparent;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: transparent;
+  outline: none;
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
+.explore-page>nav>button:hover {
+  color: var(--btn1-color);
+}
+
+.explore-page>nav>button.active {
+  border: 2px dotted var(--btn1-color);
+  color: var(--btn1-color);
+}
+
+.explore-page>.images>img {
+  margin-bottom: 70px;
+  animation-timeline: view();
+  animation-range: entry 0 cover 30%;
+}
+
+@keyframes smothAppearing {
+  from {
+    opacity: 0;
+    clip-path: inset(100% 100% 0 0);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}

@@ -8,14 +8,37 @@ export default function Header() {
   let [btnContent, setBtnContent] = React.useState('Sign Up');
   const [navBarContent] = React.useState(['Stays', 'Flights', 'Car rental', 'Airport taxis', 'attractions']);
   const navContent = navBarContent.map(navContent => (
-    <li key={navContent}>{navContent}</li>
+    <li tabindex="0" key={navContent}>{navContent}</li>
   ))
+
   function showForm() {
     setFormAppear(true);
   }
 
+  React.useEffect(() => {
+    const home = document.querySelector('.main-page');
+    const header = document.querySelector('header');
+    if (formAppear) {
+
+      if (home) home.classList.add('dimmed');
+      if (header) header.classList.add('dimmed');
+
+      document.body.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+      home.classList.remove('dimmed');
+      header.classList.remove('dimmed');
+    }
+  }, [formAppear]);
+
+
   return (
-    <>
+    <div className='header-div'>
       <header>
         <div className="slogo">
           <img src={titIcon}></img>
@@ -28,6 +51,6 @@ export default function Header() {
       </header>
       {formAppear && <SignUpForm InContent={setBtnContent}
         formAppearing={setFormAppear} />}
-    </>
+    </div>
   )
 }
