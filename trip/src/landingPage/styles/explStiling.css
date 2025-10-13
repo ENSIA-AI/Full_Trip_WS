@@ -20,7 +20,7 @@
   margin-bottom: 70px;
   animation: smothAppearing 1s linear;
   animation-timeline: view();
-  animation-range: entry 0 cover 30%;
+  animation-range: entry 0 cover 23%;
 }
 
 .explore-page>form {
@@ -98,8 +98,6 @@
 
 .explore-page>.images>img {
   margin-bottom: 70px;
-  animation-timeline: view();
-  animation-range: entry 0 cover 30%;
 }
 
 @keyframes smothAppearing {
