@@ -3,9 +3,21 @@ import { useState } from 'react'
 import tripImg from '../images/place1.jpg'
 
 export default function Explore() {
+  let [images, setImages] = useState(['TouristPlace/tourist-Place1.jpg', 'TouristPlace/tourist-Place2.jpg', 'TouristPlace/tourist-Place3.jpg', 'TouristPlace/tourist-Place4.jpg', 'TouristPlace/tourist-Place5.jpg', 'TouristPlace/tourist-Place6.jpg', 'TouristPlace/tourist-Place7.jpeg', 'TouristPlace/tourist-Place8.jpg'])
+  let image = images.map((img) => (
+    <img data-aos='fade-up' src={img} key={img} />
+  ))
   let [active, setActive] = useState('All');
   const catigories = ['All', 'Recommended', 'Beach', 'Park', 'Nature', 'Mountain']
 
+  const Catigories = catigories.map((cat) => (
+    <button
+      key={cat}
+      onClick={() => setActive(cat)}
+      className={active === cat ? 'active' : ''}
+    >
+      {cat}</button>
+  ))
   const [location, setLocation] = useState(false);
   function onsubmit(dataform) {
     const location = dataform.get('location');

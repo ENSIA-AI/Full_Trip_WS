@@ -1,6 +1,10 @@
 import '../styles/homeStyle.css'
 import tripImg from '../images/place1.jpg'
 export default function Home() {
+  let [images, setImages] = useState(['TouristPlace/tourist-Place1.jpg', 'TouristPlace/tourist-Place2.jpg', 'TouristPlace/tourist-Place3.jpg', 'TouristPlace/tourist-Place4.jpg'])
+  let image = images.map((img) => (
+    <img data-aos='fade-up' src={img} key={img} />
+  ))
   const scrollToTripForm = () => {
     const explorePage = document.querySelector('.explore-page')
     if (explorePage) {

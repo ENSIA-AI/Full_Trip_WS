@@ -1,0 +1,98 @@
+@import url(../../index.css);
+
+.about-us {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+  height: 100vh;
+  margin: 15px 90px;
+  justify-content: center;
+  gap: 50px;
+}
+
+.about-us>.content-container>div>h1 {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  width: fit-content;
+  font-size: 2.2rem;
+  font-weight: bold;
+}
+
+.about-us>.content-container>.header-about-us {
+  margin-bottom: 50px;
+}
+
+.about-us>.content-container>div>div {
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-us>.content-container>.header-about-us>p,
+.about-us>.content-container>div>div>div>p {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.about-us>.content-container>div>div> {
+  display: grid;
+  grid-template-columns: 1fr, 1fr;
+  align-items: center;
+}
+
+img[alt=second] {
+  width: 70px;
+}
+
+img[alt=third] {
+  width: 70px;
+  position: absolute;
+  bottom:-20px;
+  left: 13px;
+}
+
+#trip-i {
+  font-size: 70px;
+  background: linear-gradient(90deg, var(--btn1-color), var(--btn3-color));
+  background-clip: text;
+  color: transparent;
+}
+
+#trip-i2 {
+  font-size: 40px;
+  background: linear-gradient(90deg, var(--btn1-color), var(--btn3-color));
+  background-clip: text;
+  color: transparent;
+  position: absolute;
+  bottom: 0px;
+}
+
+.about-us>.content-container>div>div>div{
+  position: relative;
+}
+
+img[alt=trip]{
+  border-radius: 50%;
+  height: 400px;
+  width: 450px;
+  animation:float 3.2s infinite alternate;
+  box-shadow: 0px 0px 25px 10px var(--bx-shadow);
+}
+
+@keyframes float {
+  0%{
+    transform: translateX(-10px);
+    transition: 0.4s;
+  }
+  50%{
+    transition: 0.4s;
+    transform: translateX(10px);
+  }
+  100%{
+    transition: 0.4s;
+    transform: translateX(0);
+  }
+}

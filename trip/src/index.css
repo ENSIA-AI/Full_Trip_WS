@@ -7,9 +7,9 @@
 :root {
   --btn1-color: #e74211;
   --btn1-color-hover: #f1643a;
+  --btn2-color: #b695fe;
   --btn2-color-hover: #9362fe;
   --violet-cl: #7d1dd6;
-  --btn2-color: #b695fe;
   --btn3-color: #ffd600;
   --white-cl: white;
   --strong-black-cl: black;
@@ -19,6 +19,7 @@
 }
 
 body {
+  overflow-x: hidden;
   background: url(./landingPage/images/bg.jpg);
   line-height: 1.5;
   font-family: 'poppins', sans-serif;
