@@ -25,6 +25,7 @@ export default function Explore() {
     if (location !== '') {
       setLocation(true);
     }
+
   }
 
   useEffect(() => {
@@ -33,20 +34,20 @@ export default function Explore() {
 
   return (
     <div className='explore-page'>
-      <p data-aos='fade-up'>EXPLORE NOW</p>
-      <h1 data-aos='fade-up'>Find Your Dream Destination</h1>
-      <small data-aos='fade-up'>Fill in the fields below to find the best spot for your next tour</small>
+      <p>EXPLORE NOW</p>
+      <h1>Find Your Dream Destination</h1>
+      <small>Fill in the fields below to find the best spot for your next tour</small>
       <form className='trip-form' action={onsubmit}>
-        <label data-aos='fade-up'>
+        <label>
           {location ? (<i class='bxr  bx-location-check'  ></i>) : (<i class='bxr  bx-location'  ></i>)}<input name='location' type='text' placeholder='Location'></input>
         </label>
-        <label data-aos='fade-up'>
+        <label>
           <i class='bxr  bx-wallet-note'  ></i><input type='number' placeholder='Budget'></input>
         </label>
-        <label data-aos='fade-up'>
+        <label>
           <i class='bxr  bx-calendar-minus'  ></i><input type='date' placeholder='Date'></input>
         </label>
-        <button data-aos='fade-left'><i class='bxr  bx-search'  ></i> Search</button>
+        <button><i class='bxr  bx-search'  ></i> Search</button>
       </form>
       <nav data-aos='zoom-out'>
         {Catigories}

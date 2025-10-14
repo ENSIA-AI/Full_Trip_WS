@@ -19,7 +19,7 @@
   margin-bottom: 70px;
   animation: smothAppearing 1s linear;
   animation-timeline: view();
-  animation-range: entry 0 cover 23%;
+  animation-range: entry 0 cover 30%;
 }
 
 .explore-page>form {
