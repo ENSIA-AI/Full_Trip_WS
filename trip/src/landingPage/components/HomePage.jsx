@@ -16,8 +16,7 @@ export default function Home() {
   };
   return (
     <>
-      <div className='main-page'>
-        <p>Unlock Your Travel Dreams With Us!</p>
+      <div>
         <p>Discover the world most adventurus places ,life is so short for a trip.</p>
         <button onClick={scrollToTripForm}>GET STARTED <i class='bxr  bx-arrow-right'  ></i> </button>
         <div className='popular-places-tit'>
@@ -29,7 +28,7 @@ export default function Home() {
           <img src={tripImg} />
           <img src={tripImg} />
         </div>
-      </div>
+      </div >
       <ul className="review">
         <li>
           <h1>10</h1>

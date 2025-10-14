@@ -96,18 +96,18 @@
 }
 
 .explore-page>.images {
-  margin-left:50px;
+  margin-left: 50px;
   display: block;
   width: 1150px;
 }
+
 .explore-page>.images>img {
-<<<<<<< HEAD
+
   margin-bottom: 70px;
   animation-timeline: view();
   animation-range: entry 0 cover 30%;
-=======
   margin: 10px 18px;
->>>>>>> c9377dee0eb52dc5d8b83b46d1114eb46d7fae95
+
 }
 
 @keyframes smothAppearing {
