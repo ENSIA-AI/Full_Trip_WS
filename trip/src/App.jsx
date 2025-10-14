@@ -1,6 +1,8 @@
 import Header from './landingPage/components/Header'
 import Home from './landingPage/components/HomePage'
 import Explore from './landingPage/components/Explore'
+import AboutUs from './landingPage/components/AboutUs'
+import Feedback from './landingPage/components/Feedback/Feedback'
 
 function App() {
   return (
@@ -8,6 +10,8 @@ function App() {
       <Header />
       <Home />
       <Explore />
+      <AboutUs />
+      <Feedback />
     </>
   )
 }

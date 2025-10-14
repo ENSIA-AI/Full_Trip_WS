@@ -1,10 +1,13 @@
 import '../styles/homeStyle.css'
-import tripImg from '../images/place1.jpg'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 
 export default function Home() {
+  let [images, setImages] = useState(['TouristPlace/tourist-Place1.jpg', 'TouristPlace/tourist-Place2.jpg', 'TouristPlace/tourist-Place3.jpg', 'TouristPlace/tourist-Place4.jpg'])
+  let image = images.map((img) => (
+    <img data-aos='fade-up' src={img} key={img} />
+  ))
   const scrollToTripForm = () => {
     const explorePage = document.querySelector('.explore-page')
     if (explorePage) {
@@ -15,7 +18,7 @@ export default function Home() {
     }
   };
   useEffect(() => {
-    Aos.init({ duration: 2000 })
+    Aos.init({ duration: 1700 })
   }, [])
   return (
     <>
@@ -27,10 +30,7 @@ export default function Home() {
           <span data-aos='fade-right'>Popular places</span><hr data-aos='fade-right' />
         </div>
         <div className='images'>
-          <img data-aos='fade-up' src={tripImg} />
-          <img data-aos='fade-up' src={tripImg} />
-          <img data-aos='fade-up' src={tripImg} />
-          <img data-aos='fade-up' src={tripImg} />
+          {image}
         </div>
       </div>
       <ul className="review">

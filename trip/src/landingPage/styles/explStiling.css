@@ -5,7 +5,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
 }
 
 .explore-page>p {
@@ -96,8 +95,13 @@
   color: var(--btn1-color);
 }
 
+.explore-page>.images {
+  margin-left:50px;
+  display: block;
+  width: 1150px;
+}
 .explore-page>.images>img {
-  margin-bottom: 70px;
+  margin: 10px 18px;
 }
 
 @keyframes smothAppearing {

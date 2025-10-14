@@ -109,6 +109,11 @@ hr {
   cursor: pointer;
 }
 
+.images>img:hover {
+  scale: 1.03;
+  transition: 0.5s;
+}
+
 .review {
   background-color:var(--transparent-bg-cl);
   border-radius: 50px;
