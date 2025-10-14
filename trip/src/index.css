@@ -25,3 +25,12 @@ body {
   font-family: 'poppins', sans-serif;
 }
 
+::-webkit-scrollbar{
+  width: 10px;
+  background-color: #eee;
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: var(--btn1-color);
+  border-radius: 25%;
+}

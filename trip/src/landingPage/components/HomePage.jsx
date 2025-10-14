@@ -1,5 +1,8 @@
 import '../styles/homeStyle.css'
-import tripImg from '../images/place1.jpg'
+import { useEffect, useState } from 'react';
+import Aos from 'aos'
+import 'aos/dist/aos.css'
+
 export default function Home() {
   let [images, setImages] = useState(['TouristPlace/tourist-Place1.jpg', 'TouristPlace/tourist-Place2.jpg', 'TouristPlace/tourist-Place3.jpg', 'TouristPlace/tourist-Place4.jpg'])
   let image = images.map((img) => (
@@ -14,37 +17,38 @@ export default function Home() {
       });
     }
   };
+  useEffect(() => {
+    Aos.init({ duration: 1700 })
+  }, [])
   return (
     <>
-      <div>
-        <p>Discover the world most adventurus places ,life is so short for a trip.</p>
-        <button onClick={scrollToTripForm}>GET STARTED <i class='bxr  bx-arrow-right'  ></i> </button>
+      <div className='main-page'>
+        <p data-aos='fade-down'>Unlock Your Travel Dreams With Us!</p>
+        <p data-aos='fade-left'>Discover the world most adventurus places ,life is so short for a trip.</p>
+        <button data-aos='zoom-in' onClick={scrollToTripForm}>GET STARTED <i class='bxr  bx-arrow-right'  ></i> </button>
         <div className='popular-places-tit'>
-          <span>Popular places</span><hr />
+          <span data-aos='fade-right'>Popular places</span><hr data-aos='fade-right' />
         </div>
         <div className='images'>
-          <img src={tripImg} />
-          <img src={tripImg} />
-          <img src={tripImg} />
-          <img src={tripImg} />
+          {image}
         </div>
-      </div >
+      </div>
       <ul className="review">
-        <li>
-          <h1>10</h1>
-          <small>World Of Experiences</small>
+        <li data-aos='zoom-in'>
+          <h1 data-aos='fade-right'>10</h1>
+          <small data-aos='fade-left'>World Of Experiences</small>
         </li>
-        <li>
-          <h1>4K+</h1>
-          <small>Fine Destination</small>
+        <li data-aos='zoom-in'>
+          <h1 data-aos='fade-right'>4K+</h1>
+          <small data-aos='fade-left'>Fine Destination</small>
         </li>
-        <li>
-          <h1>10K+</h1>
-          <small>Customer Reviews</small>
+        <li data-aos='zoom-in'>
+          <h1 data-aos='fade-right'>10K+</h1>
+          <small data-aos='fade-left'>Customer Reviews</small>
         </li>
-        <li>
-          <h1>5.6</h1>
-          <small>Overall Rating</small>
+        <li data-aos='zoom-in'>
+          <h1 data-aos='fade-right'>5.6</h1>
+          <small data-aos='fade-left'>Overall Rating</small>
         </li>
       </ul>
     </>
