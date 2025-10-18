@@ -3,6 +3,7 @@ import Home from './landingPage/components/HomePage'
 import Explore from './landingPage/components/Explore'
 import AboutUs from './landingPage/components/AboutUs'
 import Feedback from './landingPage/components/Feedback/Feedback'
+import Footer from './landingPage/components/Footer'
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Explore />
       <AboutUs />
       <Feedback />
+      <Footer />
     </>
   )
 }

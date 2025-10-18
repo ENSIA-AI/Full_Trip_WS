@@ -8,15 +8,24 @@ export default function Home() {
   let image = images.map((img) => (
     <img data-aos='fade-up' src={img} key={img} />
   ))
-  const scrollToTripForm = () => {
-    const explorePage = document.querySelector('.explore-page')
+  function scrollToTripForm() {
+    const explorePage = document.querySelector('.explore-page');
+    const locationInput = document.getElementById('LocInp');
+
+    const scrlTop = window.scrollY + explorePage.getBoundingClientRect().top;
+    const offset = window.innerHeight * 0.18;
+
     if (explorePage) {
-      explorePage.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+      window.scrollTo({
+        top: scrlTop - offset,
+        behavior: 'smooth'
+      })
+      setTimeout(() => {
+        locationInput.focus()
+      }, 1000);
     }
   };
+
   useEffect(() => {
     Aos.init({ duration: 1700 })
   }, [])

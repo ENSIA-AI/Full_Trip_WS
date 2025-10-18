@@ -1,5 +1,5 @@
 import '../styles/explStiling.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect} from 'react'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 
@@ -38,7 +38,7 @@ export default function Explore() {
       <small data-aos='fade-up'>Fill in the fields below to find the best spot for your next tour</small>
       <form className='trip-form' action={onsubmit}>
         <label data-aos='fade-up'>
-          {location ? (<i class='bxr  bx-location-check'  ></i>) : (<i class='bxr  bx-location'  ></i>)}<input name='location' type='text' placeholder='Location'></input>
+          {location ? (<i class='bxr  bx-location-check'  ></i>) : (<i class='bxr  bx-location'  ></i>)}<input   id='LocInp' name='location' type='text' placeholder='Location'></input>
         </label>
         <label data-aos='fade-up'>
           <i class='bxr  bx-wallet-note'  ></i><input type='number' placeholder='Budget'></input>

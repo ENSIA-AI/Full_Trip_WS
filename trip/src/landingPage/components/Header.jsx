@@ -8,7 +8,7 @@ import 'aos/dist/aos.css'
 export default function Header() {
   const [formAppear, setFormAppear] = React.useState(false);
   let [btnContent, setBtnContent] = React.useState('Sign Up');
-  const [navBarContent] = React.useState(['Stays', 'Flights', 'Car rental', 'Airport taxis', 'attractions']);
+  const [navBarContent] = React.useState(['Stays', 'Flights', 'Airport taxis', 'attractions']);
   const navContent = navBarContent.map(navContent => (
     <li data-aos='zoom-in' tabindex="0" key={navContent}>{navContent}</li>
   ))
