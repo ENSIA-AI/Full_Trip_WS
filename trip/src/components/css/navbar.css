@@ -1,0 +1,114 @@
+* { 
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+:root {
+    --btn1-color: #e74211;
+    --btn1-color-hover: #f1643a;
+    --btn2-color: #b695fe;
+    --btn2-color-hover: #9362fe;
+    --violet-cl: #7d1dd6;
+    --btn3-color: #ffd600;
+    --white-cl: white;
+    --strong-black-cl: black;
+    --weak-black-cl: #080808;
+    --bx-shadow: rgba(95, 39, 23, 0.68);
+    --transparent-bg-cl: rgba(200, 32, 56, 0.15);
+    --transparent-bg-cl2: rgba(100, 75, 80, 0.2);
+    --navbar : 
+}
+
+@keyframes Logo {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.navbar {
+  background: #333 url('./picss/bg.jpg') no-repeat center center;
+  background-size: cover;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+
+}
+
+
+.logo { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+    animation-name: Logo;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    
+
+}
+.logo img { 
+    height: 20px;
+}
+.logo h2 { 
+    font-size: 0.9rem;
+}
+ul { 
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+a  { 
+    font-size: 1rem;
+    color: var(--violet-cl);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+
+}
+
+a:hover { 
+    color: var(--btn2-color);
+    border-bottom: 2px solid var(--btn2-color);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    transform: scale(1.2);
+    transition: 300ms ease-in-out;
+}
+.buttons { 
+    display : flex;
+    gap: 0.4rem;
+}
+
+button { 
+    padding: 5px 5px;
+    border: none;
+    border-radius: 20px;
+    background-color: var(--btn1-color);
+    color: var(--white-cl);
+    font-size: 0.75rem;
+    cursor: pointer;
+    text-align: center;
+    height: 30px;
+    width: 80px;
+}
+
+
+
+
+
+

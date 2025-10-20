@@ -11,7 +11,13 @@
   },
   "dependencies": {
     "react": "^19.1.1",
+<<<<<<< Updated upstream:TWS/package.json
     "react-dom": "^19.1.1"
+=======
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.4",
+    "typed.js": "^2.1.0"
+>>>>>>> Stashed changes:trip/package.json
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
