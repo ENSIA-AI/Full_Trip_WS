@@ -16,6 +16,8 @@ export default function Header() {
   function showForm() {
     setFormAppear(true);
   }
+
+  
   React.useEffect(() => {
     Aos.init({ duration: 1700 })
   }, [])

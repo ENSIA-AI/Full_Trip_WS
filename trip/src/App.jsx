@@ -7,11 +7,15 @@ import Feedback from './landingPage/components/Feedback/Feedback'
 function App() {
   return (
     <>
-      <Header />
+      {/* Testing Profile */}
+    <Header/>
+
+
+      {/* <Header />
       <Home />
       <Explore />
       <AboutUs />
-      <Feedback />
+      <Feedback /> */}
     </>
   )
 }
