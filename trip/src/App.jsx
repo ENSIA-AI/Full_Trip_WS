@@ -4,12 +4,15 @@ import Explore from './landingPage/components/Explore'
 import AboutUs from './landingPage/components/AboutUs'
 import Feedback from './landingPage/components/Feedback/Feedback'
 
+{/* Testing will remove later*/}
+
+import ProfileHeader from './UserProfile/ProfileHeader'
+
 function App() {
   return (
     <>
       {/* Testing Profile */}
-    <Header/>
-
+      <ProfileHeader/>
 
       {/* <Header />
       <Home />
