@@ -1,0 +1,152 @@
+@import url('../../index.css');
+
+.main-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: url(../images/airport.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: fit-content;
+  padding: 70px 100px 50px;
+  gap: 10px;
+  border-style: none;
+}
+
+.main-page>p:first-child {
+  font-size: 3rem;
+  width: 700px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--white-cl);
+}
+
+.main-page>p:nth-child(2) {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--white-cl);
+}
+
+.main-page>button {
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 8px 15px;
+  background-color: var(--btn1-color);
+  color: var(--white-cl);
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.main-page>button>i {
+  font-size: 25px;
+  font-weight: 100;
+  opacity: 0.8;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.main-page>button:hover {
+  background-color: var(--btn1-color-hover);
+  transform: translateX(3px);
+  box-shadow: -3px 1px 3px 3px var(--bx-shadow);
+  transition: 0.4s;
+}
+
+.main-page>button:hover>i {
+  opacity: 1;
+  font-weight: 600;
+  transform: translateX(6px);
+}
+
+.main-page>button:active {
+  background-color: var(--btn1-color);
+  transform: translateX(0px);
+  box-shadow: none;
+  transition: 0s;
+}
+
+.main-page>.popular-places-tit {
+  margin: 70px auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+span {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--white-cl);
+}
+
+hr {
+  display: inline-block;
+  width: 400px;
+  border: none;
+  border-top: 2px solid var(--btn1-color);
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.images {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.images>img {
+  width: 240px;
+  height: 140px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.images>img:hover {
+  scale: 1.03;
+  transition: 0.5s;
+}
+
+.review {
+  background-color:var(--transparent-bg-cl);
+  border-radius: 50px;
+  margin:82px 100px;
+  padding:72px 100px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review >li{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: space-between;
+  width: 100px;
+  gap: 10px;
+}
+
+.review >li:nth-child(2){
+  gap: 45px;
+}
+.review >li:nth-child(3){
+  gap: 55px;
+}
+
+.review >li >h1{
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.review >li >small{
+  font-size: 13px;
+  font-weight: 100;
+}

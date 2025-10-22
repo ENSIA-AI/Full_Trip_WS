@@ -1,0 +1,92 @@
+@import url('../../../../index.css');
+
+.client-op {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+  justify-content: center;
+  margin: 50px 100px 70px;
+  gap: 20px;
+}
+
+.client-op>.text-comp {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 15px;
+  flex-direction: column;
+  position: relative;
+}
+
+.client-op>.text-comp>p {
+  color: var(--btn1-color);
+  text-indent: 20px;
+}
+
+.client-op>.text-comp>h1 {
+  width: 600px;
+  font-size: 2.2rem;
+}
+
+.bx-star {
+  font-size: 24px;
+  border: none;
+  background-color: gold;
+}
+
+
+.client-op>img {
+  width: 400px;
+  border-radius: 50px;
+}
+
+.client-op>.text-comp>button {
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 15px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  position: absolute;
+  top: 275px;
+  left: 350px;
+  color: var(--white-cl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--btn1-color), var(--btn1-color-hover));
+}
+
+.client-op>.text-comp>button>#flesh-btn {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 20px;
+}
+
+.client-op>.text-comp>button:hover{
+  transition: 0.3s;
+  transform: translateX(10px);
+  box-shadow: -10px 2px 12px 2px var(--bx-shadow);
+}
+
+.client-op>.text-comp>button:active{
+  transition: 0s;
+  transform: translateX(0px);
+  box-shadow:none;
+}
+
+.client-op>.text-comp>button:hover>#flesh-btn {
+  color: var(--white-cl);
+  transition: 0.3s;
+  transform: translateX(4px);
+}
+
+img[alt=pers] {
+  width: 50px;
+  height: 50px;
+}
+
+img[alt=star] {
+  width: 34px;
+}
