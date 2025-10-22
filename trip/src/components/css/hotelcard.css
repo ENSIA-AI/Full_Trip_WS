@@ -52,7 +52,6 @@
     left : 0;
     right: 0;
     bottom: 0;
-    z-index: 2;
     background: linear-gradient(to bottom ,rgba(0,0,0,0.1) , rgba(0,0,0,0.8));
     opacity: 0;
     transition: opacity 0.2s ;
@@ -62,7 +61,7 @@
     padding: 1rem;
 }
 
-.hotel-card:hover .hotel-overlay { 
+.hotelcard:hover .hotel-overlay { 
     opacity : 1;
 }
 
@@ -83,6 +82,16 @@
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
+}
+
+.favorite-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+ 
+  cursor: pointer;
+}
+
+.favotire-btn.clicked { 
+    background-color: var(--btn1-color);
 }
 
 

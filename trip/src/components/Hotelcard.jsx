@@ -1,8 +1,7 @@
 import './css/hotelcard.css';
 import bg from '../assets/Hotelsposter.jpg';
 function Hotelcard() { 
-
-
+   
     function onfavorite() { 
         alert("clicked"); 
         }

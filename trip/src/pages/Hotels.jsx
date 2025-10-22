@@ -16,6 +16,7 @@ function Hotels() {
             <Hotelcard></Hotelcard>
             <Hotelcard></Hotelcard>
             <Hotelcard></Hotelcard>
+            <Hotelcard></Hotelcard>
          </div>
     </div>
 
