@@ -10,12 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "aos": "^2.3.4",
     "react": "^19.1.1",
+<<<<<<< Updated upstream:TWS/package.json
 <<<<<<< Updated upstream:TWS/package.json
     "react-dom": "^19.1.1"
 =======
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.4",
+    "typed.js": "^2.1.0"
+>>>>>>> Stashed changes:trip/package.json
+=======
+    "react-dom": "^19.1.1",
     "typed.js": "^2.1.0"
 >>>>>>> Stashed changes:trip/package.json
   },
@@ -28,6 +34,6 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
-    "vite": "^7.1.7"
+    "vite": "^7.1.10"
   }
 }

@@ -1,5 +1,9 @@
 
+<<<<<<< Updated upstream
 import Searcharea from "../components/Searchbar";
+=======
+import Searcharea from "../components/Searchbar.jsx";
+>>>>>>> Stashed changes
 import Navbar from '../components/Navbar.jsx';
 function Flights() {
     return (<>
