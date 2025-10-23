@@ -7,13 +7,11 @@ import '../index.css'
 import './ProfileHeader.css'
 
 
-function ProfileHeader() {
+function ProfileHeader({Username="User",U_type="Regular"}) {
 
-    const Username="Zakarya"
-    const U_type="Regular User"
     return (<>
         <nav>
-            <button className="PrimaryB"><FontAwesomeIcon icon={faArrowLeft} style={{ color: "#ffffff",fontWeight:"bold",fontSize:"1.2em" }} /></button>
+            <button className="PrimaryB"><FontAwesomeIcon icon={faArrowLeft} style={{ color: "#ffffff",fontWeight:"bold",fontSize:"1em" }} /></button>
             <img src={Logo} alt="Logo"></img>
             <div className="Profile_Username">
                 <div>

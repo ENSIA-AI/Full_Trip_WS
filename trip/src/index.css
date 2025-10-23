@@ -1,12 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
+
 :root {
   --btn1-color: #e74211;
-  --btn1-color-hover: rgba(231, 66, 17,90%);
+  --btn1-color-hover: rgba(231, 66, 17, 90%);
   --btn2-color: #b695fe;
   --btn2-color-hover: #9362fe;
   --violet-cl: #7d1dd6;
@@ -25,12 +28,25 @@ body {
   font-family: 'poppins', sans-serif;
 }
 
-::-webkit-scrollbar{
+.PrimaryB {
+  padding: 10px 15px;
+  color: white;
+  background-color: var(--btn1-color);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.PrimaryB:hover {
+  background-color: var(--btn1-color-hover);
+}
+
+::-webkit-scrollbar {
   width: 10px;
   background-color: #eee;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
   background-color: var(--btn1-color);
   border-radius: 25%;
 }

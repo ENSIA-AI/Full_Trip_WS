@@ -6,13 +6,15 @@ import Feedback from './landingPage/components/Feedback/Feedback'
 
 {/* Testing will remove later*/}
 
-import ProfileHeader from './UserProfile/ProfileHeader'
+
+import UserProfile from './UserProfile/UserProfile'
 
 function App() {
   return (
     <>
       {/* Testing Profile */}
-      <ProfileHeader/>
+      <UserProfile Username='Zakarya' U_type='Regular User'/>
+
 
       {/* <Header />
       <Home />
