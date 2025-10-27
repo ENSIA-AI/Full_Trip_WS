@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "aos": "^2.3.4",
+    "country-state-city": "^3.2.1",
+    "libphonenumber-js": "^1.12.25",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.4",
     "typed.js": "^2.1.0"
   },
   "devDependencies": {
