@@ -12,6 +12,7 @@ import top8 from './pics/top8.jpg'
 import top9 from './pics/top9.jpg'
 import top10 from './pics/top10.jpg'
 
+
 import './css/page.css'
 function Hotels() {
 
@@ -37,7 +38,7 @@ function Hotels() {
 
         <Navbar></Navbar>
         <div className="top-hotels">
-            <h1>World TOP 10 HOTELS</h1>
+            <h1>TOP HOTELS</h1>
             <section className="container">
                 <div className="slider-wrapper">
                     <div className="slider">
@@ -135,7 +136,9 @@ function Hotels() {
             </section>
         </div>
         <div className="second-section" >
-        <h1>Wanaa reserve ?? </h1>
+
+        <h1>RESERVE YOUR SPOT</h1>
+        
         </div>
         <div className="output">
             <Searcharea></Searcharea>

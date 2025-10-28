@@ -6,6 +6,24 @@
   box-sizing: border-box;
 }
 
+@keyframes typing {
+
+  from  { 
+   width: 0;
+  }
+
+  to { 
+    width: 100%;
+  }
+  
+}
+
+@keyframes blink { 
+  50% { 
+    border-color: transparent;
+  }
+}
+
 :root {
   --btn1-color: #e74211;
   --btn1-color-hover: #f1643a;
@@ -160,14 +178,19 @@ h1 {
   white-space: nowrap;
 }
 
-.second-section h2{ 
+.second-section h1{ 
  background-color: white;
  margin: 10px auto;
   text-align: center;
   width: 80%;
   border-radius: 2rem;
- 
   background-color: var(--btn1-color);
   color: white;
-
+  margin-inline: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 1px solid;
+ /* animation: typing 5s steps(18) forwards infinite, blink 1s step-end infinite; */
 }
+
+
