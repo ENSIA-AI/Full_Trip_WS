@@ -35,7 +35,7 @@ function Banner({ Username = "User" }) {
     Shuffle(); //A call before the interval
     const timer = setInterval(() => {
       Shuffle();
-    }, 3000);
+    }, 2500);
     return () => clearInterval(timer);
   }, []);
 
@@ -47,8 +47,6 @@ function Banner({ Username = "User" }) {
             className="BannerIc"
             icon={Icons[index]}
             style={{
-              fontSize: "12em",
-              opacity: "0.7",
               animation: animate ? "Pop 2s ease-in-out" : "",
             }}
           ></FontAwesomeIcon>

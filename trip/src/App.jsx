@@ -4,16 +4,18 @@ import Explore from './landingPage/components/Explore'
 import AboutUs from './landingPage/components/AboutUs'
 import Feedback from './landingPage/components/Feedback/Feedback'
 
-{/* Testing will remove later*/}
+
+{/* Testing will remove later*/ }
 
 
 import UserProfile from './UserProfile/UserProfile'
 
 function App() {
-  return (
+
+    return (
     <>
       {/* Testing Profile */}
-      <UserProfile Username='Zakarya' U_type='Regular User'/>
+      <UserProfile Username='Zakarya' U_type='Regular User' />
 
 
       {/* <Header />
@@ -22,7 +24,8 @@ function App() {
       <AboutUs />
       <Feedback /> */}
     </>
-  )
+    )
+
 }
 
 export default App

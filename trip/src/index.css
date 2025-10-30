@@ -19,11 +19,12 @@
   --weak-black-cl: #080808;
   --bx-shadow: rgba(95, 39, 23, 0.68);
   --transparent-bg-cl: rgba(200, 32, 56, 0.15);
+  /* Main Colors: */
+  --Primary-Color: #ffc400;
+  --Hover-Color: #ffc7bf;
 
 
 
-
-  
 
 }
 
@@ -54,5 +55,5 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--btn1-color);
-  border-radius: 25%;
+  border-radius: 15px;
 }
