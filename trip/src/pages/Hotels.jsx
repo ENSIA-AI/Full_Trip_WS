@@ -11,6 +11,8 @@ import top7 from './pics/top7.jpg'
 import top8 from './pics/top8.jpg'
 import top9 from './pics/top9.jpg'
 import top10 from './pics/top10.jpg'
+import hotel from './pics/hotel.png'
+import Footer2 from"../components/Footer2"
 
 
 import './css/page.css'
@@ -37,12 +39,11 @@ function Hotels() {
     return (<>
 
         <Navbar></Navbar>
-        <div className="top-hotels">
-            <h1>TOP HOTELS</h1>
-            <section className="container">
-                <div className="slider-wrapper">
-                    <div className="slider">
+        <h1 className="header"> <img src={hotel} className="icon" /> Reserve Your Spot </h1>
 
+        <section className="container">
+            <div className="slider-wrapper">
+                <div className="slider">
                     <div className="slide">
                         <img id="slide-1" src={top1} alt="top1" />
                         <div className="pic-overlay">
@@ -131,17 +132,14 @@ function Hotels() {
                         <a href="#slide-9"></a>
                         <a href="#slide-10"></a>
                     </div>
-                    </div>
                 </div>
-            </section>
-        </div>
-        <div className="second-section" >
+            </div>
+        </section>
 
-        <h1>RESERVE YOUR SPOT</h1>
-        
-        </div>
         <div className="output">
-            <Searcharea></Searcharea>
+            <div className="search">
+                <Searcharea></Searcharea>
+            </div>
             <div className="outputarea">
                 <Hotelcard></Hotelcard>
                 <Hotelcard></Hotelcard>
@@ -150,7 +148,7 @@ function Hotels() {
                 <Hotelcard></Hotelcard>
             </div>
         </div>
-
+      <Footer2></Footer2>
     </>);
 
 }

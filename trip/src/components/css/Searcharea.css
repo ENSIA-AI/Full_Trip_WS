@@ -22,23 +22,26 @@
   }
 
 ::placeholder { 
-  color: var(--btn1-color);
+  color: black;
   opacity: 1;
 }
 
+
 .inforamtions { 
   display: flex;
-  gap: 3px;
+  gap: 10px;
   align-items: center;
   flex-direction: column;
-  width:  92vw;
+  width:  70vw;
   margin : 15px auto;
   border: 2px solid var(--btn1-color-hover);
-  padding: 15px;;
+  padding: 20px 20px;
   border-radius: 10px;
   background-color: var(--btn1-color-hover);
   box-shadow: 5px 5px 10px var(--weak-black-cl);
-  opacity: 0.8;
+  opacity: 1;
+  z-index: 100;
+
 }
 
 input[type="text"], input[type="date"], input[type="number"], input[type="persons"], input[type="password"] {
@@ -46,17 +49,18 @@ input[type="text"], input[type="date"], input[type="number"], input[type="person
   border: 1px solid var(--strong-black-cl);
   border-radius: 5px;
   font-size: 16px;
-  width: 40vw;
+  width: 30vw;
   box-shadow: 2px 2px 5px var(--btn1-color-hover);
-  color:var(--btn1-color);
+  color:black;
 }
 
 input[type="text"], input[type="number"], input[type="persons"], input[type="password"] { 
-  width: 80vw;
+  width: 60vw;
+  color:black;
 }
 
 .form { 
-  width: 80vw;
+  width: 60vw;
   height: 40px;
   background-color: var(--btn1-color);
   font-size: 1.75rem;
@@ -69,8 +73,14 @@ input[type="text"], input[type="number"], input[type="persons"], input[type="pas
   background-color: white;
   color: var(--btn1-color);
   cursor: pointer;
+  width: 60vw;
+  scale:1.1;
 }
 
+
+.persons input{ 
+  width: 20vw;
+}
 
 
 

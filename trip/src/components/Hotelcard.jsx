@@ -2,22 +2,24 @@ import './css/hotelcard.css';
 import bg from '../assets/Hotelsposter.jpg';
 function Hotelcard() { 
    
+    const button = document.getElementById("button");
     function onfavorite() { 
-        alert("clicked"); 
+         button.style.background.color= red;
+         console.log(button.background);
         }
 
 return ( 
     <div className="hotelcard"> 
          <img src={bg} alt="This is the hotel  image" className="hotle-poster" />
-         <div className="hotel-overlay">
-                    <button className="favorite-btn" onClick={onfavorite}>
-                        🤍
-                    </button>
-                </div>
+         
          <div className="hotel-info">
-         <h3>Hotle name</h3>
-         <h3> hotel country</h3>
-         <h3>hotel distace form downtown</h3>
+         <h3>Name</h3>
+         <h3>City</h3>
+         <h3>Country</h3>
+         <h3>Rating: ⭐⭐⭐⭐</h3>
+         <div className="purchase-button"> 
+            <button>Book</button>
+         </div>
          </div>
     </div>
 ); 

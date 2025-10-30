@@ -21,13 +21,14 @@
     color: var(--btn1-color); 
     transition: transfrom 0.2s;
     height: 100%;
-    margin : 10px;
     flex-direction: column;
-    box-shadow : 10px 10px 10px var(--btn1-color)
+    box-shadow : 10px 10px 10px var(--btn1-color);
+   
 }
 
 .hotelcard:hover { 
-    transform: translateY(-5px);
+    transition: 300ms ease-in-out;
+    scale: 1.1;
 
     
 }
@@ -45,53 +46,41 @@
     height: 100%;
     object-fit: cover ;
 }
-
-.hotel-overlay { 
-    position: absolute;
-    top: 0;
-    left : 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom ,rgba(0,0,0,0.1) , rgba(0,0,0,0.8));
-    opacity: 0;
-    transition: opacity 0.2s ;
+.hotel-info { 
     display: flex;
+    justify-content: center;
+    align-items: left;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: 1rem;
-}
-
-.hotelcard:hover .hotel-overlay { 
-    opacity : 1;
+    margin-left: 10px;
+    gap: 10px;
 }
 
 
-
-.favorite-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  color: white;
-  font-size: 1.5rem;
-  padding: 0.5rem;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
+.hotel-info h3 {
+     font-family: monospace;
+     font-size: 1.2rem;
+     color:#080808;
+     border-radius: 20px;
+     text-align: left;
+     
 }
-
-.favorite-btn:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+.purchase-button { 
+margin-top: 10px;
+ display: flex;
+ justify-content: right;
+ align-items: flex-end;
  
-  cursor: pointer;
 }
 
-.favotire-btn.clicked { 
-    background-color: var(--btn1-color);
+.purchase-button button { 
+    background-color: black;
+    box-shadow: 5px 5px 10px 5px #0000006f;
+    font-family: monospace;
+}
+
+.purchase-button button:hover { 
+    scale:1.2;
+    background-color: white;
 }
 
 
