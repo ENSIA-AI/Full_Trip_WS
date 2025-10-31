@@ -3,28 +3,27 @@ import Home from './landingPage/components/HomePage'
 import Explore from './landingPage/components/Explore'
 import AboutUs from './landingPage/components/AboutUs'
 import Feedback from './landingPage/components/Feedback/Feedback'
+import { BrowserRouter, Route ,Routes} from 'react-router-dom'
+
+import UserProfile from './UserProfile/UserProfile'
 
 
 {/* Testing will remove later*/ }
 
 
-import UserProfile from './UserProfile/UserProfile'
 
 function App() {
 
-    return (
+  return (
     <>
-      {/* Testing Profile */}
-      <UserProfile Username='Zakarya' U_type='Regular User' />
-
-
-      {/* <Header />
-      <Home />
-      <Explore />
-      <AboutUs />
-      <Feedback /> */}
+      <BrowserRouter>
+        {/* Testing Profile */}
+        <Routes>
+          <Route path='/*' element={<UserProfile U_type='Regular User' Username='Zakarya'/>}></Route>
+        </Routes>
+      </BrowserRouter>
     </>
-    )
+  )
 
 }
 

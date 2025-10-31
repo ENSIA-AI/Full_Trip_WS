@@ -15,21 +15,21 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./SideBar._MainWindow.css";
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Link, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Outlet, NavLink } from 'react-router-dom';
 
 
 
 
 
-function TestRouting1(){
-  return(<>
+function TestRouting1() {
+  return (<>
     <Dump></Dump>
   </>)
 }
-function TestRouting2(){
-  return(<>
-  <Dump></Dump>
-  <Dump></Dump>
+function TestRouting2() {
+  return (<>
+    <Dump></Dump>
+    <Dump></Dump>
   </>)
 }
 
@@ -60,7 +60,7 @@ function Dump() {
 }
 
 function SideBar_MainWindow() {
-  
+
   const [FlipAn, setFlipAn] = useState(false);
   const [DashBoard, setDashBoard] = useState(false);
 
@@ -71,7 +71,7 @@ function SideBar_MainWindow() {
     { Section: "Flights", icon: faPlaneDeparture },
     { Section: "Hotels", icon: faBed },
     { Section: "Car Rentals", icon: faCarSide },
-    { Section: "Flights", icon: faEarth },
+    { Section: "Full Trips", icon: faEarth },
   ];
 
   const SideBar = [
@@ -87,15 +87,15 @@ function SideBar_MainWindow() {
 
 
   //SideBar Generation
-    function GenerateSideBar({ Array }) {
+  function GenerateSideBar({ Array }) {
     const [rotateIndex, setRotateIndex] = useState(null);
 
     return (
       <ul id="menu">
         {Array.map((item, index) => (
           <li key={index}  >
-            <div className="MainLi">
-              <FontAwesomeIcon icon={item.icon}  className="Icon"></FontAwesomeIcon>
+            <NavLink className="MainLink" to={`/${item.Section}`}>
+              <FontAwesomeIcon icon={item.icon} className="Icon"></FontAwesomeIcon>
               <p>{item.Section}</p>
 
               {item.hasSubM && (
@@ -111,7 +111,7 @@ function SideBar_MainWindow() {
                   <FontAwesomeIcon icon={faCaretDown} />
                 </button>
               )}
-            </div>
+            </NavLink>
 
             {item.hasSubM && (
               <GenerateSubMenu Array={item.SubM} active={((rotateIndex == index) && DashBoard) ? true : false} />
@@ -130,8 +130,10 @@ function SideBar_MainWindow() {
           <div> {/* this div is used to make the transtion of the drop happens (height auto dosn't aniamte)*/}
             {Array.map((item, index) => (
               <li key={index}>
-                <FontAwesomeIcon icon={item.icon}></FontAwesomeIcon>
-                {item.Section}
+                <NavLink className={"SubLink"} to={`/MyTickets/${item.Section}`}>
+                  <FontAwesomeIcon icon={item.icon}></FontAwesomeIcon>
+                  {item.Section}
+                </NavLink>
               </li>
             ))}
           </div>
@@ -149,7 +151,7 @@ function SideBar_MainWindow() {
 
 
 
-//SideBar Functions
+  //SideBar Functions
   function FliPButton() {
     setFlipAn(true);
     setTimeout(() => {
@@ -185,24 +187,19 @@ function SideBar_MainWindow() {
           </div>
         </div>
         <div className="MainWindow">
+          <Routes>
+            {
+              SideBar.map((item, index) => (
+                <Route key={index} path={`/${item.Section}`}></Route>
+              ))
+            }
+            {
+              SubMenu_1.map((item, index) => (
+                <Route key={index} path={`/${item.Section}`}></Route>
+              ))
+            }
 
-
-
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
-          <Dump />
+          </Routes>
         </div>
       </div>
     </>
