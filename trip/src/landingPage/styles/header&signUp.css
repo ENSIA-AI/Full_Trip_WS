@@ -47,13 +47,13 @@ header>.navBar>li {
 }
 
 header>.navBar>li:hover {
-  color: var(--violet-cl);
+  color: var(--btn1-color-hover);
   transition: 0.3s;
 }
 
 header>.navBar>li:focus {
-  border-bottom: 3px solid var(--violet-cl);
-  color: var(--btn2-color);
+  border-bottom: 3px solid var(--btn1-color);
+  color: var(--btn1-color);
   transition: 0.3s;
 }
 
@@ -71,20 +71,21 @@ header>.SignLogIn>button {
   border: none;
   outline: none;
   cursor: pointer;
-  background-color: var(--btn2-color);
+  background-color: var(--btn1-color);
   animation: pulse 2s infinite;
+  color:var(--white-cl);
 }
 
 header>.SignLogIn>button:hover {
   scale: 1.02;
   transition: 0.4s;
-  background-color: var(--btn2-color-hover);
+  background-color: var(--btn1-color-hover);
 }
 
 header>.SignLogIn>button:active {
   scale: 0.95;
   transition: 0s;
-  background-color: var(--btn2-color);
+  background-color: var(--btn1-color);
   animation: none;
 }
 

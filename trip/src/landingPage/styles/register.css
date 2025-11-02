@@ -14,7 +14,7 @@
   background-color: var(--white-cl);
   width: fit-content;
   height: fit-content;
-  padding: 100px;
+  padding: 60px 100px;
   display: flex;
   flex-direction: column;
   place-items: center;
@@ -37,7 +37,7 @@
 .register-page>h1>h1 {
   font-size: 2.13rem;
   margin-right: 10px;
-  color: var(--violet-cl);
+  color: var(--btn1-color);
 }
 
 .register-page>.register-form {
@@ -61,6 +61,7 @@
 .error-msg {
   color: red;
   font-size: 10px;
+  display: none;
 }
 
 .register-page>.register-form input,
@@ -114,6 +115,7 @@ label>select {
   justify-content: space-between;
   align-items: center;
   display: flex;
+  width: 100%;
 }
 
 .register-page>.register-form button {
@@ -123,24 +125,25 @@ label>select {
   font-weight: 600;
   border-radius: 15px;
   border: none;
-  background-color: var(--btn2-color);
   cursor: pointer;
   margin-top: 30px;
+  color: rgba(242, 242, 242, 0.8);
+  background-color: var(--btn1-color-hover);
 }
 
 .register-page>.register-form button:hover {
-  background-color: var(--btn2-color-hover);
+  background-color: var(--btn1-color);
   transition: 0.3s;
   color: var(--white-cl);
 }
 
 .register-page>.register-form button:active {
-  background-color: var(--violet-cl);
+  background-color: var(--btn1-color-hover);
   transition: none;
 }
 
 .register-page>.register-form .phone-first-sec {
-  width: 90px;
+  width: 65px;
   border-radius: 15px 0px 0px 15px;
   border-right: none;
   appearance: none;
@@ -154,22 +157,22 @@ label>select {
 .register-page>.register-form .phone-second-sec {
   border-left: none;
   border-radius: 0px 15px 15px 0px;
-
+  width: 100%;
 }
 
 
 @keyframes border-appealling {
   from {
-    border-top-color: var(--btn2-color);
-    border-right-color: var(--btn2-color);
-    border-bottom-color: violet;
-    border-left-color: violet;
+    border-top-color: var(--btn3-color);
+    border-right-color: var(--btn3-color);
+    border-bottom-color: var(--btn1-color);
+    border-left-color: var(--btn1-color);
   }
 
   to {
-    border-top-color: violet;
-    border-right-color: violet;
-    border-bottom-color: var(--btn2-color);
-    border-left-color: var(--btn2-color);
+    border-top-color: var(--btn3-color);
+    border-right-color: var(--btn3-color);
+    border-bottom-color: var(--btn3-color);
+    border-left-color: var(--btn3-color);
   }
 }
