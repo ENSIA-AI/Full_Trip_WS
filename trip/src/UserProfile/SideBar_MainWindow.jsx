@@ -1,170 +1,80 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faBars,
   faCaretDown,
-  faSquarePollHorizontal,
-  faTicket,
-  faPlaneDeparture,
-  faBed,
+  faPlane,
+  faHotel,
   faCarSide,
   faEarth,
   faClockRotateLeft,
-  faWallet,
-  faHeart,
+  faRightFromBracket,
   faGear,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./SideBar._MainWindow.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, Outlet, NavLink } from 'react-router-dom';
+import Flights from './SubMenu-1-Pages/Flights'
+import Hotels from './SubMenu-1-Pages/Hotels'
+import CarRentals from './SubMenu-1-Pages/CarRentals'
+import FullTrips from './SubMenu-1-Pages/FullTrips'
+import MyTrips from './SideBarPages/MyTrips'
+import Settings from "./SideBarPages/Settings"
+import ProfileHeader from "./ProfileHeader";
+import Wallet from './SideBarPages/Wallet'
+
+import Logo from '../landingPage/images/title-icon.svg'
+
+import UserContext from "./UserContext";
 
 
 
 
 
-function TestRouting1() {
-  return (<>
-    <Dump></Dump>
-  </>)
-}
-function TestRouting2() {
-  return (<>
-    <Dump></Dump>
-    <Dump></Dump>
-  </>)
-}
-
-
-
-
-function Dump() {
-  return (
-    <>
-      <div
-        style={{
-          backgroundColor: "#252525",
-          color: "white",
-          border: "1px solid white",
-          padding: "10px",
-          borderRadius: "10px",
-        }}
-      >
-        <h1>Hello</h1>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Provident,
-          vitae. Voluptatibus dolorum eveniet omnis dolor illo a nam nostrum
-          facere, rem sit adipisci amet minus ab quo facilis vero aut.
-        </p>
-      </div>
-    </>
-  );
-}
 
 function SideBar_MainWindow() {
 
   const [FlipAn, setFlipAn] = useState(false);
+  const [rotateIndex, setRotateIndex] = useState(null);
   const [DashBoard, setDashBoard] = useState(false);
+  const UserInfo = useContext(UserContext);
 
 
 
   //SideBar Items:
-  const SubMenu_1 = [
-    { Section: "Flights", icon: faPlaneDeparture },
-    { Section: "Hotels", icon: faBed },
-    { Section: "Car Rentals", icon: faCarSide },
-    { Section: "Full Trips", icon: faEarth },
-  ];
 
+
+  const BottomMenu = [
+    { Section: "Settings", icon: faGear, Component: Settings },
+    { Section: "Logout", icon: faRightFromBracket, Component: Settings },
+
+
+  ];
   const SideBar = [
-    { Section: "Overview", icon: faSquarePollHorizontal, hasSubM: false },
-    { Section: "MyTickets", icon: faTicket, hasSubM: true, SubM: SubMenu_1 },
-    { Section: "MyTrips", icon: faClockRotateLeft, hasSubM: false },
-    { Section: "Wallet", icon: faWallet, hasSubM: false },
-    { Section: "Favourit", icon: faHeart, hasSubM: false },
-    { Section: "Settings", icon: faGear, hasSubM: false },
+
+    { Section: "Flights", icon: faPlane, Component: Flights },
+    { Section: "Hotels", icon: faHotel, Component: Hotels },
+    { Section: "Car Rentals", icon: faCarSide, Component: CarRentals },
+    { Section: "Full Trips", icon: faEarth, Component: FullTrips },
+    { Section: "MyTrips", icon: faClockRotateLeft, hasSubM: false, Component: MyTrips },
+    ,
   ];
-
-
-
-
-  //SideBar Generation
-  function GenerateSideBar({ Array }) {
-    const [rotateIndex, setRotateIndex] = useState(null);
-
-    return (
-      <ul id="menu">
-        {Array.map((item, index) => (
-          <li key={index}  >
-            <NavLink className="MainLink" to={`/${item.Section}`}>
-              <FontAwesomeIcon icon={item.icon} className="Icon"></FontAwesomeIcon>
-              <p>{item.Section}</p>
-
-              {item.hasSubM && (
-                <button
-                  onClick={() => {
-                    setRotateIndex(rotateIndex === index ? null : index);
-                  }
-
-                  }
-                  className={`SButton SubMenuToogle ${rotateIndex === index ? "Rotate" : ""
-                    }`}
-                >
-                  <FontAwesomeIcon icon={faCaretDown} />
-                </button>
-              )}
-            </NavLink>
-
-            {item.hasSubM && (
-              <GenerateSubMenu Array={item.SubM} active={((rotateIndex == index) && DashBoard) ? true : false} />
-            )}
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
-
-  function GenerateSubMenu({ Array, active }) {
-    return (
-      <>
-        <ul className={active ? "SubMenu Show" : "SubMenu"}>
-          <div> {/* this div is used to make the transtion of the drop happens (height auto dosn't aniamte)*/}
-            {Array.map((item, index) => (
-              <li key={index}>
-                <NavLink className={"SubLink"} to={`/MyTickets/${item.Section}`}>
-                  <FontAwesomeIcon icon={item.icon}></FontAwesomeIcon>
-                  {item.Section}
-                </NavLink>
-              </li>
-            ))}
-          </div>
-        </ul>
-      </>
-    );
-  }
-
-
-
-
-
-
-
-
 
 
   //SideBar Functions
-  function FliPButton() {
-    setFlipAn(true);
-    setTimeout(() => {
-      setFlipAn(false);
-    }, 500);
-  }
+
   function ToogleDashBoard() {
     FliPButton();
     setDashBoard(!DashBoard);
 
   }
 
-
+  function FliPButton() {
+    setFlipAn(true);
+    setTimeout(() => {
+      setFlipAn(false);
+    }, 500);
+  }
 
 
 
@@ -172,7 +82,8 @@ function SideBar_MainWindow() {
     <>
       <div className={DashBoard ? "Container" : "Container Closed"}>
         <div className={DashBoard ? "SideBar" : "SideBar Closed"}>
-          <div className="MenuHead" style={{ translateX: DashBoard ? "-100%" : "" }}>
+          <div className="MenuHead">
+
             <h2 style={{ width: DashBoard ? "100%" : "0", overflow: "hidden", transition: "0.5s" }}>Dashboard</h2>
             <button
               className="SButton ToogleMenu"
@@ -182,24 +93,67 @@ function SideBar_MainWindow() {
               <FontAwesomeIcon icon={faBars} size="2xl" />
             </button>
           </div>
+
+
+          {/* SideBar */}
           <div className="Menu">
-            <GenerateSideBar Array={SideBar} />
+            <ul style={{ padding: DashBoard ? "15px" : "15px 10px" }}>
+              {SideBar.map((item, index) => (
+                <li key={index}  >
+                  <NavLink className="MainLink" to={`/${item.Section}`} >
+                    <FontAwesomeIcon icon={item.icon} className="Icon" style={{ fontSize: DashBoard ? "1.2em" : "1.3em" }}></FontAwesomeIcon>
+                    <p style={{ display: DashBoard ? "" : "none" }}>{item.Section}</p>
+
+                    {item.hasSubM && (
+                      <button
+                        onClick={() => {
+                          setRotateIndex(rotateIndex === index ? null : index);
+                        }
+
+                        }
+                        className={`SButton SubMenuToogle ${rotateIndex === index ? "Rotate" : ""
+                          }`}
+                      >
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      </button>
+                    )}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+            {/* Bottom List ------------------------------------------------------------------------------------- */}
+            <ul style={{ padding: DashBoard ? "15px" : "15px 10px", borderTop: "1px solid grey" }}>
+              <li>
+                <NavLink to={`/${BottomMenu[0].Section}`} className="MainLink">
+                  <FontAwesomeIcon icon={BottomMenu[0].icon} className="Icon" style={{ fontSize: DashBoard ? "1.2em" : "1.3em" }}></FontAwesomeIcon>
+                  <p style={{ display: DashBoard ? "" : "none" }}>{BottomMenu[0].Section}</p>
+                </NavLink>
+
+              </li>
+              <li>
+                <NavLink to="/Home" className={({ isActive }) => (isActive ? "MainLink active" : "MainLink")}>
+                  <FontAwesomeIcon icon={BottomMenu[1].icon} className="Icon" style={{ fontSize: DashBoard ? "1.2em" : "1.3em" }}></FontAwesomeIcon>
+                  <p style={{ display: DashBoard ? "" : "none" }}>{BottomMenu[1].Section}</p>
+                </NavLink>
+              </li>
+
+            </ul>
           </div>
         </div>
-        <div className="MainWindow">
-          <Routes>
-            {
-              SideBar.map((item, index) => (
-                <Route key={index} path={`/${item.Section}`}></Route>
-              ))
-            }
-            {
-              SubMenu_1.map((item, index) => (
-                <Route key={index} path={`/${item.Section}`}></Route>
-              ))
-            }
+        {/*Main Window -------------------------------------------------------------------------------------------------*/}
+        <div className="MainWindow">  
+          <ProfileHeader Username={UserInfo.Username} U_type={UserInfo.U_type}></ProfileHeader>
+          <div style={{ padding: "20px" }}>
+            <Routes>
+              {
+                SideBar.map((item, index) => (
+                  <Route key={index} path={`/${item.Section}`} element={<item.Component />} ></Route>
+                ))
+              }
+              <Route path="/Settings/*" element={<Settings />}></Route>
+            </Routes>
 
-          </Routes>
+          </div>
         </div>
       </div>
     </>

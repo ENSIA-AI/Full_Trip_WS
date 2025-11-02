@@ -22,6 +22,12 @@
   /* Main Colors: */
   --Primary-Color: #ffc400;
   --Hover-Color: #ffc7bf;
+  
+  --border: rgba(234, 88, 12, 0.15);
+  --input: transparent;
+  --input-background: #fff7ed;
+  --radius: 0.625rem;
+  --backgroundColor:#fef9f5;
 
 
 
@@ -36,7 +42,7 @@ body {
 }
 
 .PrimaryB {
-  padding: 10px 15px;
+  padding: min(10px ,1%) 15px;
   color: white;
   background-color: var(--btn1-color);
   border: none;
@@ -56,4 +62,14 @@ body {
 ::-webkit-scrollbar-thumb {
   background-color: var(--btn1-color);
   border-radius: 15px;
+}
+
+.InfoForm{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.InfoFormInput{
+  display: flex;
+  flex-direction: column;
 }

@@ -5,18 +5,17 @@
     font-family: Montserrat;
 }
 
-nav {
+.ProfileHaeder {
 
     background-color: rgb(255, 255, 255);
     display: flex;
     justify-content: space-between;
-    padding: 15px 20px ;
-    border-bottom:4px solid var(--btn1-color);
+    padding: min(15px,2%) 20px ;
+    border-bottom:5px solid var(--btn1-color);
+    height: 10vh;
+
 }
 
-nav>img {
-    scale: 2.5;
-}
 
 .Profile_Username {
     display: flex;

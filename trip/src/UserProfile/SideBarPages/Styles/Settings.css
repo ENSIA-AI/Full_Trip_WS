@@ -1,0 +1,59 @@
+@import url(../../../index.css);
+
+.S_Container{
+    display: flex;
+    flex-direction: column;
+    gap:30px;
+
+
+}
+
+.SettingsNav ul {
+    list-style: none;
+    display: flex;
+
+
+    border-radius: var(--radius);
+    background-color: var(--white-cl);
+}
+.SettingsNav ul>li{
+    width: 33%;
+    display: flex;
+
+}
+.NavLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px ;
+    gap: 10px;
+    font-size: 1.3em;
+    text-decoration: none;
+    width: 100%;
+    font-weight: 500;
+    color: var(--strong-black-cl);
+    border-radius: var(--radius);
+}
+
+.NavLink:hover:not(.NavLink.activeNavLink) {
+    background-color: var(--input-background);
+}
+.NavLink.activeNavLink{
+    background-color: brown;
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+.SettingsSec{
+    border-radius: var(--radius);
+    background-color: var(--backgroundColor);
+    border: 2px solid var(--border);
+    padding: 10px;
+}

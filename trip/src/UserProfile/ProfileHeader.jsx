@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 
-import Logo from "../landingPage/images/title-icon.svg"
 import '../index.css'
 import './ProfileHeader.css'
 
@@ -10,9 +9,9 @@ import './ProfileHeader.css'
 function ProfileHeader({Username="User",U_type="Regular"}) {
 
     return (<>
-        <nav>
+        <nav className="ProfileHaeder">
             <button className="PrimaryB"><FontAwesomeIcon icon={faArrowLeft} style={{ color: "#ffffff",fontWeight:"bold",fontSize:"1em" }} /></button>
-            <img src={Logo} alt="Logo"></img>
+
             <div className="Profile_Username">
                 <div>
                     <p className="UserName">{Username}</p>

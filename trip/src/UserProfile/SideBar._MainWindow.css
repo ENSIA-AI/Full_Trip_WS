@@ -2,21 +2,22 @@
 
 .Container {
     display: grid;
-    grid-template-columns: 23% 1fr;
+    grid-template-columns: 20% 1fr;
     transition: 0.5s ease-in-out;
 
 }
-.Container.Closed{
 
-    grid-template-columns: 60px 1fr;
+.Container.Closed {
+
+    grid-template-columns: 80px 1fr;
 }
+
 .SideBar {
     position: sticky;
     top: 0;
     background-color: white;
     overflow: hidden;
     height: 100vh;
-
 }
 
 .SideBar ul {
@@ -29,6 +30,7 @@
     border-bottom: 5px solid var(--btn1-color);
     height: 10vh;
     align-items: center;
+    justify-content: center;
 
 }
 
@@ -52,22 +54,33 @@
 }
 
 
-.Menu {
-    font-size: 1.4em;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-wrap: none;
+.Menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
     height: 90vh;
-    overflow-x:hidden ;
 
 }
-.Menu .Icon{
-    font-size: 1.2em;
+.Menu ul{
+    font-size: 1.4em;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    letter-spacing: 1px;
+    text-wrap: none;
+    overflow-x: hidden;
+    transition: 0.5s;
+
 }
+
+
 .Menu::-webkit-scrollbar-thumb {
     background-color: var(--Hover-Color);
 }
-.Menu::-webkit-scrollbar{
+
+.Menu::-webkit-scrollbar {
     width: 5px;
 }
 
@@ -82,40 +95,42 @@
 
 .MainLink>p {
     flex-grow: 1;
+    text-wrap: nowrap;
 }
 
-.MainLink,
-.SubLink {
+.MainLink {
     padding: 15px;
     transition: 0.1s ease-in-out;
     text-decoration: none;
-    color:black;
+    color: black;
+    border-radius: 10px;
+
+}
+.MainLink.active{
+    color: white;
+    background-color: var(--btn1-color);
 
 }
 
-.MainLink:hover,
-.SubLink:hover {
+.MainLink:hover:not(.active){
     background-color: var(--Hover-Color);
 
 }
 
-/* Sub Menu*/
-.SubLink {
-    padding-left: 50px;
-}
 
 
 
-.SubMenuToogle {
+
+/* .SubMenuToogle {
     transform: rotate(0deg);
     transition: transform 0.3s ease-in-out;
 }
 
 .SubMenuToogle.Rotate {
     transform: rotate(180deg);
-}
+} */
 
-.ToogleMenu{
+.ToogleMenu {
     color: black;
 }
 
@@ -127,13 +142,13 @@
     }
 }
 
-@keyframes Rotate {
+/* @keyframes Rotate {
     from {}
 
     to {
         transform: rotate(180deg);
     }
-}
+} */
 
 
 .SubMenu {
@@ -157,16 +172,21 @@
 
 
 
-/*MainWindow*/
-.MainWindow {
-    padding: 20px;
+
+
+
+@media screen and (max-width:800px) {
+    .MenuHead {
+        display: none;
+    }
+
+    .Container {
+        grid-template-columns: 60px 1fr;
+    }
 }
 
-
-
-
-@media  screen and (max-width: 600px){
-    .MenuHead{
+@media screen and (max-width: 600px) {
+    .MenuHead {
         display: none;
 
     }
