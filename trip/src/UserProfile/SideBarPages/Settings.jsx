@@ -1,13 +1,11 @@
 import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faShield, faWallet } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faShield, faWallet, faLocationDot, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 import './Styles/Settings.css'
 
 
-function Security() {
-    return <p>nimkmk</p>
-}
+
 function Billing() {
     return <p>nikmk ya l3tayd</p>
 }
@@ -59,44 +57,44 @@ function Profile() {
 
 
         <div className="SettingsSec">
-            <div style={{ borderBottom: "2px solid var(--border)", paddingBottom: "15px" }}>
+            <div className="SecHeader">
                 <h3>Profile informations</h3>
                 <p>Update your personal information and profile picture</p>
 
             </div>
-            <form className="InfoForm">
-                <div className="InfoFormInput">
-                    <label>First Name</label>
-                    <input type="text"></input>
+            <form >
+                <div className="InfoForm">
+                    <div className="InfoFormInput">
+                        <label>First Name</label>
+                        <input type="text" ></input>
+                    </div>
+
+                    <div className="InfoFormInput">
+                        <label>Last Name</label>
+                        <input type="text"></input>
+                    </div>
+
+                    <div className="InfoFormInput" style={{ gridColumn: "span 2" }}>
+                        <label>Email</label>
+                        <FontAwesomeIcon icon={faEnvelope} className="InfoFormIcon" ></FontAwesomeIcon>
+                        <input type="email" style={{ paddingLeft: "40px" }} placeholder="example@gmail.com"></input>
+                    </div>
+                    <div className="InfoFormInput" >
+                        <label>Phone Number</label>
+                        <FontAwesomeIcon icon={faPhone} className="InfoFormIcon"></FontAwesomeIcon>
+                        <input type="text" style={{ paddingLeft: "40px" }} placeholder="0540493067"></input>
+                    </div>
+                    <div className="InfoFormInput">
+                        <label>Address</label>
+                        <FontAwesomeIcon icon={faLocationDot} className="InfoFormIcon"></FontAwesomeIcon>
+
+                        <input type="text" style={{ paddingLeft: "40px" }} placeholder="Algeirs"></input>
+                    </div>
                 </div>
-
-                <div className="InfoFormInput">
-                    <label>Last Name</label>
-                    <input type="text"></input>
+                <div className="Submition" style={{}}>
+                    <input type="reset" className="SecondaryB" />
+                    <input type="submit" className="PrimaryB" value={"Save Changes"} />
                 </div>
-
-                <div className="InfoFormInput">
-                    <label>Email</label>
-                    <input type="text"></input>
-                </div>
-                <div className="InfoFormInput">
-                    <label>Phone Number</label>
-                    <input type="text"></input>
-                </div>
-                <div className="InfoFormInput">
-                    <label>Last Name</label>
-                    <input type="text"></input>
-                </div>
-                <div className="InfoFormInput">
-                    <label>Last Name</label>
-                    <input type="text"></input>
-                </div>
-
-
-
-
-
-
             </form>
         </div>
 
@@ -108,5 +106,38 @@ function Profile() {
 
     </>);
 }
+function Security() {
+
+
+    return <>
+        <div className="SettingsSec">
+            <div className="SecHeader">
+                <h3>Change Password</h3>
+                <p>Update your password to keep your account secure</p>
+            </div>
+            <form className="PassChangeForm">
+                <div className="InfoFormInput">
+                    <label>Current Password</label>
+                    <input type="text" ></input>
+                </div>
+                <div className="InfoFormInput">
+                    <label>New Password</label>
+                    <input type="text" ></input>
+                </div>
+                <div className="InfoFormInput">
+                    <label>Confirm New Password</label>
+                    <input type="text" ></input>
+                </div>
+                <div>
+                    <input type="submit" className="PrimaryB" value={"Update Password"}></input>
+                </div>
+            </form>
+        </div>
+
+    </>
+}
+
+
+
 
 export default Settings

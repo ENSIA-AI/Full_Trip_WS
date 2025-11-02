@@ -9,7 +9,7 @@
 
 :root {
   --btn1-color: #e74211;
-  --btn1-color-hover: #e7582ce6;
+  --btn1-color-hover: #ad2f08;
   --btn2-color: #b695fe;
   --btn2-color-hover: #9362fe;
   --violet-cl: #7d1dd6;
@@ -22,12 +22,12 @@
   /* Main Colors: */
   --Primary-Color: #ffc400;
   --Hover-Color: #ffc7bf;
-  
+
   --border: rgba(234, 88, 12, 0.15);
   --input: transparent;
   --input-background: #fff7ed;
   --radius: 0.625rem;
-  --backgroundColor:#fef9f5;
+  --backgroundColor: #fef9f5;
 
 
 
@@ -42,16 +42,44 @@ body {
 }
 
 .PrimaryB {
-  padding: min(10px ,1%) 15px;
+  padding: min(10px, 1%) 15px;
+  font-size: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
   color: white;
   background-color: var(--btn1-color);
-  border: none;
+  border: solid 2px var(--btn1-color);
   border-radius: 10px;
   cursor: pointer;
+  transition: 0.1s;
 }
+
+.SecondaryB {
+  padding: min(10px, 1%) 15px;
+  font-size: 16px;
+  font-weight: 500;
+  color: black;
+  background-color: var(--input-background);
+  border: solid 2px var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
 
 .PrimaryB:hover {
   background-color: var(--btn1-color-hover);
+
+}
+
+.SecondaryB:hover {
+  color: brown;
+}
+
+.SecondaryB:hover {
+  background-color: ();
 }
 
 ::-webkit-scrollbar {
@@ -62,14 +90,4 @@ body {
 ::-webkit-scrollbar-thumb {
   background-color: var(--btn1-color);
   border-radius: 15px;
-}
-
-.InfoForm{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-.InfoFormInput{
-  display: flex;
-  flex-direction: column;
 }
