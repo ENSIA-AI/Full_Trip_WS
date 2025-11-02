@@ -1,14 +1,10 @@
 import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faShield, faWallet, faLocationDot, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faShield, faCreditCard, faWallet, faLocationDot, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 import './Styles/Settings.css'
 
 
-
-function Billing() {
-    return <p>nikmk ya l3tayd</p>
-}
 
 function Settings() {
     const SettingsNavItems = [
@@ -135,6 +131,69 @@ function Security() {
         </div>
 
     </>
+}
+
+
+/*Billing----------------------------------------------------------------------- */
+const Cards = [
+    { CardNum: "0545 4534 3454 3453", isDefault: true, expiringDate: "02/27" },
+    { CardNum: "0545 4534 3454 4829", isDefault: false, expiringDate: "03/29" }
+]
+
+function CreditCard({ CardNum, isDefault, expiringDate }) {
+
+    function DefaultIndicator() {
+        return (
+            <p className="DefaultInd">Default</p>
+        )
+    }
+
+    let maskedNum = ".... .... .... " + CardNum.slice(-4);
+    return (<>
+        <div className={`SettingsSec CreditCard ${isDefault ? "Default" : ""}`}>
+            <div style={{ display: "flex", alignItems: "Center", gap: "20px" }}>
+                <FontAwesomeIcon icon={faCreditCard} className={isDefault ? "CardI Default" : "CardI"}></FontAwesomeIcon>
+                <div>
+
+                    <h3>{maskedNum}</h3>
+                    <p>Expires {expiringDate}</p>
+                </div>
+
+            </div>
+            <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+                {isDefault && <DefaultIndicator />}
+                <button className=" SecondaryB EditCard">Edit</button>
+                <button className="SecondaryB RemoveCard">Remove</button>
+            </div>
+        </div>
+
+    </>)
+
+}
+function Billing() {
+
+    return (<>
+
+        <div className="SettingsSec" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div className="SecHeader" >
+                <h3>Payment Methodes</h3>
+                <p>Manage your saved payment methods</p>
+            </div>
+            {
+                Cards.map((item, index) => (
+                    <CreditCard key={index} CardNum={item.CardNum} isDefault={item.isDefault} expiringDate={item.expiringDate}></CreditCard>
+                ))
+            }
+
+            <button className="PrimaryB"> <FontAwesomeIcon icon={faCreditCard} />Add Payment Method</button>
+        </div>
+        {/* ADD Billing History */}
+
+
+
+
+    </>)
+
 }
 
 

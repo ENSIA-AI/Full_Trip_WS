@@ -61,7 +61,8 @@
     padding: 15px 20px;
     position: relative;
 }
-.SettingsSec .SecHeader{
+
+.SettingsSec .SecHeader {
     border-bottom: 2px solid var(--border);
     padding-bottom: 15px;
 }
@@ -116,9 +117,49 @@ form label {
 }
 
 /* Security --------------------------------*/
-.PassChangeForm{
+.PassChangeForm {
     margin-top: 15px;
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+
+/*Biling----------------------------------*/
+.RemoveCard {
+    color: red;
+}
+
+.CreditCard {
+
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.CreditCard.Default {
+    background-color: var(--input-background);
+
+}
+
+.CardI {
+    font-size: 2em;
+    padding: 10px;
+    color: white;
+    border-radius: var(--radius);
+    background-color: #252525;
+}
+
+.CardI.Default {
+    background-color: brown;
+}
+
+.DefaultInd {
+    padding: 5px 10px;
+    color: white;
+    font-size: 0.8em;
+    border-radius: var(--radius);
+    background-color: var(--btn1-color);
+    font-weight: 500;
 }

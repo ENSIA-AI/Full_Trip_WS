@@ -13,6 +13,8 @@
     padding: min(15px,2%) 20px ;
     border-bottom:5px solid var(--btn1-color);
     height: 10vh;
+    position: sticky;
+    top: 0;
 
 }
 

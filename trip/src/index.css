@@ -57,7 +57,7 @@ body {
 }
 
 .SecondaryB {
-  padding: min(10px, 1%) 15px;
+  padding:  10px 15px;
   font-size: 16px;
   font-weight: 500;
   color: black;

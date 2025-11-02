@@ -47,8 +47,6 @@ function SideBar_MainWindow() {
   const BottomMenu = [
     { Section: "Settings", icon: faGear, Component: Settings },
     { Section: "Logout", icon: faRightFromBracket, Component: Settings },
-
-
   ];
   const SideBar = [
 
@@ -90,7 +88,7 @@ function SideBar_MainWindow() {
               onClick={ToogleDashBoard}
               style={{ animation: FlipAn ? "Flip 0.5s ease-in-out" : "" }}
             >
-              <FontAwesomeIcon icon={faBars} size="2xl" />
+              <FontAwesomeIcon icon={faBars} size="xl" />
             </button>
           </div>
 
