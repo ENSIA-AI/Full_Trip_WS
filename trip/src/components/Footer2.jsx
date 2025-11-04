@@ -1,5 +1,5 @@
 import './css/Footer2.css'
-import titIcon from './css/picss/titIcon2'
+import titIcon from './css/picss/title-icon2.svg'
 export default function Footer2() {
 
   function scrollToPage(page) {
@@ -64,32 +64,53 @@ export default function Footer2() {
             <h1>TravelWUs</h1>
           </div>
           <div className="icons">
-            <a href="https://t.me/kader_IRO" target="_blank"><i class='bx bxl-telegram'></i></a>
-            <a href="https://instagram.com/alg_abdo2006" target="_blank"><i class='bx bxl-instagram'></i></a>
-            <a href="https://discord.com/kader_59741" target="_blank"><i class='bx bxl-discord-alt'></i></a>
+            <a href="https://t.me/oussama_bznx" target="_blank"><i class='bx bxl-telegram'></i></a>
+            <a href="https://instagram.com/oussama._znx" target="_blank"><i class='bx bxl-instagram'></i></a>
+            <a href="https://discord.com/oussama_x7" target="_blank"><i class='bx bxl-discord-alt'></i></a>
           </div>
         </div>
-        <div className='information'>
-          <h3>Information</h3>
-          <div className="page-sections">
-            <p onClick={() => scrollToPage('home')}>Home</p>
-            <p onClick={() => scrollToPage('explore')}>Explore</p>
-            <p onClick={() => scrollToPage('client')}>From Our Cliens</p>
-            <p onClick={() => scrollToPage('feedback')}>Feedback</p>
-          </div>
-        </div>
+     
+        <div className="copy">
+        <p id='copyright'>&copy;TravelWUs | All Right Reserved</p>
+      </div>
         <div className="contact-details">
-          <p>+213 799314679</p>
+          <h1>Contact Us</h1>
           <a
             href="https://mail.google.com/mail/?view=cm&fs=1&to=megdoud.abdelkader@ensia.edu.dz"
             target="_blank"
             rel="noreferrer"
           >
+
             megdoud.abdelkader@ensia.edu.dz
           </a>
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=oussama.bouziane@ensia.edu.dz"
+            target="_blank"
+            rel="noreferrer"
+          >
+
+            oussama.bouziane@ensia.edu.dz
+          </a>
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=mohammed.benadda@ensia.edu.dz"
+            target="_blank"
+            rel="noreferrer"
+          >
+
+            mohaammed.bedadda@ensia.edu.dz
+          </a>
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=zakarya.bouzid@ensia.edu.dz"
+            target="_blank"
+            rel="noreferrer"
+          >
+
+            zakarya.bouzid@ensia.edu.dz
+          </a>
         </div>
+      
+
       </div>
-      <p id='copyright'>TravelWUs | All Right Reserved</p>
     </footer>
   )
 }

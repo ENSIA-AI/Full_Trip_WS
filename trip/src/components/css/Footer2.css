@@ -3,12 +3,13 @@
 footer {
   background-color: var(--transparent-bg-cl);
   padding: 0 100px;
+  
 }
 
 footer>.footer {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 250px;
+  gap: 200px;
   padding-top: 15px;
 }
 
@@ -105,6 +106,7 @@ h1 {
   transform: scale(0.96);
 }
 .contact-details{
+  white-space: nowrap;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -119,9 +121,22 @@ h1 {
 .contact-details>a:hover{
   color: gray;
   color: var(--btn1-color);
+  background:none;
+  scale:0.9;
+  transition: scale 0.3s ease;
 }
 
 #copyright{
+ font-size: 1.0rem;
+ text-align: center;
   margin: 10px 0 0;
   text-align: center;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.copy { 
+  display:  flex;
+  justify-content: center ;
+  align-items: center;
 }

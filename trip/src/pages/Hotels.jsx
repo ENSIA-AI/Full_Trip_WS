@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import Searcharea from "../components/Searchbar";
 import Hotelcard from "../components/Hotelcard";
+
 import top1 from './pics/top1.jpg'
 import top2 from './pics/top2.avif'
 import top3 from './pics/top3.jpg'
@@ -14,6 +15,7 @@ import top10 from './pics/top10.jpg'
 import hotel from './pics/hotel.png'
 import Footer2 from"../components/Footer2"
 
+import { useRef } from "react";
 
 import './css/page.css'
 function Hotels() {
@@ -34,12 +36,24 @@ function Hotels() {
             behavior: 'smooth'
         });
     }, 3000);
+  
 
+    const refrence = useRef(null);
+
+
+     function handleScroll() { 
+    
+         refrence.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+         });
+         
+    }
 
     return (<>
 
         <Navbar></Navbar>
-        <h1 className="header"> <img src={hotel} className="icon" /> Reserve Your Spot </h1>
+        <h1 className="header" onClick={handleScroll} style={{cursor:"pointer"}}><img src={hotel} className="icon" /> Reserve Your Spot </h1>
 
         <section className="container">
             <div className="slider-wrapper">
@@ -136,19 +150,22 @@ function Hotels() {
             </div>
         </section>
 
-        <div className="output">
-            <div className="search">
+        <div className="output" >
+            <div className="search" ref={refrence}>
                 <Searcharea></Searcharea>
             </div>
+            
             <div className="outputarea">
                 <Hotelcard></Hotelcard>
                 <Hotelcard></Hotelcard>
                 <Hotelcard></Hotelcard>
                 <Hotelcard></Hotelcard>
-                <Hotelcard></Hotelcard>
+                <Hotelcard></Hotelcard> 
             </div>
+            
         </div>
       <Footer2></Footer2>
+    
     </>);
 
 }

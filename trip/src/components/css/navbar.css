@@ -1,69 +1,65 @@
-* { 
-    margin : 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 :root {
-    --btn1-color: #e74211;
-    --btn1-color-hover: #f1643a;
-    --btn2-color: #b695fe;
-    --btn2-color-hover: #9362fe;
-    --violet-cl: #7d1dd6;
-    --btn3-color: #ffd600;
-    --white-cl: white;
-    --strong-black-cl: black;
-    --weak-black-cl: #080808;
-    --bx-shadow: rgba(95, 39, 23, 0.68);
-    --transparent-bg-cl: rgba(200, 32, 56, 0.15);
-    --transparent-bg-cl2: rgba(100, 75, 80, 0.2);
-    --shadow: rgba(211, 107, 10, 0.822);
-      }
+  --btn1-color: #e74211;
+  --btn1-color-hover: #f1643a;
+  --btn2-color: #b695fe;
+  --btn2-color-hover: #9362fe;
+  --violet-cl: #7d1dd6;
+  --btn3-color: #ffd600;
+  --white-cl: white;
+  --strong-black-cl: black;
+  --weak-black-cl: #080808;
+  --bx-shadow: rgba(95, 39, 23, 0.68);
+  --transparent-bg-cl: rgba(200, 32, 56, 0.15);
+  --transparent-bg-cl2: rgba(100, 75, 80, 0.2);
+  --shadow: rgba(211, 107, 10, 0.822);
+}
 
-@keyframes buttonHover { 
-  0%{ 
-    scale:1.0
+@keyframes buttonHover {
+  0% {
+    scale: 1;
   }
 
-  100% { 
+  100% {
     scale: 1.2;
     background-color: white;
     color: var(--btn1-color);
   }
 }
-      @keyframes logo { 
-        0%{
-          width: 0; 
-        }
+@keyframes logo {
+  0% {
+    width: 0;
+  }
 
-        100% { 
-          width: 200px;
-        }
-      }
-      @keyframes button { 
-        0%{
-          width: 0; 
-          font-size: 0.1rem;
-        }
+  100% {
+    width: 200px;
+  }
+}
+@keyframes button {
+  0% {
+    width: 0;
+    font-size: 0.1rem;
+  }
 
-        100% { 
-          width: 80px;
-          font-size: 1.2rem;
-        }
-      }
+  100% {
+    width: 80px;
+    font-size: 1.2rem;
+  }
+}
 
-      @keyframes nav { 
-        0% { 
-          width: 0% ;
-        }
+@keyframes nav {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 60%;
+  }
+}
 
-       
-
-        100% { 
-          width:60% ;
-        }
-      }
-
-    
 .navbar {
   padding: 1rem 2rem;
   display: flex;
@@ -73,98 +69,168 @@
   border-bottom-right-radius: 20px;
 }
 
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem;
+  background-color: var(--btn1-color);
+  height: 50px;
+  width: 200px;
+  border-radius: 20px;
+  padding: 5px;
+  margin-left: -20px;
+  box-shadow: 5px 5px 5px var(--shadow);
+  animation: logo 1000ms;
+}
+.logo img {
+  height: 20px;
+}
+.logo h2 {
+  font-size: 1.2rem;
+  color: white;
+}
+ul {
+  list-style: none;
+  display: flex;
+  gap: 3vw;
+  border-radius: 20px;
+  background-color: var(--btn1-color);
+  height: 50px;
+  width: 60%;
+  max-width: 60%;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  box-shadow: 5px 5px 5px var(--shadow);
+  animation: nav 700ms;
+}
 
-.logo { 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.2rem;
-    background-color: var(--btn1-color);
-    height: 50px;
-    width: 200px;
-    border-radius: 20px;
-    padding: 5px;
-    margin-left: -20px;
-    box-shadow: 5px 5px 5px var(--shadow);
-    animation : logo 1000ms ;
+a {
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 600;
+  white-space: nowrap;
 }
-.logo img { 
-    height: 20px;
-}
-.logo h2 { 
-    font-size: 1.2rem;
-    color: white;
-}
-ul { 
 
+a:hover {
+  color: var(--btn1-color);
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 10px;
+  transform: scale(1.2);
+  transition: 300ms ease-out;
+}
+.buttons {
+  display: flex;
+  gap: 0.4rem;
+}
+
+button {
+  padding: 5px 5px;
+  border: none;
+  border-radius: 20px;
+  background-color: var(--btn1-color);
+  color: var(--white-cl);
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  height: 50px;
+  width: 80px;
+  white-space: nowrap;
+  box-shadow: 5px 5px 5px var(--shadow);
+  margin: 10px;
+  animation: button 1000ms;
+}
+
+button:hover {
+  scale: 1.3;
+  background-color: white;
+  color: var(--btn1-color);
+  transition-duration: 300ms;
+}
+
+@media (min-width: 485px) and (max-width: 700px) {
+  .logo {
+    display: none;
+  }
+  .buttons {
+    display: none;
+  }
+
+  ul {
+    margin: 8px auto;
+    overflow: hidden;
     list-style: none;
     display: flex;
-    gap: 3vw;
-    border-radius: 20px;;
+    gap: 2vw;
+    border-radius: 20px;
     background-color: var(--btn1-color);
-    height: 50px;  
-    width: 60%;
-    max-width: 60%;
+    height: 50px;
+    width: 90%;
+    max-width: 100vw;
     justify-content: center;
     align-items: center;
     padding: 10px;
     box-shadow: 5px 5px 5px var(--shadow);
-    animation : nav 700ms ; 
-    
+    animation: nav 700ms;
+  }
 
+  @keyframes nav {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 90%;
+      max-width: 100vw;
+    }
+  }
 }
 
-a  { 
-    font-size: 1rem;
-    color: white;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    font-weight: 600;
-    white-space: nowrap;
+@media (min-width: 701px) and (max-width: 1100px){
+  .logo h2 {
+    font-size: 0.8rem;
+  }
+  ul a {
+    font-size: 0.7rem;
 
+  }
+  ul {
+    margin-left: 10px;
+  }
+  .buttons {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: -20px;
+  }
+
+  .buttons button {
+    margin: 0px;
+    font-size: 0.8rem;
+  }
+
+  @keyframes button {
+    0% {
+      width: 0;
+      font-size: 0.1rem;
+    }
+
+    100% {
+      width: 80px;
+      font-size: 0.8rem;
+    }
+  }
+
+  button:hover {
+  scale: 1.1;
+  background-color: white;
+  color: var(--btn1-color);
+  transition-duration: 300ms;
 }
-
-a:hover { 
-    color: var(--btn1-color);
-    background-color: #ffffff;
-    border-radius: 20px;
-    padding: 10px;
-    transform: scale(1.2);
-    transition: 300ms ease-out;
 }
-.buttons { 
-    display : flex;
-    gap: 0.4rem;
-}
-
-button { 
-    padding: 5px 5px;
-    border: none;
-    border-radius: 20px;
-    background-color: var(--btn1-color);
-    color: var(--white-cl);
-    font-size: 1.2rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    height: 50px;
-    width: 80px;
-    white-space: nowrap;
-    box-shadow: 5px 5px 5px var(--shadow);
-    margin: 10px;
-    animation : button 1000ms;
-}
-
-button:hover{ 
-scale: 1.3;
-background-color: white;
-color: var(--btn1-color);
-transition-duration: 300ms;
-}
-
-
-
-
-
-

@@ -9,6 +9,7 @@ function Hotelcard() {
         }
 
 return ( 
+    <>
     <div className="hotelcard"> 
          <img src={bg} alt="This is the hotel  image" className="hotle-poster" />
          
@@ -22,6 +23,9 @@ return (
          </div>
          </div>
     </div>
+
+    </>
+
 ); 
 
 } 
