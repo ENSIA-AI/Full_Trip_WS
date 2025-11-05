@@ -47,7 +47,7 @@
 
   100% {
     width: 80px;
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 }
 
@@ -128,6 +128,9 @@ a:hover {
   display: flex;
   gap: 0.4rem;
 }
+.buttons button { 
+  font-size: 1rem;
+}
 
 button {
   padding: 5px 5px;
@@ -191,13 +194,12 @@ button:hover {
   }
 }
 
-@media (min-width: 701px) and (max-width: 1100px){
+@media (min-width: 701px) and (max-width: 1100px) {
   .logo h2 {
     font-size: 0.8rem;
   }
   ul a {
     font-size: 0.7rem;
-
   }
   ul {
     margin-left: 10px;
@@ -228,9 +230,9 @@ button:hover {
   }
 
   button:hover {
-  scale: 1.1;
-  background-color: white;
-  color: var(--btn1-color);
-  transition-duration: 300ms;
-}
+    scale: 1.1;
+    background-color: white;
+    color: var(--btn1-color);
+    transition-duration: 300ms;
+  }
 }

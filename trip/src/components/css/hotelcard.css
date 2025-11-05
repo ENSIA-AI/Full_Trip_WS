@@ -1,4 +1,9 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Arimo:ital,wght@0,400..700;1,400..700&family=BBH+Sans+Bartle&family=BBH+Sans+Hegarty&family=Bebas+Neue&family=Bitcount+Prop+Single:wght@100..900&family=Bitcount:wght@100..900&family=Bungee&family=Intel+One+Mono:ital,wght@0,300..700;1,300..700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Momo+Trust+Display&family=Montserrat:ital,wght@1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik+Dirt&display=swap');
+
+
+
+
 :root {
   --btn1-color: #e74211;
   --btn1-color-hover: #f1643a;
@@ -57,7 +62,7 @@
 
 
 .hotel-info h3 {
-     font-family: monospace;
+     
      font-size: 1.2rem;
      color:#080808;
      border-radius: 20px;
@@ -75,13 +80,15 @@ margin-top: 10px;
 .purchase-button button { 
     background-color: black;
     box-shadow: 5px 5px 10px 5px #0000006f;
-    font-family: monospace;
+    
 }
 
 .purchase-button button:hover { 
     scale:1.2;
     background-color: white;
 }
+
+
 
 
 

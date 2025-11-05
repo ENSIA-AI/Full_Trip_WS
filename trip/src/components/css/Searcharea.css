@@ -83,5 +83,9 @@ input[type="text"], input[type="number"], input[type="persons"], input[type="pas
 }
 
 
+.distination input{ 
+width: 30vw;
+}
+
 
 

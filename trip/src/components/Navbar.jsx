@@ -13,7 +13,7 @@ function Navbar() {
                     <li><a href="/hotels">Hotels</a></li>
                     <li><a href="/flights">Flights</a></li>
                     <li><a href="/carrental">Car Rental</a></li>
-                    <li><a href="/attractions">Attractions</a></li>
+                    <li><a href="/attractions">Full Trip</a></li>
                 </ul>
             
             <div className="buttons">
