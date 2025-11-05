@@ -14,16 +14,12 @@ import {
 import "./SideBar._MainWindow.css";
 import { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, Outlet, NavLink } from 'react-router-dom';
-import Flights from './SubMenu-1-Pages/Flights'
-import Hotels from './SubMenu-1-Pages/Hotels'
-import CarRentals from './SubMenu-1-Pages/CarRentals'
-import FullTrips from './SubMenu-1-Pages/FullTrips'
-import MyTrips from './SideBarPages/MyTrips'
-import Settings from "./SideBarPages/Settings"
-import ProfileHeader from "./ProfileHeader";
-import Wallet from './SideBarPages/Wallet'
+import Flights from './SideBarPages/Flights'
 
-import Logo from '../landingPage/images/title-icon.svg'
+import Settings from "./SideBarPages/Settings"
+
+import ProfileHeader from "./ProfileHeader";
+
 
 import UserContext from "./UserContext";
 
@@ -51,10 +47,10 @@ function SideBar_MainWindow() {
   const SideBar = [
 
     { Section: "Flights", icon: faPlane, Component: Flights },
-    { Section: "Hotels", icon: faHotel, Component: Hotels },
-    { Section: "Car Rentals", icon: faCarSide, Component: CarRentals },
-    { Section: "Full Trips", icon: faEarth, Component: FullTrips },
-    { Section: "MyTrips", icon: faClockRotateLeft, hasSubM: false, Component: MyTrips },
+    { Section: "Hotels", icon: faHotel},
+    { Section: "Car Rentals", icon: faCarSide },
+    { Section: "Full Trips", icon: faEarth },
+    { Section: "MyTrips", icon: faClockRotateLeft, hasSubM: false},
     ,
   ];
 

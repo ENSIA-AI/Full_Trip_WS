@@ -52,7 +52,7 @@ function Profile() {
     return (<>
 
 
-        <div className="SettingsSec">
+        <div className="Section">
             <div className="SecHeader">
                 <h3>Profile informations</h3>
                 <p>Update your personal information and profile picture</p>
@@ -106,7 +106,7 @@ function Security() {
 
 
     return <>
-        <div className="SettingsSec">
+        <div className="Section">
             <div className="SecHeader">
                 <h3>Change Password</h3>
                 <p>Update your password to keep your account secure</p>
@@ -150,7 +150,7 @@ function CreditCard({ CardNum, isDefault, expiringDate }) {
 
     let maskedNum = ".... .... .... " + CardNum.slice(-4);
     return (<>
-        <div className={`SettingsSec CreditCard ${isDefault ? "Default" : ""}`}>
+        <div className={`Section CreditCard ${isDefault ? "Default" : ""}`}>
             <div style={{ display: "flex", alignItems: "Center", gap: "20px" }}>
                 <FontAwesomeIcon icon={faCreditCard} className={isDefault ? "CardI Default" : "CardI"}></FontAwesomeIcon>
                 <div>
@@ -174,7 +174,7 @@ function Billing() {
 
     return (<>
 
-        <div className="SettingsSec" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div className="Section" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div className="SecHeader" >
                 <h3>Payment Methodes</h3>
                 <p>Manage your saved payment methods</p>

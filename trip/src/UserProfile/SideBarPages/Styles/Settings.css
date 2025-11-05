@@ -1,12 +1,5 @@
 @import url(../../../index.css);
 
-.S_Container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-
-
-}
 
 .SettingsNav ul {
     list-style: none;
@@ -49,23 +42,6 @@
 
 
 
-
-
-
-
-
-.SettingsSec {
-    border-radius: var(--radius);
-    background-color: var(--backgroundColor);
-    border: 2px solid var(--border);
-    padding: 15px 20px;
-    position: relative;
-}
-
-.SettingsSec .SecHeader {
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 15px;
-}
 
 
 
