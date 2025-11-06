@@ -174,14 +174,6 @@
     color: green;
 }
 
-.Class>div,
-.Status>div {
-    border-radius: var(--radius);
-    color: white;
-    padding: 5px 7px;
-
-}
-
 .Class>.Economy {
     background-color: crimson;
 }
@@ -194,10 +186,21 @@
     background-color: green;
 }
 
-.Status>.Active {
+.Class>div,
+.Active,
+.Pending {
+    border-radius: var(--radius);
+    color: white;
+    padding: 5px 7px;
+
+}
+
+.Active {
     background-color: lightgreen;
 }
 
-.Status>.Pending {
+.Pending {
     background-color: coral;
 }
+
+

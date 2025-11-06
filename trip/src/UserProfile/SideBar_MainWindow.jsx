@@ -12,9 +12,10 @@ import {
   faGear,
 } from "@fortawesome/free-solid-svg-icons";
 import "./SideBar._MainWindow.css";
-import { useContext, useEffect, useState } from "react";
+import { Component, useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, Outlet, NavLink } from 'react-router-dom';
 import Flights from './SideBarPages/Flights'
+import Hotels from './SideBarPages/Hotels'
 
 import Settings from "./SideBarPages/Settings"
 
@@ -47,10 +48,10 @@ function SideBar_MainWindow() {
   const SideBar = [
 
     { Section: "Flights", icon: faPlane, Component: Flights },
-    { Section: "Hotels", icon: faHotel},
+    { Section: "Hotels", icon: faHotel, Component: Hotels },
     { Section: "Car Rentals", icon: faCarSide },
     { Section: "Full Trips", icon: faEarth },
-    { Section: "MyTrips", icon: faClockRotateLeft, hasSubM: false},
+    { Section: "MyTrips", icon: faClockRotateLeft, hasSubM: false },
     ,
   ];
 
@@ -135,7 +136,7 @@ function SideBar_MainWindow() {
           </div>
         </div>
         {/*Main Window -------------------------------------------------------------------------------------------------*/}
-        <div className="MainWindow">  
+        <div className="MainWindow">
           <ProfileHeader Username={UserInfo.Username} U_type={UserInfo.U_type}></ProfileHeader>
           <div style={{ padding: "20px" }}>
             <Routes>
