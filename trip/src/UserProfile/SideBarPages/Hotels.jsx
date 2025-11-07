@@ -138,8 +138,8 @@ function Hotels() {
     return (<>
         <div className="S_Container Section">
             <div className="SecHeader" >
-                <h1>My Hotle Reservation</h1>
-                <p>Manage your Current Flights</p>
+                <h1>My Hotel Reservation</h1>
+                <p>Manage your Current Hotel Reservation</p>
             </div>
             <HotelCard HotelInfo={HotelInfo_1}></HotelCard>
             <HotelCard HotelInfo={HotelInfo_1}></HotelCard>

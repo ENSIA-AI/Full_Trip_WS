@@ -47,6 +47,7 @@
 
 .Price {
     display: inline;
+    font-weight: bold;
     text-align: left;
 }
 
@@ -98,6 +99,12 @@
     gap: 10px;
 }
 
+.Res_info p {
+    font-weight: 500;
+}
+
+
+
 .HStatus {
     flex-grow: 1;
     text-align: center;
@@ -119,7 +126,8 @@
         flex-direction: column;
 
     }
-    .stars{
+
+    .stars {
         text-align: center;
     }
 }

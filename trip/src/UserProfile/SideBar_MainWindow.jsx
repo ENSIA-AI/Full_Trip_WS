@@ -7,15 +7,15 @@ import {
   faHotel,
   faCarSide,
   faEarth,
-  faClockRotateLeft,
   faRightFromBracket,
   faGear,
 } from "@fortawesome/free-solid-svg-icons";
 import "./SideBar._MainWindow.css";
 import { Component, useContext, useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Link, Outlet, NavLink } from 'react-router-dom';
+import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import Flights from './SideBarPages/Flights'
 import Hotels from './SideBarPages/Hotels'
+import CarRentals from "./SideBarPages/CarRentals";
 
 import Settings from "./SideBarPages/Settings"
 
@@ -49,9 +49,8 @@ function SideBar_MainWindow() {
 
     { Section: "Flights", icon: faPlane, Component: Flights },
     { Section: "Hotels", icon: faHotel, Component: Hotels },
-    { Section: "Car Rentals", icon: faCarSide },
+    { Section: "Car Rentals", icon: faCarSide, Component: CarRentals },
     { Section: "Full Trips", icon: faEarth },
-    { Section: "MyTrips", icon: faClockRotateLeft, hasSubM: false },
     ,
   ];
 
@@ -140,6 +139,8 @@ function SideBar_MainWindow() {
           <ProfileHeader Username={UserInfo.Username} U_type={UserInfo.U_type}></ProfileHeader>
           <div style={{ padding: "20px" }}>
             <Routes>
+              <Route index element={<Navigate to="Flights" replace />} />
+
               {
                 SideBar.map((item, index) => (
                   <Route key={index} path={`/${item.Section}`} element={<item.Component />} ></Route>
