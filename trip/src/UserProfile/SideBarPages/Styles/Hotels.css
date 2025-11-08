@@ -3,7 +3,6 @@
 .Hotel {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 20px;
 
 }
@@ -11,11 +10,13 @@
 .HotelDetails {
 
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     gap: 10px;
 
-    margin-bottom: 10px;
+
     padding-bottom: 10px;
+    margin-bottom: 10px;
     border-bottom: 2px solid var(--border);
 }
 
@@ -26,13 +27,18 @@
     justify-content: space-between;
     gap: 10px;
 
+    padding-bottom: 10px;
+
+    border-bottom: 2px solid var(--border);
+
 }
 
-.Location {
+.Location,.TourDuration {
     display: flex;
     align-items: center;
     gap: 5px;
     color: rgba(165, 42, 42, 0.8);
+    font-weight: 500;
 }
 
 .Rating {

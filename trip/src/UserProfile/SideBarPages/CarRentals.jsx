@@ -111,7 +111,7 @@ function CarCard({ Car }) {
 
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <button className="SecondaryB RemoveCard" sty>Cancel Reservation</button>
+                <button className="SecondaryB RemoveCard">Cancel Reservation</button>
             </div>
 
         </div>

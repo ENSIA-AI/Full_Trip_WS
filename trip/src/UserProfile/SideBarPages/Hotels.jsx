@@ -96,6 +96,7 @@ function HotelCard({ HotelInfo }) {
 
 
                     <p className="Price"><span>{HotelInfo.price}$</span> / night</p>
+                    <p className="Price">Total: <span>{HotelInfo.price * HotelInfo.NightsReserved}$</span></p>
                     <div className="Res_info">
                         <div className="NightsRes">
                             <h4>Nights Reserved:</h4>
@@ -121,8 +122,9 @@ function HotelCard({ HotelInfo }) {
 
 
             </div>
-            <button className="SecondaryB RemoveCard" style={{ float: "right" }}>Cancel Reservation</button>
-
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <button className="SecondaryB RemoveCard">Cancel Reservation</button>
+            </div>
         </div>
 
 

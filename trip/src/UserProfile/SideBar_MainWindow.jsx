@@ -6,7 +6,7 @@ import {
   faPlane,
   faHotel,
   faCarSide,
-  faEarth,
+  faCompass,
   faRightFromBracket,
   faGear,
 } from "@fortawesome/free-solid-svg-icons";
@@ -15,7 +15,8 @@ import { Component, useContext, useEffect, useState } from "react";
 import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import Flights from './SideBarPages/Flights'
 import Hotels from './SideBarPages/Hotels'
-import CarRentals from "./SideBarPages/CarRentals";
+import CarRentals from "./SideBarPages/CarRentals"
+import Tours from './SideBarPages/Tours'
 
 import Settings from "./SideBarPages/Settings"
 
@@ -33,7 +34,7 @@ function SideBar_MainWindow() {
 
   const [FlipAn, setFlipAn] = useState(false);
   const [rotateIndex, setRotateIndex] = useState(null);
-  const [DashBoard, setDashBoard] = useState(false);
+  const [DashBoard, setDashBoard] = useState(true);
   const UserInfo = useContext(UserContext);
 
 
@@ -50,7 +51,7 @@ function SideBar_MainWindow() {
     { Section: "Flights", icon: faPlane, Component: Flights },
     { Section: "Hotels", icon: faHotel, Component: Hotels },
     { Section: "Car Rentals", icon: faCarSide, Component: CarRentals },
-    { Section: "Full Trips", icon: faEarth },
+    { Section: "Tours", icon: faCompass ,Component:Tours},
     ,
   ];
 
