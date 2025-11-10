@@ -55,7 +55,7 @@ function Profile() {
         <div className="Section">
             <div className="SecHeader">
                 <h3>Profile informations</h3>
-                <p>Update your personal information and profile picture</p>
+                <p>Update your personal information</p>
 
             </div>
             <form >

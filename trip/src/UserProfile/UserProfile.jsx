@@ -6,12 +6,12 @@ import UserContext from "./UserContext";
 
 
 function UserProfile({ Username = " User", U_type = "REgular" }) {
-  const User={Username,U_type}
+  const User = { Username, U_type }
   return (
     <>
       <UserContext.Provider value={User}>
-      
-      <SideBar_MainWindow />
+
+        <SideBar_MainWindow />
       </UserContext.Provider>
     </>
   );

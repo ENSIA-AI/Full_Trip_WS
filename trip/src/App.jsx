@@ -19,7 +19,7 @@ function App() {
       <BrowserRouter>
         {/* Testing Profile */}
         <Routes>
-          <Route path='/*' element={<UserProfile U_type='Regular User' Username='Zakarya'/>}></Route>
+          <Route path='/*' element={<UserProfile U_type='Agency' Username='Travel W Us'/>}></Route>
         </Routes>
       </BrowserRouter>
     </>

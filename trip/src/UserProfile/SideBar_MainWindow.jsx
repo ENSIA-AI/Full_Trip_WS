@@ -9,6 +9,8 @@ import {
   faCompass,
   faRightFromBracket,
   faGear,
+  faChartDiagram,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import "./SideBar._MainWindow.css";
 import { Component, useContext, useEffect, useState } from "react";
@@ -17,6 +19,9 @@ import Flights from './SideBarPages/Flights'
 import Hotels from './SideBarPages/Hotels'
 import CarRentals from "./SideBarPages/CarRentals"
 import Tours from './SideBarPages/Tours'
+
+import AgencyOverview from "./SideBarPages/Agency/AgencyOverview";
+import AgencyTours from "./SideBarPages/Agency/AgencyTours";
 
 import Settings from "./SideBarPages/Settings"
 
@@ -45,16 +50,24 @@ function SideBar_MainWindow() {
   const BottomMenu = [
     { Section: "Settings", icon: faGear, Component: Settings },
     { Section: "Logout", icon: faRightFromBracket, Component: Settings },
+    
   ];
-  const SideBar = [
+  const RegUserSideBar = [
 
     { Section: "Flights", icon: faPlane, Component: Flights },
     { Section: "Hotels", icon: faHotel, Component: Hotels },
     { Section: "Car Rentals", icon: faCarSide, Component: CarRentals },
-    { Section: "Tours", icon: faCompass ,Component:Tours},
+    { Section: "Tours", icon: faCompass, Component: Tours },
     ,
   ];
+  const AgencySideBar = [
 
+    { Section: "Overview", icon: faChartDiagram, Component: AgencyOverview },
+    { Section: "Tours", icon: faCompass, Component: AgencyTours },
+    { Section: "Costumers", icon: faUsers, Component: AgencyTours }
+  ]
+
+  const SideBar = (UserInfo.U_type === "Agency") ? AgencySideBar : RegUserSideBar;
 
   //SideBar Functions
 
@@ -137,7 +150,11 @@ function SideBar_MainWindow() {
         </div>
         {/*Main Window -------------------------------------------------------------------------------------------------*/}
         <div className="MainWindow">
-          <ProfileHeader Username={UserInfo.Username} U_type={UserInfo.U_type}></ProfileHeader>
+          <ProfileHeader Username={UserInfo.Username
+
+
+
+          } U_type={UserInfo.U_type}></ProfileHeader>
           <div style={{ padding: "20px" }}>
             <Routes>
               <Route index element={<Navigate to="Flights" replace />} />

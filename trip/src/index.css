@@ -24,12 +24,13 @@
   --Hover-Color: #ffc7bf;
 
   --border: rgba(234, 88, 12, 0.15);
+  --Secborder:brown;
   --input: transparent;
   --input-background: #fff7ed;
   --radius: 0.625rem;
   --backgroundColor: #fef9f5;
   --SecbackgroundColor: #ffd7a8;
-  --ThirdBc:#fff7ed;
+  --ThirdBc: #fff7ed;
 
 
 
@@ -78,7 +79,7 @@ body {
 .S_Container {
   display: flex;
   flex-direction: column;
-  gap:10px
+  gap: 10px
 }
 
 .Section {
@@ -90,7 +91,7 @@ body {
 }
 
 .SecHeader {
-  border-bottom: 2px solid var(--border);
+  border-bottom: 3px solid var(--Secborder);
   padding-bottom: 15px;
   text-wrap: nowrap;
 
@@ -107,6 +108,23 @@ body {
 .CostumeLabel {
   font-weight: 600;
   font-size: 1.1em;
+}
+
+.CostumeTable {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.CostumeTable> :first-child {
+  color: blue;
+}
+
+.CostumeTable tr {
+  border-bottom: 2px solid var(--border);
+}
+.CostumeTable th,.CostumeTable td{
+  padding: 10px;
 }
 
 .SecondaryB:hover {

@@ -13,7 +13,9 @@ const Tour_info1 = {
     Agency: "MMA Travel",
     location: "Paris, France",
 
-
+    //!ADD This:
+    TotalTickets:10,
+    TicketsBought:8,
 
     imageUrl: Paris,
     Includes: [{
