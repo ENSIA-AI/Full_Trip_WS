@@ -55,7 +55,7 @@
     font-size: 1.8em;
 }
 
-.StatNum.Money {
+.Money {
     color: green;
 }
 
@@ -94,3 +94,5 @@
     height: 1.2em;
     border: solid 2px black;
 }
+
+/*Bookings --------------------------------------

@@ -24,7 +24,7 @@
   --Hover-Color: #ffc7bf;
 
   --border: rgba(234, 88, 12, 0.15);
-  --Secborder:brown;
+  --Secborder: brown;
   --input: transparent;
   --input-background: #fff7ed;
   --radius: 0.625rem;
@@ -110,20 +110,23 @@ body {
   font-size: 1.1em;
 }
 
+/* TAble-----------------------------------------------------*/
 .CostumeTable {
   width: 100%;
-
   border-collapse: collapse;
+  font-weight: 500;
 }
 
 .CostumeTable> :first-child {
-  color: blue;
+  text-align: left;
 }
 
 .CostumeTable tr {
   border-bottom: 2px solid var(--border);
 }
-.CostumeTable th,.CostumeTable td{
+
+.CostumeTable th,
+.CostumeTable td {
   padding: 10px;
 }
 
@@ -143,4 +146,32 @@ body {
 ::-webkit-scrollbar-thumb {
   background-color: var(--btn1-color);
   border-radius: 15px;
+}
+
+
+
+.Active,
+.Pending,
+.Confirmed,
+.Cancelled {
+  border-radius: var(--radius);
+  color: white;
+  padding: 5px;
+  text-align: center;
+}
+
+.Active {
+  background-color: lightgreen;
+}
+
+.Pending {
+  background-color: coral;
+}
+
+.Cancelled {
+  background-color: crimson;
+}
+
+.Confirmed {
+  background-color: lightgreen;
 }
