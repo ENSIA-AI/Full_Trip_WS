@@ -15,17 +15,19 @@ import {
 import "./SideBar._MainWindow.css";
 import { Component, useContext, useEffect, useState } from "react";
 import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
-import Flights from './SideBarPages/Flights'
-import Hotels from './SideBarPages/Hotels'
-import CarRentals from "./SideBarPages/CarRentals"
-import Tours from './SideBarPages/Tours'
-
+//Regular-------------------------------------
+import Flights from './SideBarPages/Regular/Flights'
+import Hotels from './SideBarPages/Regular/Hotels'
+import CarRentals from "./SideBarPages/Regular/CarRentals"
+import Tours from './SideBarPages/Regular/Tours'
+//Agency--------------------------------------
 import AgencyOverview from "./SideBarPages/Agency/AgencyOverview";
 import AgencyTours from "./SideBarPages/Agency/AgencyTours";
-
-import Settings from "./SideBarPages/Settings"
-
+import Ag_Costumers from "./SideBarPages/Agency/AgencyCostumers";
+//Mutual--------------------------------------
+import Settings from "./SideBarPages/Regular/Settings"
 import ProfileHeader from "./ProfileHeader";
+
 
 
 import UserContext from "./UserContext";
@@ -64,7 +66,7 @@ function SideBar_MainWindow() {
 
     { Section: "Overview", icon: faChartDiagram, Component: AgencyOverview },
     { Section: "Tours", icon: faCompass, Component: AgencyTours },
-    { Section: "Costumers", icon: faUsers, Component: AgencyTours }
+    { Section: "Costumers", icon: faUsers, Component: Ag_Costumers }
   ]
 
   const SideBar = (UserInfo.U_type === "Agency") ? AgencySideBar : RegUserSideBar;

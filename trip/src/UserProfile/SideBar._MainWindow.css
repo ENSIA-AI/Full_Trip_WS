@@ -150,6 +150,9 @@
     }
 } */
 
+.MainWindow{
+    overflow: auto;
+}
 
 .SubMenu {
 

@@ -16,7 +16,7 @@ const Tour_info1 = {
     //!ADD This:
     TotalTickets:10,
     TicketsBought:8,
-
+    
     imageUrl: Paris,
     Includes: [{
         name: "Flight",

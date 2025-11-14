@@ -1,0 +1,74 @@
+.Contact p {
+    font-size: 0.9em;
+}
+
+.ActionsCell {
+    position: relative;
+    text-align: center;
+
+}
+
+.ActionsB {
+    font-size: 1.3em;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    position: relative;
+    z-index: 0;
+
+}
+
+
+.ActionsMenu {
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    translate: -60% 85%;
+    background-color: white;
+    text-wrap: nowrap;
+    color: black;
+
+    border-radius: var(--radius);
+    border: 3px solid var(--border);
+
+
+    z-index: 1;
+
+    animation: SmoothAppear 0.2s  ;
+
+}
+
+.ActionsMenu h4{
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    padding: 10px;
+}
+.ActionsMenu div{
+    padding: 10px 10px;
+}
+.ActionsMenu div:hover{
+
+    background-color: var(--Hover-Color);
+    cursor: pointer;
+}
+.ActionsMenu .Icon{
+    color: brown;
+}
+.ActionsMenu .DeleteC{
+    border-top: 3px solid var(--border);
+    color: red ; 
+}
+
+@keyframes SmoothAppear {
+    
+    0%{
+        scale: 0.3;
+        opacity: 0.2;
+    }
+    100%{
+        scale: 1;
+        opacity: 1;
+    }
+}

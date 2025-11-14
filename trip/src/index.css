@@ -75,19 +75,46 @@ body {
   background-color: var(--btn1-color-hover);
 
 }
-
+/*Containers-----------------------------------------------*/
 .S_Container {
   display: flex;
   flex-direction: column;
   gap: 10px
 }
 
+.FlexH_spaceBetween{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+}
+.FlexV{
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  gap: 5px;
+}
+.FlexV_spaceBetween{
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+}
+.FlexH{
+  display: flex;
+  align-items: center;
+  gap:10px;
+}
 .Section {
   border-radius: var(--radius);
   background-color: var(--backgroundColor);
   border: 2px solid var(--border);
   padding: 15px 20px;
   position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow: auto;
 }
 
 .SecHeader {
@@ -97,12 +124,20 @@ body {
 
 }
 
+/*Input ---------------------------------------*/
 .CostumeInput {
-  padding: 10px 8px;
+  padding: 8px;
+  padding-left: 35px;
   font-size: 1em;
-  border-radius: 5px;
+  border-radius: var(--radius);
   border: 2px solid var(--border);
   background-color: var(--input-background);
+  width: 100%;
+}
+
+.CostumeInput:focus {
+  border: 2px solid brown;
+  outline: none;
 }
 
 .CostumeLabel {
@@ -110,15 +145,47 @@ body {
   font-size: 1.1em;
 }
 
-/* TAble-----------------------------------------------------*/
+.InputContainer div {
+  position: relative;
+}
+
+.InputContainer div>.inputIcon {
+  position: absolute;
+  scale: 1;
+  opacity: 0.8;
+  color: brown;
+  left: 0;
+  top: 50%;
+  translate: 50% -50%;
+
+
+}
+
+/* Table-----------------------------------------------------*/
+.TableContainer{
+  border:2px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  z-index: 2;
+  position: relative;
+  
+}
 .CostumeTable {
   width: 100%;
   border-collapse: collapse;
   font-weight: 500;
+  overflow: auto;
+  position: relative;
+
+
 }
 
 .CostumeTable> :first-child {
   text-align: left;
+  background-color: var(--ThirdBc);
+
+  border-radius: 15px;
+  
 }
 
 .CostumeTable tr {
@@ -139,7 +206,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
   background-color: #eee;
 }
 
@@ -160,18 +227,18 @@ body {
   text-align: center;
 }
 
-.Active {
+.Active,
+.Confirmed {
   background-color: lightgreen;
+  color: green;
 }
 
 .Pending {
   background-color: coral;
+  color: brown;
 }
 
 .Cancelled {
   background-color: crimson;
-}
-
-.Confirmed {
-  background-color: lightgreen;
+  color: white;
 }
