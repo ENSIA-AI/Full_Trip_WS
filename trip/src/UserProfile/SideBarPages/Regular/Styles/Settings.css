@@ -4,14 +4,12 @@
 .SettingsNav ul {
     list-style: none;
     display: flex;
-
-
     border-radius: var(--radius);
     background-color: var(--white-cl);
 }
 
 .SettingsNav ul>li {
-    width: 33%;
+    flex-grow: 1;
     display: flex;
 
 }

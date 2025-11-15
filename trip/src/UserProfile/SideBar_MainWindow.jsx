@@ -65,7 +65,7 @@ function SideBar_MainWindow() {
   const AgencySideBar = [
 
     { Section: "Overview", icon: faChartDiagram, Component: AgencyOverview },
-    { Section: "Tours", icon: faCompass, Component: AgencyTours },
+    { Section: "Agency Tours", icon: faCompass, Component: AgencyTours },
     { Section: "Costumers", icon: faUsers, Component: Ag_Costumers }
   ]
 
@@ -163,7 +163,7 @@ function SideBar_MainWindow() {
 
               {
                 SideBar.map((item, index) => (
-                  <Route key={index} path={`/${item.Section}`} element={<item.Component />} ></Route>
+                  <Route key={index} path={`/${item.Section}/*`} element={<item.Component />} ></Route>
                 ))
               }
               <Route path="/Settings/*" element={<Settings />}></Route>

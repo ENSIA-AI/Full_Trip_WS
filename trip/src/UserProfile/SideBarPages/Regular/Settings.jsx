@@ -150,20 +150,22 @@ function CreditCard({ CardNum, isDefault, expiringDate }) {
 
     let maskedNum = ".... .... .... " + CardNum.slice(-4);
     return (<>
-        <div className={`Section CreditCard ${isDefault ? "Default" : ""}`}>
-            <div style={{ display: "flex", alignItems: "Center", gap: "20px" }}>
-                <FontAwesomeIcon icon={faCreditCard} className={isDefault ? "CardI Default" : "CardI"}></FontAwesomeIcon>
-                <div>
+        <div className={`Section ${isDefault ? "Default" : ""}`}>
+            <div className="CreditCard">
+                <div style={{ display: "flex", alignItems: "Center", gap: "20px" }}>
+                    <FontAwesomeIcon icon={faCreditCard} className={isDefault ? "CardI Default" : "CardI"}></FontAwesomeIcon>
+                    <div>
 
-                    <h3>{maskedNum}</h3>
-                    <p>Expires {expiringDate}</p>
+                        <h3>{maskedNum}</h3>
+                        <p>Expires {expiringDate}</p>
+                    </div>
+
                 </div>
-
-            </div>
-            <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
-                {isDefault && <DefaultIndicator />}
-                <button className=" SecondaryB EditCard">Edit</button>
-                <button className="SecondaryB RemoveCard">Remove</button>
+                <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
+                    {isDefault && <DefaultIndicator />}
+                    <button className=" SecondaryB EditCard">Edit</button>
+                    <button className="SecondaryB RemoveCard">Remove</button>
+                </div>
             </div>
         </div>
 
