@@ -23,6 +23,7 @@ function Ag_Costumers() {
     const btnref = useRef();
     const [open, setopen] = useState(false)
     const [menuindex, setmenuindex] = useState(null);
+    const [CostumersList, setCostumersList] = useState(customers);
 
     useEffect(() => {
 
@@ -41,6 +42,12 @@ function Ag_Costumers() {
             document.removeEventListener("click", handleClickOutside);
         };
     }, [])
+
+    function deleteCustomer(idToRemove) {
+
+        setCostumersList(prev => prev.filter(costumer => costumer.customerId !== idToRemove));
+        setopen(false);
+    }
 
 
     return (<>
@@ -69,7 +76,7 @@ function Ag_Costumers() {
                     <div className="TableContainer">
                         <table className="CostumeTable" style={{ zIndex: 0 }}>
                             <tr>
-                                <th>Costumer</th>
+                                <th>Custumer</th>
                                 <th>Contact</th>
                                 <th>Bookings</th>
                                 <th>total Spent</th>
@@ -77,7 +84,7 @@ function Ag_Costumers() {
                                 <th>Last Booking</th>
                                 <th>Actions</th>
                             </tr>
-                            {customers.map((costumer, index) => (
+                            {CostumersList.map((costumer, index) => (
                                 <tr key={index} style={{ color: "brown" }}>
                                     <td style={{ color: "black" }}><div ><p>{costumer.customer}</p><p style={{ color: "red" }}>{costumer.customerId}</p></div></td>
                                     <td><div className="Contact">
@@ -93,7 +100,7 @@ function Ag_Costumers() {
 
 
                                         <button ref={btnref} className="ActionsB" onClick={(e) => {
-                        
+
                                             e.stopPropagation();// prevent document click from immediately closing it
                                             setmenuindex(index);
                                             setopen((prev) => (index === menuindex ? !prev : true));
@@ -105,8 +112,7 @@ function Ag_Costumers() {
                                         {open && (menuindex === index) &&
                                             (<div className="ActionsMenu FlexV" style={{ gap: 0 }}>
                                                 <h4>Actions</h4>
-                                                <div className="FlexH"> <FontAwesomeIcon className="Icon" icon={faEye}></FontAwesomeIcon><p>View Details</p></div>
-                                                <div className="FlexH_spaceBetween DeleteC"> <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon><p>Delete Costumer</p></div>
+                                                <button onClick={() => deleteCustomer(costumer.customerId)} className="FlexH_spaceBetween DeleteC"> <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon><p>Delete Costumer</p></button>
                                             </div>)}
 
                                     </td>

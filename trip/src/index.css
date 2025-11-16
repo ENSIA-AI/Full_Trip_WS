@@ -345,12 +345,17 @@ body {
   border-bottom: 2px solid var(--border);
   padding: 10px;
 }
+.ActionsMenu button{
+  background-color: white;
+  border: none;
+  font-size: 1em;
+}
 
-.ActionsMenu div {
+.ActionsMenu div , .ActionsMenu button {
   padding: 10px 10px;
 }
 
-.ActionsMenu div:hover {
+.ActionsMenu div:hover ,.ActionsMenu button:hover {
 
   background-color: var(--Hover-Color);
   cursor: pointer;

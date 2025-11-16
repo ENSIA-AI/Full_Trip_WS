@@ -6,6 +6,8 @@ import './styles/AgencyTours.css'
 import { faMap } from "@fortawesome/free-regular-svg-icons";
 import { useEffect, useRef, useState } from "react";
 
+import { createPortal } from 'react-dom';
+
 
 function AddTour() {
 
@@ -157,7 +159,6 @@ function AddTour() {
 
                     ))}
 
-                    {/*OnClick*/}
                     <button className="PrimaryB FlexH" onClick={AddHighlight}><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>ADD a Higlight</button>
 
                 </div>
@@ -165,12 +166,15 @@ function AddTour() {
                     <div className="SecHeader">
                         <h3> Departure Dates:</h3>
                     </div>
-                    <div className="InputContainer">
-                        <div>
+                    <label htmlFor="date">
+                        <div className="InputContainer">
+                            <div>
 
-                            <input type="Date" min={today} className="CostumeInput" placeholder="Select Date" ></input>
+                                <input id="date" type="Date" min={today} className="CostumeInput" placeholder="Select Date" ></input>
+                                <small>ADD a Date</small>
+                            </div>
                         </div>
-                    </div>
+                    </label>
                     <button className="PrimaryB FlexH"><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>ADD Date</button>
 
                 </div>
@@ -182,11 +186,14 @@ function AddTour() {
 
 const Tours = [{
 
+    TourId: 0,
+
     name: "Paris: City of Lights",
     rating: 4.9,
     RateCount: 234,
     Agency: "MMA Travel",
     location: "Paris, France",
+
 
     //!ADD This:
     TotalTickets: 10,
@@ -220,6 +227,7 @@ const Tours = [{
     Status: "Active",
 
 }, {
+    TourId: 2,
     name: "Paris: City of Lights",
     rating: 4.9,
     RateCount: 234,
@@ -262,8 +270,12 @@ function ToursManagement() {
 
     //Actions Menu-------------------------------
     const btnref = useRef();
+    const [openCustomer, SetopenCustomers] = useState(false);
     const [open, setopen] = useState(false)
     const [menuindex, setmenuindex] = useState(null);
+
+    const [ToursList, SetToursList] = useState(Tours);
+
     useEffect(() => {
 
         function handleClickOutside(e) {
@@ -281,14 +293,55 @@ function ToursManagement() {
             document.removeEventListener("click", handleClickOutside);
         };
     }, [])
+    function ManageDepartureDates() {
+
+    }
+    function ShowCustomers({ isOpen, onClose, children }) {
+        if (!isOpen) return null;
+
+        return createPortal(
+
+            <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <div style={{
+                    background: 'white',
+                    padding: '20px',
+                    borderRadius: '8px'
+                }}>
+                    {children}
+                    <button onClick={onClose}>Close</button>
+                </div>
+            </div>
+
+
+            , document.body)
+    }
+    function DeleteTour(idToRemove) {
+        SetToursList(prev =>
+            prev.filter(tour => tour.TourId !== idToRemove)
+        );
+
+        setopen(false);
+
+
+    }
     //ShowDepartureDates---------------------------
 
     return (<>
         <div className="Section" >
 
-            {Tours.map((Tour, index) => (
+            {ToursList.map((Tour) => (
 
-                <div key={index} className="Section">
+                <div key={Tour.TourId} className="Section">
                     <div className="FlexH_spaceBetween" >
                         <h4>{Tour.name}</h4>
 
@@ -299,21 +352,23 @@ function ToursManagement() {
 
 
                                 e.stopPropagation();// prevent document click from immediately closing it
-                                setmenuindex(index);
-                                setopen((prev) => (index === menuindex ? !prev : true));
+                                setmenuindex(Tour.TourId);
+                                setopen((prev) => (Tour.TourId === menuindex ? !prev : true));
 
 
                             }}><FontAwesomeIcon icon={faEllipsisV}></FontAwesomeIcon></button>
-                            {open && (menuindex == index) &&
+                            {open && (menuindex == Tour.TourId) &&
 
 
                                 (<div className="ActionsMenu FlexV" style={{ gap: 0, translate: "-100% 90%" }}>
                                     <h4>Actions</h4>
-                                    <div className="FlexH"> <FontAwesomeIcon className="Icon" icon={faUsers}></FontAwesomeIcon><p>View Costumers</p></div>
-                                    <div className="FlexH"> <FontAwesomeIcon className="Icon" icon={faCalendar}></FontAwesomeIcon><p>Manage Dates</p></div>
+                                    <button onClick={ShowCustomers} className="FlexH"> <FontAwesomeIcon className="Icon" icon={faUsers}></FontAwesomeIcon><p>View Costumers</p></button>
 
-                                    <div className="FlexH DeleteC"> <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon><p>Delete Tour</p></div>
+                                    <button onClick={ManageDepartureDates} className="FlexH"> <FontAwesomeIcon className="Icon" icon={faCalendar}></FontAwesomeIcon><p>Manage Dates</p></button>
+
+                                    <div onClick={() => DeleteTour(Tour.TourId)} className="FlexH DeleteC"> <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon><p>Delete Tour</p></div>
                                 </div>)
+
 
                             }
 
@@ -390,10 +445,5 @@ function AgencyTours() {
 
     </>)
 }
-
-
-
-
-
 
 export default AgencyTours;
