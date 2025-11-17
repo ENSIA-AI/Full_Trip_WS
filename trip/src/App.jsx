@@ -3,7 +3,7 @@ import Home from './landingPage/components/HomePage'
 import Explore from './landingPage/components/Explore'
 import AboutUs from './landingPage/components/AboutUs'
 import Feedback from './landingPage/components/Feedback/Feedback'
-import { BrowserRouter, Route ,Routes} from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import UserProfile from './UserProfile/UserProfile'
 
@@ -19,7 +19,7 @@ function App() {
       <BrowserRouter>
         {/* Testing Profile */}
         <Routes>
-          <Route path='/*' element={<UserProfile U_type='Agency' Username='Travel W Us'/>}></Route>
+          <Route path='/*' element={<UserProfile U_type='Agency' Username='Travel W Us' />}></Route>
         </Routes>
       </BrowserRouter>
     </>

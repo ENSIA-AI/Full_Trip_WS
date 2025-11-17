@@ -14,13 +14,55 @@ function AddTour() {
 
     const [HighlightsCount, SetHighlightsCount] = useState(1);
     const [HighlightsIDCount, SetHighlightsIDCount] = useState(1);
-    const [Highlights, SetHighlights] = useState([{ id: 0 }])
+    const [Highlights, SetHighlights] = useState([{ id: 0 }]);
+
+    //Dates Management:
+    const [DDates, setDDates] = useState([]);
+    const [IdCount, setIdCount] = useState(0);
+
+    const [DateValid, SetDateValid] = useState(true);
+    const [SpotsValid, SetSpotsValid] = useState(true);
+
+    const Dateinput = useRef();
+    const Spotsinput = useRef();
+    function AddDepartureDate() {
+        const date = Dateinput.current.value.trim();
+        const spots = Spotsinput.current.value.trim();
+        var Valid = true;
+        if (date === "") {
+
+            SetDateValid(false);
+            Valid = false;
+
+        }
+        else {
+            SetDateValid(true);
+        }
+        if (spots === "") {
+            SetSpotsValid(false);
+            Valid = false;
+        }
+        else {
+            SetSpotsValid(true);
+
+        }
+        if (Valid) {
+            setDDates(prev => [...prev, { Date: date, Spots: spots, id: IdCount, SpotsTaken: 0 }]);
+            setIdCount(IdCount + 1);
+        }
+    }
+    function DeleteDate(id) {
+
+        setDDates(prev => prev.filter(Date => Date.id !== id));
+    }
+    //--------------------------------------------
 
     function AddHighlight() {
 
         SetHighlightsCount(HighlightsCount + 1);
         SetHighlights(prev => [...prev, { id: HighlightsIDCount }]);
         SetHighlightsIDCount(HighlightsIDCount + 1);
+
 
 
 
@@ -101,13 +143,7 @@ function AddTour() {
                             <input type="number" className="CostumeInput" placeholder="Amount"></input>
                         </div>
                     </div>
-                    <div className="InputContainer">
-                        <label>Spots:</label>
-                        <div>
-                            <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faUser}></FontAwesomeIcon></label>
-                            <input type="number" min={2} className="CostumeInput" placeholder="1"></input>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="div3 Section Inclusion">
                     <div className="SecHeader">
@@ -169,15 +205,34 @@ function AddTour() {
                     </div>
                     <label htmlFor="date">
                         <div className="InputContainer">
+                            <label>Date:</label>
                             <div>
-
-                                <input id="date" type="Date" min={today} className="CostumeInput" placeholder="Select Date" ></input>
-                                <small>ADD a Date</small>
+                                <input ref={Dateinput} id="date" type="Date" min={today} className={`CostumeInput ${DateValid ? "" : "InvalidIn"}`} placeholder="Select Date" ></input>
+                            </div>
+                        </div>
+                        <div className="InputContainer">
+                            <label>Spots:</label>
+                            <div>
+                                <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
+                                <input ref={Spotsinput} type="number" min={2} className={`CostumeInput ${SpotsValid ? "" : "InvalidIn"}`} placeholder="1"></input>
                             </div>
                         </div>
                     </label>
-                    <button className="PrimaryB FlexH"><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>ADD Date</button>
-
+                    <button onClick={AddDepartureDate} className="PrimaryB FlexH"><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>ADD Date</button>
+                    {DDates.map(Date => (
+                        <div key={Date.id} className="Section ">
+                            <div className="FlexH_spaceBetween">
+                                <div className="FlexH">
+                                    <FontAwesomeIcon className="DateIcon" icon={faCalendar}></FontAwesomeIcon>
+                                    <div>
+                                        <h4>{Date.Date}</h4>
+                                        <div className="Spots">{Date.SpotsTaken}/{Date.Spots} Spots</div>
+                                    </div>
+                                </div>
+                                <button className="SecondaryB" onClick={() => DeleteDate(Date.id)}><FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon></button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
@@ -310,8 +365,35 @@ function ToursManagement() {
     const btnref = useRef();
     const [openCustomer, SetopenCustomers] = useState(false);
     const [openManageDates, SetManageDatesOpen] = useState(false);
-    const [open, setopen] = useState(false)
-    const [menuindex, setmenuindex] = useState(null);
+    const [open, setopen] = useState(false);
+    const [menuindex, setmenuindex] = useState();
+    //Dates Management:
+    const [DDates, setDDates] = useState([]);
+    const [IdCount, setIdCount] = useState(0);
+    const Dateinput = useRef();
+    const Spotsinput = useRef();
+    function AddDepartureDate() {
+        const date = Dateinput.current.value.trim();
+        const spots = Spotsinput.current.value.trim();
+        if (date === "") {
+
+            Dateinput.current.className += " InvalidIn";
+
+        }
+        if (spots === "") {
+            Spotsinput.current.className += " InvalidIn";
+        }
+        else {
+            console.log(date);
+            setDDates(prev => [...prev, { Date: date, Spots: spots, id: IdCount, SpotsTaken: 0 }]);
+            setIdCount(IdCount + 1);
+        }
+    }
+    function DeleteDate(id) {
+
+        setDDates(prev => prev.filter(Date => Date.id !== id));
+    }
+    //--------------------------------------------
 
     const [ToursList, SetToursList] = useState(Tours);
 
@@ -349,7 +431,7 @@ function ToursManagement() {
                 alignItems: 'center',
                 justifyContent: 'center',
             }}>
-                <div className="Section SmoothAppear">
+                <div className="Section SmoothAppear" style={{ height: "80vh", overflow: "auto" }}>
                     {children}
                     <button className="PrimaryB" onClick={onClose}>Close</button>
                 </div>
@@ -414,18 +496,32 @@ function ToursManagement() {
                             </div>
                             <h4>Add a New Departure Date:</h4>
                             <div className="FlexH">
-                                <input className="CostumeInput" type="Date" min={today}></input>
+                                <input ref={Dateinput} className="CostumeInput" type="Date" min={today}></input>
                                 <div className="InputContainer">
                                     <div>
                                         <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
-                                        <input  type="number" min={1}  className="CostumeInput" placeholder="Spots"></input>
+                                        <input ref={Spotsinput} type="number" min={1} className="CostumeInput" placeholder="Spots"></input>
                                     </div>
                                 </div>
 
-                                <button className="PrimaryB FlexH"><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>Add</button>
+                                <button className="PrimaryB FlexH" onClick={AddDepartureDate}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>Add</button>
                             </div>
                             <h4>Current DepartureDates:</h4>
-                            <hr style={{width:"100%",margin:"0"}}></hr>
+                            <hr style={{ width: "100%", margin: "0" }}></hr>
+                            {DDates.map(Date => (
+                                <div key={Date.id} className="Section ">
+                                    <div className="FlexH_spaceBetween">
+                                        <div className="FlexH">
+                                            <FontAwesomeIcon className="DateIcon" icon={faCalendar}></FontAwesomeIcon>
+                                            <div>
+                                                <h4>{Date.Date}</h4>
+                                                <div className="Spots">{Date.SpotsTaken}/{Date.Spots} Spots</div>
+                                            </div>
+                                        </div>
+                                        <button className="SecondaryB" onClick={() => DeleteDate(Date.id)}><FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon></button>
+                                    </div>
+                                </div>
+                            ))}
 
                         </Portal>
                         <Portal isOpen={openCustomer} onClose={() => (SetopenCustomers(false))}>

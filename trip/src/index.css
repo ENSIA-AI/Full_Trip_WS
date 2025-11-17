@@ -121,7 +121,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  overflow: auto;
+
 }
 
 .SecHeader {
@@ -141,8 +141,18 @@ body {
   background-color: var(--input-background);
   width: 100%;
   transition: 0.2s;
+}
 
+.ValidIn {
+  border: 2px solid green !important;
+}
 
+.InvalidIn {
+  border: 2px solid red !important;
+}
+
+.InValid {
+  color: red;
 }
 
 .CostumeInput .Icon {
@@ -388,6 +398,6 @@ body {
 
 /*Portal----------------------------------------------*/
 
-.SmoothAppear{
+/* .SmoothAppear {
   animation: SmoothAppear 0.3s;
-}
+} */

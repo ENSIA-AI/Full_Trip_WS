@@ -62,3 +62,24 @@
     text-align: center;
     font-weight: 600;
 }
+/*Dates--------------------------*/
+.DateIcon{
+
+    font-size: 1.2em;
+    padding: 10px;
+    border-radius: var(--radius);
+    color: var(--Primary-Color);
+    background-color: var(--input-background);
+    border: 2px solid var(--border);
+
+}
+.Spots{
+    font-size:small;
+    text-align: center;
+    font-weight: bold;
+    padding: 3px;
+    background-color: lightblue;
+    color: white;
+
+    border-radius: var(--radius);
+}

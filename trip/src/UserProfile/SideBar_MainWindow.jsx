@@ -159,12 +159,13 @@ function SideBar_MainWindow() {
           } U_type={UserInfo.U_type}></ProfileHeader>
           <div style={{ padding: "20px" }}>
             <Routes>
-              <Route index element={<Navigate to="Flights" replace />} />
+              <Route index element={<Navigate to={(UserInfo.U_type === "Agency")?"Overview":"Flights"} replace />} />
 
               {
                 SideBar.map((item, index) => (
                   <Route key={index} path={`/${item.Section}/*`} element={<item.Component />} ></Route>
                 ))
+
               }
               <Route path="/Settings/*" element={<Settings />}></Route>
             </Routes>
