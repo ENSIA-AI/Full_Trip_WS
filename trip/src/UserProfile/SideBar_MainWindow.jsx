@@ -110,7 +110,7 @@ function SideBar_MainWindow() {
             <ul style={{ padding: DashBoard ? "15px" : "15px 10px" }}>
               {SideBar.map((item, index) => (
                 <li key={index}  >
-                  <NavLink className="MainLink" to={`${item.Section}`} >
+                  <NavLink className="MainLink" to={`/Profile/${item.Section}`} >
                     <FontAwesomeIcon icon={item.icon} className="Icon" style={{ fontSize: DashBoard ? "1.2em" : "1.3em" }}></FontAwesomeIcon>
                     <p style={{ display: DashBoard ? "" : "none" }}>{item.Section}</p>
 
@@ -134,7 +134,7 @@ function SideBar_MainWindow() {
             {/* Bottom List ------------------------------------------------------------------------------------- */}
             <ul style={{ padding: DashBoard ? "15px" : "15px 10px", borderTop: "1px solid grey" }}>
               <li>
-                <NavLink to={`${BottomMenu[0].Section}`} className="MainLink">
+                <NavLink to={`/Profile/${BottomMenu[0].Section}`} className="MainLink">
                   <FontAwesomeIcon icon={BottomMenu[0].icon} className="Icon" style={{ fontSize: DashBoard ? "1.2em" : "1.3em" }}></FontAwesomeIcon>
                   <p style={{ display: DashBoard ? "" : "none" }}>{BottomMenu[0].Section}</p>
                 </NavLink>

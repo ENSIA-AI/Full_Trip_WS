@@ -5,6 +5,7 @@
   margin: 0;
   box-sizing: border-box;
   max-width: 100%;
+
 }
 
 
@@ -38,15 +39,16 @@
 
 
 }
-
-html{
+/* 
+#root{
   overflow-x: hidden;
-}
+} */
 
 body {
   background: url(./landingPage/images/bg.jpg);
   line-height: 1.5;
   font-family: 'poppins', sans-serif;
+
 }
 
 .PrimaryB {

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBuilding, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-
+import { Link } from "react-router-dom";
 
 import '../index.css'
 import './ProfileHeader.css'
@@ -10,8 +10,7 @@ function ProfileHeader({ Username = "User", U_type = "Regular" }) {
 
     return (<>
         <nav className="ProfileHaeder">
-            <button className="PrimaryB"><FontAwesomeIcon icon={faArrowLeft} style={{ color: "#ffffff", fontWeight: "bold", fontSize: "1em" }} /></button>
-
+            <Link to="/"><button style={{height:"100%"}} className="PrimaryB"><FontAwesomeIcon icon={faArrowLeft} style={{ color: "#ffffff", fontWeight: "bold", fontSize: "1em" }} /></button></Link>
             <div className="Profile_Username">
                 <div>
                     <p className="UserName">{Username}</p>
