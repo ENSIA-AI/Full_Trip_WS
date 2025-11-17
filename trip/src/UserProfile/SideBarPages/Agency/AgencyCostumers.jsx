@@ -45,10 +45,32 @@ function Ag_Costumers() {
 
     function deleteCustomer(idToRemove) {
 
+        const index = customers.findIndex(obj => obj.id === idToRemove);
+        customers.splice(index, 1);
+
         setCostumersList(prev => prev.filter(costumer => costumer.customerId !== idToRemove));
         setopen(false);
     }
 
+    function Search(e) {
+        const value = e.target.value.trim();
+        console.log(value);
+
+        if (value.trim() === "") {
+            setCostumersList(customers);
+        }
+        else {
+
+            setCostumersList(customers.filter(customer =>
+                customer.customer.toLowerCase().startsWith(value.toLowerCase()) ||
+                customer.customerId.toLowerCase().startsWith(value.toLowerCase()) ||
+                customer.contact.email.toLowerCase().startsWith(value.toLowerCase()) ||
+                customer.contact.phone.toLocaleLowerCase().startsWith(value.toLowerCase())
+            ))
+        }
+
+
+    }
 
     return (<>
         <div className="S_Container :">
@@ -62,7 +84,7 @@ function Ag_Costumers() {
                     <div className="InputContainer">
                         <div>
                             <label for="search" className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faMagnifyingGlass}></FontAwesomeIcon></label>
-                            <input id="search" className="CostumeInput" placeholder="Search by name,email,ID..."></input>
+                            <input onChange={Search} id="search" className="CostumeInput" placeholder="Search by name,email,ID..."></input>
                         </div>
                     </div>
                 </div>

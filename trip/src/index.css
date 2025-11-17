@@ -142,7 +142,7 @@ body {
   width: 100%;
   transition: 0.2s;
 
-  animation: SmoothAppear 0.3s;
+
 }
 
 .CostumeInput .Icon {
@@ -345,17 +345,20 @@ body {
   border-bottom: 2px solid var(--border);
   padding: 10px;
 }
-.ActionsMenu button{
+
+.ActionsMenu button {
   background-color: white;
   border: none;
   font-size: 1em;
 }
 
-.ActionsMenu div , .ActionsMenu button {
+.ActionsMenu div,
+.ActionsMenu button {
   padding: 10px 10px;
 }
 
-.ActionsMenu div:hover ,.ActionsMenu button:hover {
+.ActionsMenu div:hover,
+.ActionsMenu button:hover {
 
   background-color: var(--Hover-Color);
   cursor: pointer;
@@ -381,4 +384,10 @@ body {
     scale: 1;
     opacity: 1;
   }
+}
+
+/*Portal----------------------------------------------*/
+
+.SmoothAppear{
+  animation: SmoothAppear 0.3s;
 }
