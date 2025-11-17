@@ -3,11 +3,20 @@ import Home from './landingPage/components/HomePage'
 import Explore from './landingPage/components/Explore'
 import AboutUs from './landingPage/components/AboutUs'
 import Feedback from './landingPage/components/Feedback/Feedback'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import UserProfile from './UserProfile/UserProfile'
+
+
+{/* Testing will remove later*/ }
+
+
 import Footer from './landingPage/components/Footer'
 import Register from './landingPage/components/Register'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
+
   return (
 
     <BrowserRouter>
@@ -26,6 +35,7 @@ function App() {
       </Routes>
     </BrowserRouter>
   )
+
 }
 
 export default App

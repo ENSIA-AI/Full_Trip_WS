@@ -1,6 +1,7 @@
 import '../F-Stiling/ClientOp.css'
 import img1 from '../F-images/img1.jpg'
 import star from '../F-images/star.png'
+import TripPhone from '../F-images/Traveling-pana.svg'
 import Aos from 'aos'
 import { useEffect } from 'react'
 
@@ -18,7 +19,8 @@ export default function ClientOp() {
   }
 
   return (
-    <div className="client-op">
+    <div className="client-op" >
+      <img src={TripPhone}  className='TripPhoneImg'/>
       <div className="text-comp">
         <p data-aos='fade-up' >FROM OUR CLIENTS</p>
         <h1 data-aos='fade-up'>Real Travel History From Our Beloved Clients</h1>
@@ -38,7 +40,6 @@ export default function ClientOp() {
         </div>
         <button data-aos='fade-up-left' onClick={scrollToAboutUs}>About Us <i id='flesh-btn' class='bxr  bx-arrow-right-stroke'  ></i> </button>
       </div>
-      <img data-aos='fade-left' src={img1} />
     </div>
   )
 }

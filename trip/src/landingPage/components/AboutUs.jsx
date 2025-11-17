@@ -1,10 +1,15 @@
 import { useEffect } from 'react'
 import '../styles/AboutUsStiling.css'
-import second from '../images/second.png'
-import third from '../images/third.png'
-import trip from '../images/trip.png'
+import first from '../images/firstImg.svg'
+import second from '../images/second.svg'
+import third from '../images/third.svg'
+import trip from '../images/trip.svg'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
+
+//Testing a new style:
+import { faHeadset } from '@fortawesome/free-solid-svg-icons'
+
 
 export default function AboutUs() {
   useEffect(() => {
@@ -23,7 +28,7 @@ export default function AboutUs() {
       <div className='content-container'>
         <div>
           <div>
-            <img data-aos='fade-up-right' src={second} alt='second' />
+            <img data-aos='fade-up' src={first} alt='first' />
             <div data-aos='fade-up'>
               <h2>Safety and Support</h2>
               <p>
@@ -33,7 +38,7 @@ export default function AboutUs() {
             </div>
           </div>
           <div>
-            <i data-aos='fade-up-right' id='trip-i' class='bxr bx-trip'></i>
+            <img data-aos='fade-up' src={third} alt='third'></img>
             <div data-aos='fade-up'>
               <h2>Customized Experiences</h2>
               <p>
@@ -45,8 +50,8 @@ export default function AboutUs() {
 
           <div>
             <div>
-              <i data-aos='fade-up-right' id='trip-i2' class='bxr bx-message-question-mark'></i>
-              <img data-aos='fade-up' src={third} alt='third' />
+              
+              <img data-aos='fade-up' src={second} alt='third' />
             </div>
             <div data-aos='fade-up'>
               <h2>Expert Guidance</h2>
