@@ -158,6 +158,7 @@ function Flights() {
             
             <div className="outputarea">
                <FlightCard></FlightCard>
+              
             </div>
             
         </div>
