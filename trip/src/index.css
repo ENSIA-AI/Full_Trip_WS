@@ -2,9 +2,11 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  max-width: 100%;
 }
 
 :root {
+  width: 100vw;
   --btn1-color: #e74211;
   --btn1-color-hover: #f1643a;
   --btn2-color: #b695fe;
@@ -19,20 +21,24 @@
   --transparent-bg-cl2: rgba(100, 75, 80, 0.2);
 }
 
-body {
+html{
   overflow-x: hidden;
+}
+
+body {
   background: url(./landingPage/images/bg.jpg);
   line-height: 1.5;
   font-family: 'poppins', sans-serif;
 }
 
-::-webkit-scrollbar{
+
+::-webkit-scrollbar {
   width: 10px;
   border-radius: 5px;
   background-color: #eee;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
   background-color: var(--btn1-color);
   border-radius: 25%;
 }

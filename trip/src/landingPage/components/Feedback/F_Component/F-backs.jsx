@@ -44,8 +44,7 @@ export default function Fbacks() {
           {feedbacks.map((feedback, index) => (
             <li data-aos='fade-up' key={index}>
               <p style={{
-                borderRadius: expandedItems.includes(index) ? '15px 15px 0 0' : '15px',
-
+                borderRadius: expandedItems.includes(index) ? '15px 15px 0 0' : '15px'
               }}>
                 {feedback.summary}
                 <button id='btn' onClick={() => showDetails(index)}>

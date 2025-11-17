@@ -13,15 +13,14 @@ export default function AboutUs() {
 
   return (
     <div className="about-us">
+      <div className='header-about-us'>
+        <h1 data-aos='fade-up-right'>Why Should You Choose Us</h1>
+        <p data-aos='fade-up-right'>
+          At TravelWUs, we bring years of expertise and passion for global exploration.
+          Our mission is to deliver extraordinary travel experiences with care and precision.
+        </p>
+      </div>
       <div className='content-container'>
-        <div className='header-about-us'>
-          <h1 data-aos='fade-up-right'>Why Should You Choose Us</h1>
-          <p data-aos='fade-up-right'>
-            At TravelWUs, we bring years of expertise and passion for global exploration.
-            Our mission is to deliver extraordinary travel experiences with care and precision.
-          </p>
-        </div>
-
         <div>
           <div>
             <img data-aos='fade-up-right' src={second} alt='second' />
@@ -58,8 +57,8 @@ export default function AboutUs() {
             </div>
           </div>
         </div>
+        <img src={trip} alt='trip' />
       </div>
-      <img src={trip} alt='trip' />
     </div>
   )
 }

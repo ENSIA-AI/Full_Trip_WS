@@ -3,11 +3,12 @@
 .ann-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  gap: min(40px, 10vw);
   padding-bottom: 20px;
   align-items: center;
   justify-content: center;
-  margin: 0 100px;
+  width: 100vw;
+
 }
 
 .ann-section .txt-content {
@@ -19,15 +20,15 @@
 }
 
 .ann-section .txt-content h1 {
-  font-size: 1.9rem;
+  font-size: clamp(1.2rem, 3vw, 1.9rem);
   width: 100%;
 }
 
-.typed{
+.typed {
   color: black;
 }
 
-.typed-cursor{
+.typed-cursor {
   color: var(--btn1-color);
 }
 
@@ -39,12 +40,12 @@
 .ann-section .txt-content button {
   cursor: pointer;
   border-radius: 20px;
-  padding: 8px 15px;
+  padding: min(8px, 8%) min(15px, 10%);
   background-color: var(--btn1-color);
   color: var(--white-cl);
   border: 2px solid transparent;
   outline: none;
-  font-size: 15px;
+  font-size: min(15px, 3vw);
   font-weight: 600;
 }
 
@@ -64,7 +65,7 @@
 }
 
 .ann-section>img {
-  width: 400px;
+  width: clamp(200px, 40vw, 400px);
   animation: smooth-mooving 2s infinite;
 }
 
@@ -79,5 +80,20 @@
 
   100% {
     transform: translateY(0px);
+  }
+}
+
+@media (max-width:600px) {
+  .ann-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ann-section>.txt-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

@@ -139,12 +139,7 @@ export default function Register() {
               </select>
             </label>
           </div>
-          <div style={{
-            width: "2px",
-            height: "350px",
-            backgroundColor: "black",
-            margin: "0 10px"
-          }}>
+          <div className='separate-line'>
           </div>
           <div className='second-sec'>
             <label>Currency

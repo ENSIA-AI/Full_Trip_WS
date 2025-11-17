@@ -2,13 +2,14 @@
 
 footer {
   background-color: var(--transparent-bg-cl);
-  padding: 0 100px;
+  padding: 0 min(100px, 10vw);
+  width: 100vw;
 }
 
 footer>.footer {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 250px;
+  gap: min(250px,2vh);
   padding-top: 15px;
 }
 
@@ -70,58 +71,69 @@ footer>.footer>.social-contact>.icons>a>i {
 footer.footer>.social-contact>.slogo>img,
 h1 {
   width: 25px;
-  font-size: 25px;
+  font-size: min(10vw,25px);
 }
 
-.information{
+.information {
   margin-top: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap:7px;
+  gap: 7px;
 }
 
-.page-sections{
+.page-sections {
   font-size: 14px;
 }
 
-.page-sections>p{
+.page-sections>p {
   width: fit-content;
   border-bottom: 1.2px solid transparent;
 }
 
-.page-sections>p:hover{
+.page-sections>p:hover {
   color: var(--btn1-color);
   border-bottom: 1.2px solid var(--btn1-color);
   transition: 0.3s;
   cursor: pointer;
 }
 
-.page-sections>p:active{
+.page-sections>p:active {
   color: var(--btn1-color);
   border-bottom: 1.2px solid transparent;
   transition: 0s;
   transform: scale(0.96);
 }
-.contact-details{
+
+.contact-details {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 }
 
-.contact-details>a{
+.contact-details>a {
   color: gray;
   text-decoration: none;
+  font-size: min(16px ,4vw);
 }
 
-.contact-details>a:hover{
+.contact-details>a:hover {
   color: gray;
   color: var(--btn1-color);
 }
 
-#copyright{
+#copyright {
   margin: 10px 0 0;
   text-align: center;
+}
+
+@media (max-width:770px) {
+  footer>.footer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 }

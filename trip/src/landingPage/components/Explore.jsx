@@ -51,7 +51,7 @@ export default function Explore() {
       <nav data-aos='zoom-out'>
         {Catigories}
       </nav>
-      <div className='images'>
+      <div className='exp-images'>
         {image}
       </div>
     </div>
