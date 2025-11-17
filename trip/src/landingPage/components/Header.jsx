@@ -2,25 +2,27 @@ import '../styles/header&signUp.css'
 import React from 'react'
 import titIcon from '../images/title-icon.svg'
 import SignUpForm from './SignUpForm'
-import Aos from 'aos'
-import 'aos/dist/aos.css'
 
 export default function Header() {
   const [formAppear, setFormAppear] = React.useState(false);
+  const [hiddenMenu, setHideMenu] = React.useState(true);
   let [btnContent, setBtnContent] = React.useState('Sign Up');
-  const [navBarContent] = React.useState(['Stays', 'Flights', 'Car rental', 'Airport taxis', 'attractions']);
+  const [navBarContent] = React.useState(['Stays', 'Flights', 'Airport taxis', 'attractions']);
   const navContent = navBarContent.map(navContent => (
-    <li data-aos='zoom-in' tabindex="0" key={navContent}>{navContent}</li>
+    <li tabindex="0" key={navContent}>{navContent}</li>
   ))
+
+  const hideMenu = () => {
+    setHideMenu(true);
+  }
+
+  function showMenu() {
+    setHideMenu(false);
+  }
 
   function showForm() {
     setFormAppear(true);
   }
-
-  
-  React.useEffect(() => {
-    Aos.init({ duration: 1700 })
-  }, [])
 
   React.useEffect(() => {
     const home = document.querySelector('.main-page');
@@ -47,17 +49,28 @@ export default function Header() {
   return (
     <div className='header-div'>
       <header>
-        <div data-aos='fade-right' className="slogo">
+        <div className="slogo">
           <img src={titIcon}></img>
           <h1>TravelWUs</h1>
         </div>
-        <ul className='navBar'>{navContent}</ul>
-        <div data-aos='fade-left' className='SignLogIn'>
+        <ul
+          id={hiddenMenu ? 'hideMin' : 'showMin'}
+          className='navBar'>
+          <li><button onClick={hideMenu} name='return'><i class='bx  bx-x'  ></i> </button></li>
+          {navContent}</ul>
+        <div className='SignLogIn'>
           <button onClick={showForm}>{btnContent}</button>
         </div>
-      </header>
-      {formAppear && <SignUpForm InContent={setBtnContent}
-        formAppearing={setFormAppear} />}
-    </div>
+        <div className='menu'>
+          <i
+            class='bxr  bx-menu'
+            onClick={showMenu}></i>
+        </div>
+      </header >
+      {
+        formAppear && <SignUpForm InContent={setBtnContent}
+          formAppearing={setFormAppear} />
+      }
+    </div >
   )
 }

@@ -11,18 +11,29 @@ import UserProfile from './UserProfile/UserProfile'
 {/* Testing will remove later*/ }
 
 
+import Footer from './landingPage/components/Footer'
+import Register from './landingPage/components/Register'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
 
   return (
-    <>
-      <BrowserRouter>
-        {/* Testing Profile */}
-        <Routes>
-          <Route path='/*' element={<UserProfile U_type='Agency' Username='Travel W Us' />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </>
+
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={
+          <>
+            <Header />
+            <Home />
+            <Explore />
+            <AboutUs />
+            <Feedback />
+            <Footer />
+          </>
+        } />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
   )
 
 }

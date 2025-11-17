@@ -10,21 +10,22 @@
   background-repeat: no-repeat;
   background-position: center;
   height: fit-content;
-  padding: 70px 100px 50px;
+  padding: min(100px, 15vh) min(100px, 15vw);
   gap: 10px;
+  width: 100vw;
   border-style: none;
 }
 
 .main-page>p:first-child {
-  font-size: 3rem;
-  width: 700px;
+  font-size: clamp(1.4rem, 6vw, 3rem);
+  width: min(700px, 70vw);
   font-weight: bold;
   text-align: center;
   color: var(--white-cl);
 }
 
 .main-page>p:nth-child(2) {
-  font-size: 15px;
+  font-size: clamp(13px, 4vw, 15px);
   font-weight: 600;
   text-align: center;
   color: var(--white-cl);
@@ -74,13 +75,15 @@
 }
 
 .main-page>.popular-places-tit {
-  margin: 70px auto 20px;
+  margin: min(70px, 8vh) auto min(20px, 8vw);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-span {
+.main-page>.popular-places-tit>span {
+  font-size: clamp(0.6rem, 4vw, 1.2rem);
+  line-break: auto;
   display: inline-block;
   font-weight: 700;
   color: var(--white-cl);
@@ -88,7 +91,7 @@ span {
 
 hr {
   display: inline-block;
-  width: 400px;
+  width: 20vw;
   border: none;
   border-top: 2px solid var(--btn1-color);
   vertical-align: middle;
@@ -99,54 +102,64 @@ hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: min(20px, 5vw);
 }
 
 .images>img {
-  width: 240px;
-  height: 140px;
-  border-radius: 20px;
+  width: clamp(150px, 20%, 400px);
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 20%;
   cursor: pointer;
 }
 
 .images>img:hover {
   scale: 1.03;
-  transition: 0.5s;
+  transition: 0.3s;
+}
+
+.review-div{
+  width: 100vw;
+  padding: min(72px, 8%) min(100px, 8%);
+  
 }
 
 .review {
-  background-color:var(--transparent-bg-cl);
-  border-radius: 50px;
-  margin:82px 100px;
-  padding:72px 100px;
+  padding: min(72px, 8%) min(100px, 8%);
+  background-color: var(--transparent-bg-cl);
+  border-radius: 5vw;
   list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-items: center;
+  justify-content: space-between;
+}
+
+.review>li {
+  width: clamp(100px, 20vw, 170px);
+}
+
+.review>li>h1 {
+  font-size: clamp(1rem, 4vw, 2rem);
+  font-weight: bold;
+  overflow: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.review >li{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  justify-content: space-between;
-  width: 100px;
   gap: 10px;
 }
 
-.review >li:nth-child(2){
-  gap: 45px;
-}
-.review >li:nth-child(3){
-  gap: 55px;
-}
-
-.review >li >h1{
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.review >li >small{
-  font-size: 13px;
+.review>li>h1>small {
+  font-size: clamp(11px, 2vw, 13px);
   font-weight: 100;
+  overflow: none;
+}
+
+@media (max-width:600px) {
+  .main-page>.popular-places-tit {
+    flex-direction: column;
+  }
 }
