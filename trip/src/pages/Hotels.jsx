@@ -1,7 +1,6 @@
 import Navbar from "../components/Navbar";
 import Searcharea from "../components/Searchbar";
-import Hotelcard from "../components/Hotelcard";
-
+import Hotelcard2 from "../components/HotelCard2";
 import top1 from './pics/top1.jpg'
 import top2 from './pics/top2.avif'
 import top3 from './pics/top3.jpg'
@@ -156,11 +155,10 @@ function Hotels() {
             </div>
             
             <div className="outputarea">
-                <Hotelcard></Hotelcard>
-                <Hotelcard></Hotelcard>
-                <Hotelcard></Hotelcard>
-                <Hotelcard></Hotelcard>
-                <Hotelcard></Hotelcard> 
+                 
+                <Hotelcard2></Hotelcard2> 
+                <Hotelcard2></Hotelcard2> 
+                <Hotelcard2></Hotelcard2> 
             </div>
             
         </div>

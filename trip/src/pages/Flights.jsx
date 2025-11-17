@@ -1,7 +1,6 @@
 
 import Navbar from "../components/Navbar";
-import Searcharea from "../components/SearchbarF.jsx";
-import Hotelcard from "../components/Planecard.jsx";
+import FlightCard from "../components/FlightCard.jsx";
 import top1 from './pics/Atop1.jpg'
 import top2 from './pics/Atop2.jpg'
 import top3 from './pics/Atop3.jpg'
@@ -14,12 +13,13 @@ import top9 from './pics/Atop9.webp'
 import top10 from './pics/Atop10.avif'
 import plane from './pics/plane-departure-solid-full.svg'
 import Footer2 from"../components/Footer2"
+import Searcharea from "../components/SearchbarF.jsx";
 
 import { useRef } from "react";
 
 import './css/page.css'
-import SearchareaF from "../components/SearchbarF.jsx";
-import Plane from "../components/Planecard.jsx";
+
+
 function Flights() {
      const slider = document.querySelector('.slider');
     let scrollAmount = 0;
@@ -153,15 +153,11 @@ function Flights() {
 
         <div className="output" >
             <div className="search" ref={refrence}>
-                <SearchareaF></SearchareaF>
+                <Searcharea></Searcharea>
             </div>
             
             <div className="outputarea">
-                <Plane></Plane>
-                <Plane></Plane>
-                <Plane></Plane>
-                <Plane></Plane>
-                <Plane></Plane>
+               <FlightCard></FlightCard>
             </div>
             
         </div>

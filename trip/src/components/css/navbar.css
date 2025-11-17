@@ -114,14 +114,15 @@ a {
   display: inline-block;
   font-weight: 600;
   white-space: nowrap;
+  outline: none;
 }
 
 a:hover {
   color: var(--btn1-color);
   background-color: #ffffff;
   border-radius: 20px;
-  padding: 10px;
-  transform: scale(1.2);
+  padding: 10px ;
+  transform: scale(1);
   transition: 300ms ease-out;
 }
 .buttons {
@@ -147,6 +148,7 @@ button {
   white-space: nowrap;
   box-shadow: 5px 5px 5px var(--shadow);
   margin: 10px;
+  font-size: 1rem;
   animation: button 1000ms;
 }
 
@@ -156,6 +158,7 @@ button:hover {
   color: var(--btn1-color);
   transition-duration: 300ms;
 }
+
 
 @media (min-width: 485px) and (max-width: 700px) {
   .logo {
@@ -230,7 +233,7 @@ button:hover {
   }
 
   button:hover {
-    scale: 1.1;
+    scale: 1.2;
     background-color: white;
     color: var(--btn1-color);
     transition-duration: 300ms;

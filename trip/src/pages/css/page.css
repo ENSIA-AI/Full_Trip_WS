@@ -56,9 +56,9 @@
   border-radius: 20px;
   width: 90%;
   margin: auto ;
-  display: flex;
+  display: grid;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: row;
   background-size: cover;
   min-height: 300px;
 }
@@ -76,9 +76,9 @@
   padding: 50px;
   border-radius: 10px;
   color: var(--white-cl);
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 50px; 
+ display: flex;
+ flex-direction: column;
+ gap: 50px;
 
 
 }

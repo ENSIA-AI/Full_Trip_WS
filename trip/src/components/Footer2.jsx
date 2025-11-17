@@ -2,59 +2,7 @@ import './css/Footer2.css'
 import titIcon from './css/picss/title-icon2.svg'
 export default function Footer2() {
 
-  function scrollToPage(page) {
-    const home = document.querySelector('.main-page');
-    const explorePage = document.querySelector('.explore-page');
-    const clientOp = document.querySelector('.client-op');
-    const feedbacks = document.querySelector('.feedback-section');
-
-    switch (page) {
-      case 'explore':
-        if (explorePage) {
-          const scrlTop = window.scrollY + explorePage.getBoundingClientRect().top;
-          const offset = window.innerHeight * 0.18;
-
-          window.scrollTo({
-            top: scrlTop - offset,
-            behavior: 'smooth'
-          })
-        }
-        break;
-      case 'home':
-        if (home) {
-          const scrlTop = window.scrollY + home.getBoundingClientRect().top;
-          const offset = window.innerHeight * 0.18;
-
-          window.scrollTo({
-            top: scrlTop - offset,
-            behavior: 'smooth'
-          })
-        }
-        break;
-      case 'client':
-        if (clientOp) {
-          const scrlTop = window.scrollY + clientOp.getBoundingClientRect().top;
-          const offset = window.innerHeight * 0.3;
-
-          window.scrollTo({
-            top: scrlTop - offset,
-            behavior: 'smooth'
-          })
-        }
-        break;
-      case 'feedback':
-        if (feedbacks) {
-          const scrlTop = window.scrollY + feedbacks.getBoundingClientRect().top;
-          const offset = window.innerHeight * 0.18;
-          window.scrollTo({
-            top: scrlTop - offset,
-            behavior: 'smooth'
-          })
-        }
-        break;
-    }
-
-  };
+  
   return (
     <footer>
       <div className="footer">
