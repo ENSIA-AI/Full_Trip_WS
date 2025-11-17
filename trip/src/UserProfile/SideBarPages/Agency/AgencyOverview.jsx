@@ -1,0 +1,116 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './styles/AgencyOverview.css'
+
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { faUsers, faCompass, faDollar, faXmark } from '@fortawesome/free-solid-svg-icons';
+import StatsCard from '../../UI/StatCard';
+
+const data = [
+    { Month: "Jan", count: 68 },
+    { Month: "Feb", count: 30 },
+    { Month: "Mar", count: 70 },
+    { Month: "Apr", count: 100 },
+    { Month: "May", count: 70 },
+];
+
+
+const bookings = [
+    { BookingID: "B001", Customer: "Alice Brown", Tour: "Paris City Lights", Date: "2025-03-12", Amount: 1200, Status: "Confirmed" },
+    { BookingID: "B002", Customer: "John Smith", Tour: "Rome Ancient Wonders", Date: "2025-04-05", Amount: 950, Status: "Pending" },
+    { BookingID: "B003", Customer: "Maria Lopez", Tour: "Tokyo Highlights", Date: "2025-02-28", Amount: 1450, Status: "Cancelled" },
+    { BookingID: "B004", Customer: "David Miller", Tour: "New York Explorer", Date: "2025-05-10", Amount: 1100, Status: "Confirmed" },
+    { BookingID: "B005", Customer: "Sofia Rossi", Tour: "Dubai Luxury Tour", Date: "2025-01-22", Amount: 2100, Status: "Confirmed" },
+    { BookingID: "B006", Customer: "Ethan Clark", Tour: "Cairo Pyramids", Date: "2025-03-01", Amount: 1300, Status: "Pending" },
+    { BookingID: "B007", Customer: "Olivia Davis", Tour: "London Royal Tour", Date: "2025-04-18", Amount: 980, Status: "Confirmed" },
+    { BookingID: "B008", Customer: "Noah Wilson", Tour: "Bangkok Adventure", Date: "2025-05-02", Amount: 890, Status: "Cancelled" },
+    { BookingID: "B009", Customer: "Emma Johnson", Tour: "Sydney Coastal Trip", Date: "2025-06-15", Amount: 1750, Status: "Pending" },
+    { BookingID: "B010", Customer: "Liam Martinez", Tour: "Cape Town Safari", Date: "2025-02-14", Amount: 1600, Status: "Confirmed" }
+];
+
+
+
+
+
+
+
+
+function AgencyOverview() {
+
+    return (<>
+
+        <div className='S_Container'>
+            <div className='Stats'>
+                <StatsCard Title="Total Bookings" Number={213} Icon={faUsers} Change_rate={-8} ></StatsCard>
+                <StatsCard Title="Tours" Number={2} Icon={faCompass} ></StatsCard>
+                <StatsCard Title="Revenu" Number={49123} Icon={faDollar} ></StatsCard>
+                <StatsCard Title="Cancelations" Number={213} Icon={faXmark} ></StatsCard>
+            </div>
+            {/*Graph-------------------------------------------- */}
+            <div className=' Section'>
+                <div className='SecHeader'>
+                    <h2>Costumers Statistics:</h2>
+                    <p>Review your Agency Statistics</p>
+                </div>
+                <div className='Graph'>
+                    <ResponsiveContainer width="100%" height="80%">
+                        <LineChart data={data}>
+                            <CartesianGrid stroke="#ccc" />
+                            <XAxis dataKey="Month" />
+                            <YAxis domain={[0, 'dataMax + 20']} />
+                            <Tooltip
+                                wrapperStyle={{ backgroundColor: "#222", border: "1px solid #555", borderRadius: "0.625em" }}
+                                contentStyle={{ backgroundColor: "#333", color: "#fff", borderRadius: "0.625em" }}
+                                itemStyle={{ color: "#0ff" }}
+                                labelStyle={{ color: "#ccc", fontWeight: "bold" }}
+                            />
+                            <Line type="monotone" dataKey="count" stroke="#e74211" strokeWidth={3} />
+                        </LineChart>
+                    </ResponsiveContainer>
+                    <div className='GraphKeys'>
+                        <div className='Key'>
+                            <div className='square' style={{ backgroundColor: "#e74211" }}></div>
+                            <p> Costumers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/*LastBookings-------------------------------------*/}
+            <div className='Section'>
+                <div className='SecHeader'>
+                    <h2>Recent Bookings:</h2>
+                    <p>Review your Last Bookings</p>
+                </div>
+                <div className='TableContainer'>
+                    <table className='CostumeTable' style={{backgroundColor:"white"}}>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Costumer</th>
+                            <th>Tour</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                        {bookings.map((Booking, index) => (
+                            <tr key={index}>
+                                <td>{Booking.BookingID}</td>
+                                <td>{Booking.Customer}</td>
+                                <td>{Booking.Tour}</td>
+                                <td>{Booking.Date}</td>
+                                <td className='Money'>{Booking.Amount} $</td>
+                                <td><div className={Booking.Status}>{Booking.Status}</div></td>
+                            </tr>
+                        ))}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+    </>)
+
+
+}
+
+export default AgencyOverview;
