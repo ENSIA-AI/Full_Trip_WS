@@ -42,24 +42,28 @@ export default function Home() {
           {image}
         </div>
       </div>
-      <ul className="review">
-        <li data-aos='zoom-in'>
-          <h1 data-aos='fade-right'>10</h1>
-          <small data-aos='fade-left'>World Of Experiences</small>
-        </li>
-        <li data-aos='zoom-in'>
-          <h1 data-aos='fade-right'>4K+</h1>
-          <small data-aos='fade-left'>Fine Destination</small>
-        </li>
-        <li data-aos='zoom-in'>
-          <h1 data-aos='fade-right'>10K+</h1>
-          <small data-aos='fade-left'>Customer Reviews</small>
-        </li>
-        <li data-aos='zoom-in'>
-          <h1 data-aos='fade-right'>5.6</h1>
-          <small data-aos='fade-left'>Overall Rating</small>
-        </li>
-      </ul>
+      <div className="review-div">
+        <ul className="review">
+          <li data-aos='zoom-in'>
+            <h1 data-aos='fade-right'>10<small data-aos='fade-left'>World Of Experiences</small></h1>
+
+          </li>
+          <li data-aos='zoom-in'>
+            <h1 data-aos='fade-right'>4K+<small data-aos='fade-left'>Fine Destination</small></h1>
+
+          </li>
+          <li data-aos='zoom-in'>
+            <h1 data-aos='fade-right'>10K+<small data-aos='fade-left'>Customer Reviews</small></h1>
+
+          </li>
+          <li data-aos='zoom-in'>
+            <h1 data-aos='fade-right'>5.6
+              <small data-aos='fade-left'>Overall Rating</small>
+            </h1>
+
+          </li>
+        </ul>
+      </div>
     </>
   )
 }

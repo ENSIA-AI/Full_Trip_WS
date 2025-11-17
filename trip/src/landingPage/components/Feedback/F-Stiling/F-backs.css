@@ -3,8 +3,10 @@
 .feedback-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin: 100px 100px;
-  gap: 30px;
+  gap: min(30px, 10vw);
+  width: 100vw;
+  padding: min(100px, 15vh) min(100px, 15vw);
+  overflow: hidden;
 }
 
 .feedback-section>.some-feedbacks {
@@ -17,8 +19,7 @@
 
 .feedback-section>.some-feedbacks>h1,
 .add-feedback h1 {
-  display: flex;
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 3vw, 2rem);
   width: 100%;
 }
 
@@ -26,8 +27,13 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  height: 390px;
+  gap: min(20px, 20vh);
+  height: fit-content;
+}
+
+.feedback-section>.some-feedbacks>ul>li>small {
+  overflow-y: scroll;
+  font-size: clamp(13px, 2vw, 14px);
 }
 
 .feedback-section>.some-feedbacks>ul>li>p {
@@ -38,6 +44,7 @@
   background-color: var(--transparent-bg-cl);
   font-weight: 600;
   transition: border-radius 0.3s ease-in-out;
+  font-size: clamp(14px, 3vw, 16px);
 }
 
 .expand {
@@ -73,7 +80,7 @@
 
 .bx-arrow-down-circle,
 .bx-arrow-up-stroke-circle {
-  font-size: 20px;
+  font-size: clamp(14px, 4vw, 20px);
   padding: 0;
   margin: 0;
   cursor: pointer;
@@ -81,28 +88,36 @@
 
 .add-feedback {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
+  width: 100%;
+}
 
+.add-feedback>h1 {
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  margin-bottom: min(15px, 10vh);
+}
+
+.add-feedback>p {
+  font-size: clamp(0.6rem, 2vw, 1rem);
 }
 
 .add-feedback form {
   display: flex;
-  align-items: flex-start;
   flex-direction: column;
-  margin: 30px 0px;
+  margin: min(30px, 5vw) 0px;
   gap: 20px;
 }
 
 .add-feedback form>input,
 textarea {
   outline: none;
-  padding: 12px 15px;
-  font-size: 15px;
+  padding: min(12px, 3vh) min(15px, 8%);
+  font-size: min(15px, 10vw);
   border: none;
   border-radius: 12px;
   background-color: var(--transparent-bg-cl2);
-  width: 500px;
+  width: min(500px, 90vw);
 }
 
 .add-feedback form>textarea {
@@ -121,16 +136,16 @@ textarea {
   border-radius: 10px;
   cursor: pointer;
   font-weight: 500;
-  transition:all 0.4s ease;
+  transition: all 0.4s ease;
 }
 
-.add-feedback form button:hover{
-  transition:transform 0.25s ease;
+.add-feedback form button:hover {
+  transition: transform 0.25s ease;
   box-shadow: 0px -4px 5px 3px var(--bx-shadow);
   transform: translateY(6px) !important;
 }
 
-.add-feedback form button:active{
+.add-feedback form button:active {
   transition: 0s;
   box-shadow: none;
   transform: translateY(0px) !important;
@@ -138,4 +153,13 @@ textarea {
 
 .add-feedback p {
   font-size: 14px;
+}
+
+@media (max-width:900px) {
+  .feedback-section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
