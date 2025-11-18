@@ -8,12 +8,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import UserProfile from './UserProfile/UserProfile'
 
 
-{/* Testing will remove later*/ }
-
-
 import Footer from './landingPage/components/Footer'
 import Register from './landingPage/components/Register'
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
 
