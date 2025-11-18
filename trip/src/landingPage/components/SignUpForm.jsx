@@ -30,7 +30,11 @@ function SignUpForm({ formAppearing, InContent }) {
           Welcome - In
         </div>
         <p>If you are not registred yet ,you can click here to register:</p>
-        <a href='/register'>register!</a>
+        <Link to={'/register'}>
+          <a>
+            register!
+          </a>
+        </Link>
         <label htmlFor='email' >email
           <input
             id='email'

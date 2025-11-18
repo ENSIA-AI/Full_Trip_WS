@@ -32,11 +32,10 @@ function App() {
           </>
         } />
         <Route path="/register" element={<Register />} />
-        <Route path="/Profile/*" element={<UserProfile Username='Zakaraya' U_type='Regular'/>} />
+        <Route path="/Profile/*" element={<UserProfile Username='Zoko' U_type='Regular'/>} />
       </Routes>
     </BrowserRouter>
   )
-
 }
 
 export default App

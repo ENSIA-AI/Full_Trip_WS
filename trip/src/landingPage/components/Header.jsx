@@ -71,8 +71,8 @@ export default function Header() {
           {LoggedIn ?
             <Link to={"/Profile"} className='PrimrayB'><FontAwesomeIcon icon={faUser}></FontAwesomeIcon></Link> :
             <button onClick={showForm}>Log In</button>
-
           }
+
         </div>
         <div className='menu'>
           <i

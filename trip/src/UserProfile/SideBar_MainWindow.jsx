@@ -60,7 +60,6 @@ function SideBar_MainWindow() {
     { Section: "Hotels", icon: faHotel, Component: Hotels },
     { Section: "Car Rentals", icon: faCarSide, Component: CarRentals },
     { Section: "Tours", icon: faCompass, Component: Tours },
-    ,
   ];
   const AgencySideBar = [
 
