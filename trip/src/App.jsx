@@ -10,7 +10,6 @@ import UserProfile from './UserProfile/UserProfile'
 
 import Footer from './landingPage/components/Footer'
 import Register from './landingPage/components/Register'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
 
