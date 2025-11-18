@@ -51,7 +51,7 @@ function Hotels() {
 
     return (<>
 
-        <Navbar></Navbar>
+        
         <h1 className="header" onClick={handleScroll} style={{cursor:"pointer"}}><img src={hotel} className="icon" /> Reserve Your Spot </h1>
 
         <section className="container">

@@ -53,7 +53,7 @@ function Flights() {
 
     return (<>
 
-        <Navbar></Navbar>
+        
         <h1 className="header" onClick={handleScroll} style={{cursor:"pointer"}}><img src={plane} className="icon" /> Fly Beyond Limits</h1>
 
         <section className="container">

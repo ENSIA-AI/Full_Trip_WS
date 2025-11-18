@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './css/navbar.css';
 import LOGO from '../pages/pics/pic1.png';
 
@@ -20,33 +21,37 @@ function Navbar() {
                 <h2>TravelWUs</h2>
             </div>
 
-            <button 
+            {/* Burger Button */}
+            <button
                 className={`burger-menu ${isMenuOpen ? 'open' : ''}`}
                 onClick={toggleMenu}
-                aria-label="Toggle menu"
             >
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-            
+
+            {/* Links */}
             <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
-                <li><a href="/" onClick={closeMenu}>Home</a></li>
-                <li><a href="/" onClick={closeMenu}>Hotels</a></li>
-                <li><a href="/flights" onClick={closeMenu}>Flights</a></li>
-                <li><a href="/carrental" onClick={closeMenu}>Car Rental</a></li>
-                <li><a href="/carrental" onClick={closeMenu}>Attractions</a></li>
-                <li><a href="/attractions" onClick={closeMenu}>Full Trip</a></li>
+                <li><Link to="/" onClick={closeMenu}>Home</Link></li>
+                <li><Link to="/hotels" onClick={closeMenu}>Hotels</Link></li>
+                <li><Link to="/flights" onClick={closeMenu}>Flights</Link></li>
+                <li><Link to="/carrental" onClick={closeMenu}>Car Rental</Link></li>
+                <li><Link to="/attractions" onClick={closeMenu}>Attractions</Link></li>
+                <li><Link to="/fulltrip" onClick={closeMenu}>Full Trip</Link></li>
             </ul>
-            
+
+            {/* Auth Buttons */}
             <div className="buttons">
-                <button>Sign in</button>
-                <button>Sign up</button>
+                <Link to="/signin"><button>Sign in</button></Link>
+                <Link to="/signup"><button>Sign up</button></Link>
             </div>
 
+            {/* Dark overlay */}
             {isMenuOpen && <div className="overlay" onClick={closeMenu}></div>}
         </nav>
     );
 }
 
 export default Navbar;
+
