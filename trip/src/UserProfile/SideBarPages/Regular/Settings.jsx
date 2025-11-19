@@ -256,15 +256,15 @@ function Security() {
             <form className="PassChangeForm">
                 <div className="InfoFormInput">
                     <label>Current Password</label>
-                    <input type="text" ></input>
+                    <input type="text" required></input>
                 </div>
                 <div className="InfoFormInput">
                     <label>New Password</label>
-                    <input type="text" ></input>
+                    <input type="text" required ></input>
                 </div>
                 <div className="InfoFormInput">
                     <label>Confirm New Password</label>
-                    <input type="text" ></input>
+                    <input type="text" required ></input>
                 </div>
                 <div>
                     <input type="submit" className="PrimaryB" value={"Update Password"}></input>
