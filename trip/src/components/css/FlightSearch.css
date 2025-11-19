@@ -89,6 +89,7 @@
 
 .date-input .form-input {
   padding-left: 30px;
+  margin-left: -40px;
   cursor: pointer;
 }
 

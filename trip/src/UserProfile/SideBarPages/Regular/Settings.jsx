@@ -89,6 +89,9 @@ function Profile() {
 
             firstNameIn.current.classList.add("InvalidIn");
         }
+        else if(values.firstName){
+
+        }
         else {
             firstNameIn.current.classList.remove("InvalidIn");
 
