@@ -24,7 +24,7 @@ export default function Header() {
   const [hiddenMenu, setHideMenu] = React.useState(true);
   const [LoggedIn, SetLoggedIn] = useState(true);
 
-  const [navBarContent] = React.useState(['Hotels', 'Flights', 'Car Rental', 'attractions', 'Tours']);
+  const [navBarContent] = React.useState(['Home','Hotels', 'Flights', 'Car Rental', 'attractions', 'Tours']);
   const navContent = navBarContent.map(item => (
     <Link key={item} to={`/${item}`}>
       <li tabIndex="0">{item}</li>

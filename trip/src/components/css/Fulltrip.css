@@ -24,6 +24,7 @@
   padding: 20px 30px;
   background: linear-gradient(90deg, #1e90ff, #00bfff);
   color: white;
+  text-wrap: nowrap;
 }
 
 .booking-container .booking-header h1 {
