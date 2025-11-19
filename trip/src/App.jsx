@@ -1,3 +1,7 @@
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 import Header from './landingPage/components/Header'
 import Home from './landingPage/components/HomePage'
 import Explore from './landingPage/components/Explore'
@@ -10,7 +14,11 @@ import UserProfile from './UserProfile/UserProfile'
 
 import Footer from './landingPage/components/Footer'
 import Register from './landingPage/components/Register'
+<<<<<<< Updated upstream
 import CarRental from './moha-pages/pages/CarRental'
+=======
+import { useState } from 'react'
+>>>>>>> Stashed changes
 
 function App() {
 

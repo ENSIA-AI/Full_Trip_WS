@@ -2,6 +2,20 @@ import '../styles/header&signUp.css'
 import React, { useState } from 'react'
 import titIcon from '../images/title-icon.svg'
 import SignUpForm from './SignUpForm'
+<<<<<<< Updated upstream
+=======
+import { Route, Routes } from 'react-router-dom'
+
+import Home from './HomePage'
+import Explore from './Explore'
+import AboutUs from './AboutUs'
+import Feedback from './Feedback/Feedback'
+import Footer from './Footer'
+import Flights from '../../pages/Flights'
+import Hotels from '../../pages/Hotels'
+import FullTrip from '../../pages/FullTrip'
+import CarRental from '../../moha-pages/pages/CarRental'
+>>>>>>> Stashed changes
 
 import UserProfile from '../../UserProfile/UserProfile'
 
@@ -57,6 +71,7 @@ export default function Header() {
 
 
   return (
+<<<<<<< Updated upstream
     <div className='header-div'>
       <header>
         <div className="slogo">
@@ -69,6 +84,57 @@ export default function Header() {
           <li><button onClick={hideMenu} name='return'><i class='bx  bx-x'  ></i> </button></li>
           {navContent}</ul>
         <div className='SignLogIn'>
+=======
+    <>
+      <div className='header-div'>
+        <header>
+          <div className="slogo">
+            <img src={titIcon}></img>
+            <h1>TravelWUs</h1>
+          </div>
+          <ul
+            id={hiddenMenu ? 'hideMin' : 'showMin'}
+            className='navBar'>
+            <li><button onClick={hideMenu} name='return'><i class='bx  bx-x'  ></i> </button></li>
+            {navContent}</ul>
+          <div className='SignLogIn'>
+
+            {LoggedIn ?
+              <Link to={"/Profile"} className='PrimrayB'><FontAwesomeIcon icon={faUser}></FontAwesomeIcon></Link> :
+              <button onClick={showForm}>Log In</button>
+            }
+
+          </div>
+          <div className='menu'>
+            <i
+              class='bxr  bx-menu'
+              onClick={showMenu}></i>
+          </div>
+        </header >
+        {
+          formAppear && <SignUpForm
+            formAppearing={setFormAppear} SetLoggedIn={SetLoggedIn} SetUserInfo={setUserInfo} />
+        }
+      </div >
+
+      <Routes>
+        <Route path="Home" element={
+          <>
+            <Home />
+            <Explore />
+            <AboutUs />
+            <Feedback />
+            <Footer />
+          </>
+        } />
+        <Route path="Flights" element={<Flights />} />
+        <Route path="Car Rental" element={<CarRental />} />
+        <Route path="Hotels" element={<Hotels />} />
+        <Route path="Tours" element={<FullTrip />} />
+      </Routes>
+    </>
+
+>>>>>>> Stashed changes
 
           {LoggedIn ?
             <Link to={"/Profile"} className='PrimrayB'><FontAwesomeIcon icon={faUser}></FontAwesomeIcon></Link> :
