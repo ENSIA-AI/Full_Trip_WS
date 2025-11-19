@@ -17,7 +17,9 @@ export default function Header() {
 
   const [navBarContent] = React.useState(['Stays', 'Flights', 'Airport taxis', 'attractions']);
   const navContent = navBarContent.map(navContent => (
-    <li tabindex="0" key={navContent}>{navContent}</li>
+    <Link to ='carRental'>
+      <li tabindex="0" key={navContent}>{navContent}</li>
+    </Link>
   ))
 
   const hideMenu = () => {

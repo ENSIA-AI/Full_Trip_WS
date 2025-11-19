@@ -10,6 +10,7 @@ import UserProfile from './UserProfile/UserProfile'
 
 import Footer from './landingPage/components/Footer'
 import Register from './landingPage/components/Register'
+import CarRental from './moha-pages/pages/CarRental'
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           </>
         } />
         <Route path="/register" element={<Register />} />
+        <Route path='/carRental' element={<CarRental />}></Route>
         <Route path="/Profile/*" element={<UserProfile Username='Zoko' U_type='Regular'/>} />
       </Routes>
     </BrowserRouter>
