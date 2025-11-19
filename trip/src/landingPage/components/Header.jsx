@@ -2,8 +2,6 @@ import '../styles/header&signUp.css'
 import React, { useState } from 'react'
 import titIcon from '../images/title-icon.svg'
 import SignUpForm from './SignUpForm'
-<<<<<<< Updated upstream
-=======
 import { Route, Routes } from 'react-router-dom'
 
 import Home from './HomePage'
@@ -15,7 +13,7 @@ import Flights from '../../pages/Flights'
 import Hotels from '../../pages/Hotels'
 import FullTrip from '../../pages/FullTrip'
 import CarRental from '../../moha-pages/pages/CarRental'
->>>>>>> Stashed changes
+import Attraction from '../../moha-pages/pages/Attractions'
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,19 +29,10 @@ export default function Header({ setUserInfo }) {
   const [active, setActive] = useState('Home');
 
 
-  const [navBarContent] = React.useState(['Home', 'Hotels', 'Flights', 'Car Rental', 'attractions', 'Tours']);
-  const navContent = navBarContent.map(item => (
-    <Link key={item} to={`/${item}`}>
-      <li
-        className={active === item ? 'active' : ''}
-        onClick={() => setActive(item)}>
-        {item}</li>
-    </Link>
-  ));
 
-  const [navBarContent] = React.useState(['Stays', 'Flights', 'Airport taxis', 'attractions']);
+  const [navBarContent] = React.useState(['Home','Hotels', 'Flights', 'Car Rental', 'Attraction','Tours']);
   const navContent = navBarContent.map(navContent => (
-    <Link to ='carRental'>
+    <Link to ={`/${navContent}`}>
       <li tabindex="0" key={navContent}>{navContent}</li>
     </Link>
   ))
@@ -83,20 +72,6 @@ export default function Header({ setUserInfo }) {
 
 
   return (
-<<<<<<< Updated upstream
-    <div className='header-div'>
-      <header>
-        <div className="slogo">
-          <img src={titIcon}></img>
-          <h1>TravelWUs</h1>
-        </div>
-        <ul
-          id={hiddenMenu ? 'hideMin' : 'showMin'}
-          className='navBar'>
-          <li><button onClick={hideMenu} name='return'><i class='bx  bx-x'  ></i> </button></li>
-          {navContent}</ul>
-        <div className='SignLogIn'>
-=======
     <>
       <div className='header-div'>
         <header>
@@ -143,10 +118,11 @@ export default function Header({ setUserInfo }) {
         <Route path="Car Rental" element={<CarRental />} />
         <Route path="Hotels" element={<Hotels />} />
         <Route path="Tours" element={<FullTrip />} />
+        <Route path='Attraction' element={<Attraction/>}></Route>
+        <Route path='Car Rental' element={<CarRental/>}></Route>
       </Routes>
     </>
 
->>>>>>> Stashed changes
 
 
   )

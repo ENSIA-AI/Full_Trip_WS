@@ -45,8 +45,6 @@ function Attractions() {
   return (
     <div className="attractions-main-container">
 
-      {/* Navbar */}
-      <NavBar />
 
       {/* Scroll H1 Button */}
       <h1 className="attractions-scroll-h1" onClick={scrollToForm}>

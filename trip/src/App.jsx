@@ -26,7 +26,6 @@ function App() {
         <Route index element={<Navigate to="/Home" replace/>}></Route>
         <Route path="/*" element={<Header setUserInfo={setUserInfo} />} />
         <Route path="/register" element={<Register />} />
-        <Route path='/carRental' element={<CarRental />}></Route>
         <Route path="/Profile/*" element={<UserProfile Username='Zoko' U_type='Regular'/>} />
       </Routes>
     </BrowserRouter>
