@@ -86,8 +86,9 @@
 
 
 .slider-wrapper {
-  position: relative;
+  /* position: relative; */
   max-width: 70rem;
+  max-height: 40vh;
   margin: 0 auto;
 
 }
@@ -100,14 +101,16 @@
   box-shadow: 5px 5px 5px 5px  hsla(0, 0%, 0%, 0.6);
   border-radius: 20px;
   scrollbar-width: none;
+  
 }
 
 .slide {
-  position: relative;
+  /* position: relative; */
   flex: 0 0 100%;
   scroll-snap-align: start;
   padding-bottom: -10px;
   overflow: hidden;
+  
 }
 
 .slide img {

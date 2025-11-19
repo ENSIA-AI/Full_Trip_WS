@@ -1,5 +1,6 @@
 import React from "react";
 import "./css/CarRentalCard.css";
+import PaymentForm from "./PaymentForm";
 
 function CarRentalCard({ id, image, name, model, price, rating, location }) {
   return (
