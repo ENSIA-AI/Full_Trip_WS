@@ -83,3 +83,20 @@
 
     border-radius: var(--radius);
 }
+
+@media screen and (max-width:800px) {
+    .parent{
+        grid-template-columns: 1fr;
+    }
+}
+@media screen and (max-width:600px){
+    
+    .DatesForm{
+        flex-direction: column !important;
+    }
+}
+@media screen and (max-width:400px) {
+    .parent{
+        font-size: 0.8em;
+    }
+}

@@ -2,13 +2,16 @@ import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faShield, faCreditCard, faWallet, faLocationDot, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 
+import { useRef, useState } from "react";
 import './Styles/Settings.css'
 
 
-
 function Settings() {
+
+
+
     const SettingsNavItems = [
-        { Section: "Profile", Icon: faUser },
+        { Section: "Personal Info", Icon: faUser },
         { Section: "Security", Icon: faShield },
         { Section: "Billing", Icon: faWallet },
     ];
@@ -25,7 +28,7 @@ function Settings() {
                     <ul>
                         {SettingsNavItems.map((item, index) => (
                             <li key={index}>
-                                <NavLink className={({ isActive }) => (isActive ? "NavLink activeNavLink" : "NavLink")} to={`/Settings/${item.Section}`}>
+                                <NavLink className={({ isActive }) => (isActive ? "NavLink activeNavLink" : "NavLink")} to={`/Profile/Settings/${item.Section}`}>
                                     <FontAwesomeIcon icon={item.Icon} />
                                     <p>{item.Section}</p>
                                 </NavLink>
@@ -35,8 +38,8 @@ function Settings() {
                 </nav>
 
                 <Routes>
-                    <Route index element={<Navigate to="Profile" replace />} />
-                    <Route path="Profile" element={<Profile />} />
+                    <Route index element={<Navigate to="Personal Info" replace />} />
+                    <Route path="Personal Info" element={<Profile />} />
                     <Route path="Security" element={<Security />} />
                     <Route path="Billing" element={<Billing />} />
                 </Routes>
@@ -49,6 +52,139 @@ function Settings() {
 
 
 function Profile() {
+
+
+    const firstNameIn = useRef();
+    const lastNameIn = useRef();
+    const emailIn = useRef();
+    const phoneNumberIn = useRef();
+    const addressIn = useRef();
+
+    const [formData, setFormData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        address: "",
+    });
+    const [errors, setErrors] = useState({});
+
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        setErrors(prev => ({ ...prev, [name]: "" }));//resets errors
+    }
+    function validate(values) {
+
+        const newErrors = {};
+
+        // First name
+        if (!values.firstName.trim()) {
+
+            newErrors.firstName = "First name is required.";
+
+            firstNameIn.current.classList.add("InvalidIn");
+        } else if (values.firstName.trim().length < 2) {
+            newErrors.firstName = "First name must be at least 2 characters.";
+
+            firstNameIn.current.classList.add("InvalidIn");
+        }
+        else {
+            firstNameIn.current.classList.remove("InvalidIn");
+
+        }
+
+        // Last name
+        if (!values.lastName.trim()) {
+            newErrors.lastName = "Last name is required.";
+
+            lastNameIn.current.classList.add("InvalidIn");
+        } else if (values.lastName.trim().length < 2) {
+            newErrors.lastName = "Last name must be at least 2 characters.";
+            lastNameIn.current.classList.add("InvalidIn");
+        }
+        else {
+            lastNameIn.current.classList.remove("InvalidIn");
+        }
+
+        // Email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!values.email.trim()) {
+            newErrors.email = "Email is required.";
+
+            emailIn.current.classList.add("InvalidIn");
+        } else if (!emailRegex.test(values.email.trim())) {
+            newErrors.email = "Enter a valid email address.";
+            emailIn.current.classList.add("InvalidIn");
+        }
+        else {
+            emailIn.current.classList.remove("InvalidIn");
+
+        }
+
+
+        // Phone
+        const phoneRegex = /^(05|06|07)[0-9]{8}$/;
+
+        if (!values.phoneNumber.trim()) {
+            newErrors.phoneNumber = "Phone number is required.";
+            phoneNumberIn.current.classList.add("InvalidIn");
+        } else if (!phoneRegex.test(values.phoneNumber.trim())) {
+            newErrors.phoneNumber = "Phone must be an algerian number.";
+            phoneNumberIn.current.classList.add("InvalidIn");
+        }
+        else {
+            phoneNumberIn.current.classList.remove("InvalidIn");
+
+        }
+
+        // Address
+        if (!values.address.trim()) {
+            newErrors.address = "Address is required.";
+            addressIn.current.classList.add("InvalidIn");
+        } else if (values.address.trim().length < 3) {
+            newErrors.address = "Address is too short.";
+            addressIn.current.classList.add("InvalidIn");
+        }
+        else {
+            addressIn.current.classList.remove("InvalidIn");
+
+        }
+
+        return newErrors;
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        const validationErrors = validate(formData);
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+    }
+    function handleReset() {
+        setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            address: "",
+        });
+
+        addressIn.current.classList.remove("InvalidIn");
+        firstNameIn.current.classList.remove("InvalidIn");
+        lastNameIn.current.classList.remove("InvalidIn");
+        phoneNumberIn.current.classList.remove("InvalidIn");
+        emailIn.current.classList.remove("InvalidIn");
+
+        setErrors({});
+    }
+
+
+
     return (<>
 
 
@@ -58,33 +194,39 @@ function Profile() {
                 <p>Update your personal information</p>
 
             </div>
-            <form >
+            <form onSubmit={handleSubmit} onReset={handleReset} >
                 <div className="InfoForm">
                     <div className="InfoFormInput">
                         <label>First Name</label>
-                        <input type="text" ></input>
+                        <input name="firstName" value={formData.firstName} ref={firstNameIn} onChange={handleChange} type="text" ></input>
+                        {errors.firstName && <small className="error">{errors.firstName}</small>}
                     </div>
 
                     <div className="InfoFormInput">
                         <label>Last Name</label>
-                        <input type="text"></input>
+                        <input name="lastName" value={FormData.lastName} ref={lastNameIn} onChange={handleChange} type="text"></input>
+                        {errors.lastName && <small className="error">{errors.lastName}</small>}
+
                     </div>
 
                     <div className="InfoFormInput" style={{ gridColumn: "span 2" }}>
                         <label>Email</label>
                         <FontAwesomeIcon icon={faEnvelope} className="InfoFormIcon" ></FontAwesomeIcon>
-                        <input type="email" style={{ paddingLeft: "40px" }} placeholder="example@gmail.com"></input>
+                        <input name="email" value={FormData.email} ref={emailIn} onChange={handleChange} type="email" style={{ paddingLeft: "40px" }} placeholder="example@gmail.com"></input>
+                        {errors.lastName && <small className="error">{errors.lastName}</small>}
+
                     </div>
                     <div className="InfoFormInput" >
                         <label>Phone Number</label>
                         <FontAwesomeIcon icon={faPhone} className="InfoFormIcon"></FontAwesomeIcon>
-                        <input type="text" style={{ paddingLeft: "40px" }} placeholder="0540493067"></input>
+                        <input name="phoneNumber" value={FormData.phoneNumber} ref={phoneNumberIn} onChange={handleChange} type="text" style={{ paddingLeft: "40px" }} placeholder="0540493067"></input>
+                        {errors.phoneNumber && <small className="error">{errors.phoneNumber}</small>}
                     </div>
                     <div className="InfoFormInput">
                         <label>Address</label>
                         <FontAwesomeIcon icon={faLocationDot} className="InfoFormIcon"></FontAwesomeIcon>
-
-                        <input type="text" style={{ paddingLeft: "40px" }} placeholder="Algeirs"></input>
+                        <input name="address" value={FormData.address} ref={addressIn} onChange={handleChange} type="text" style={{ paddingLeft: "40px" }} placeholder="Algeirs"></input>
+                        {errors.address && <small className="error">{errors.address}</small>}
                     </div>
                 </div>
                 <div className="Submition" style={{}}>

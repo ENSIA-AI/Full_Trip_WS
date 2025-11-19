@@ -125,7 +125,7 @@ function AddTour() {
                     </div>
 
                 </div>
-                <div class="div2 Section">
+                <div className="div2 Section">
                     <div className="SecHeader">
                         <h3> Pricing And Duration:</h3>
                     </div>
@@ -145,7 +145,7 @@ function AddTour() {
                     </div>
 
                 </div>
-                <div class="div3 Section Inclusion">
+                <div className="div3 Section Inclusion">
                     <div className="SecHeader">
                         <h3> Includes:</h3>
                     </div>
@@ -179,7 +179,7 @@ function AddTour() {
                         </div>
                     </div>
                 </div>
-                <div class="div4 Section">
+                <div className="div4 Section">
                     <div className="SecHeader">
                         <h3> Tour Highlights:</h3>
                     </div>
@@ -199,7 +199,7 @@ function AddTour() {
                     <button className="PrimaryB FlexH" onClick={AddHighlight}><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>ADD a Higlight</button>
 
                 </div>
-                <div class="div6 Section">
+                <div className="div6 Section">
                     <div className="SecHeader">
                         <h3> Departure Dates:</h3>
                     </div>
@@ -495,7 +495,7 @@ function ToursManagement() {
                                 <p>Add or remove departure dates for this tour</p>
                             </div>
                             <h4>Add a New Departure Date:</h4>
-                            <div className="FlexH">
+                            <div className="FlexH DatesForm">
                                 <input ref={Dateinput} className="CostumeInput" type="Date" min={today}></input>
                                 <div className="InputContainer">
                                     <div>
@@ -507,6 +507,7 @@ function ToursManagement() {
                                 <button className="PrimaryB FlexH" onClick={AddDepartureDate}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>Add</button>
                             </div>
                             <h4>Current DepartureDates:</h4>
+
                             <hr style={{ width: "100%", margin: "0" }}></hr>
                             {DDates.map(Date => (
                                 <div key={Date.id} className="Section ">
@@ -602,13 +603,14 @@ function AgencyTours() {
     return (<>
 
 
+
         <div className=" S_Container">
 
             <nav className="SettingsNav">
                 <ul>
                     {ToursNavItems.map((item, index) => (
                         <li key={index}>
-                            <NavLink className={({ isActive }) => (isActive ? "NavLink activeNavLink" : "NavLink")} to={`/Agency Tours/${item.Section}`}>
+                            <NavLink className={({ isActive }) => (isActive ? "NavLink activeNavLink" : "NavLink")} to={`/Profile/Agency Tours/${item.Section}`}>
                                 <FontAwesomeIcon icon={item.Icon} />
                                 <p>{item.Section}</p>
                             </NavLink>

@@ -51,8 +51,8 @@ function AgencyOverview() {
                     <h2>Costumers Statistics:</h2>
                     <p>Review your Agency Statistics</p>
                 </div>
-                <div className='Graph'>
-                    <ResponsiveContainer width="100%" height="80%">
+                <div className="Graph">
+                    <ResponsiveContainer width={1000} height={500}>
                         <LineChart data={data}>
                             <CartesianGrid stroke="#ccc" />
                             <XAxis dataKey="Month" />
@@ -63,16 +63,18 @@ function AgencyOverview() {
                                 itemStyle={{ color: "#0ff" }}
                                 labelStyle={{ color: "#ccc", fontWeight: "bold" }}
                             />
-                            <Line type="monotone" dataKey="count" stroke="#e74211" strokeWidth={3} />
+                            <Line type={"linear"} dataKey="count" stroke="#e74211" strokeWidth={3} />
                         </LineChart>
                     </ResponsiveContainer>
-                    <div className='GraphKeys'>
-                        <div className='Key'>
-                            <div className='square' style={{ backgroundColor: "#e74211" }}></div>
-                            <p> Costumers</p>
+
+                    <div className="GraphKeys">
+                        <div className="Key">
+                            <div className="square" style={{ backgroundColor: "#e74211" }}></div>
+                            <p>Costumers</p>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             {/*LastBookings-------------------------------------*/}
@@ -81,8 +83,8 @@ function AgencyOverview() {
                     <h2>Recent Bookings:</h2>
                     <p>Review your Last Bookings</p>
                 </div>
-                <div className='TableContainer'>
-                    <table className='CostumeTable' style={{backgroundColor:"white"}}>
+                <div className='TableContainer' style={{overflow:"auto"}}>
+                    <table className='CostumeTable' style={{ backgroundColor: "white" }}>
                         <tr>
                             <th>Booking ID</th>
                             <th>Costumer</th>

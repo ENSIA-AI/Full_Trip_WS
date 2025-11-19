@@ -132,7 +132,7 @@ function SideBar_MainWindow() {
               ))}
             </ul>
             {/* Bottom List ------------------------------------------------------------------------------------- */}
-            <ul style={{ padding: DashBoard ? "15px" : "15px 10px", borderTop: "1px solid grey" }}>
+            <ul className="BottomMenu"style={{ padding: DashBoard ? "15px" : "15px 10px"}}>
               <li>
                 <NavLink to={`/Profile/${BottomMenu[0].Section}`} className="MainLink">
                   <FontAwesomeIcon icon={BottomMenu[0].icon} className="Icon" style={{ fontSize: DashBoard ? "1.2em" : "1.3em" }}></FontAwesomeIcon>
@@ -163,7 +163,7 @@ function SideBar_MainWindow() {
 
               {
                 SideBar.map((item, index) => (
-                  <Route key={index} path={`${item.Section}`} element={<item.Component />} ></Route>
+                  <Route key={index} path={`${item.Section}/*`} element={<item.Component />} ></Route>
                 ))
 
               }
@@ -177,3 +177,4 @@ function SideBar_MainWindow() {
   );
 }
 export default SideBar_MainWindow;
+

@@ -137,3 +137,24 @@ form label {
     background-color: var(--btn1-color);
     font-weight: 500;
 }
+
+@media screen and (max-width:700px){
+    
+    .InfoForm,.CreditCard{
+        display: flex;
+        flex-direction: column;
+    }
+    .CreditCard{
+        gap: 20px;
+    }
+}
+@media screen  and (max-width:500px){
+        .SettingsNav,.CreditCard{
+            font-size: 0.8em;
+        }
+}
+@media screen  and (max-width:300px){
+        .SettingsNav{
+            font-size: 0.6em;
+        }
+}

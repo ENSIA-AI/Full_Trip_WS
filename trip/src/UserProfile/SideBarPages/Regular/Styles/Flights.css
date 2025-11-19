@@ -194,4 +194,35 @@
     padding: 5px 7px;
 
 }
+.FlightResInfo div{
+    text-align: center;
+}
 
+
+@media screen and (max-width:1000px) {
+
+    .FlightCard,
+    .Icon_Flight_Details {
+        flex-direction: column;
+    }
+
+    .FlightTimeDescription {
+        width: 100%;
+    }
+
+    .FlightCard {
+        gap: 20px;
+    }
+    .FlightResInfo{
+        width: 100%;
+    }
+
+}
+
+@media screen and (max-width:600px) {
+
+    .FlightTimeDescription {
+        font-size: 0.8em;
+        width: fit-content;
+    }
+}

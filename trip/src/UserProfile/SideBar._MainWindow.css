@@ -54,7 +54,7 @@
 }
 
 
-.Menu{
+.Menu {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -62,7 +62,8 @@
     height: 90vh;
 
 }
-.Menu ul{
+
+.Menu ul {
     font-size: 1.1em;
     font-weight: 600;
     display: flex;
@@ -106,13 +107,14 @@
     border-radius: 10px;
 
 }
-.MainLink.active{
+
+.MainLink.active {
     color: white;
     background-color: var(--btn1-color);
 
 }
 
-.MainLink:hover:not(.active){
+.MainLink:hover:not(.active) {
     background-color: var(--Hover-Color);
 
 }
@@ -150,7 +152,7 @@
     }
 } */
 
-.MainWindow{
+.MainWindow {
     overflow: auto;
 }
 
@@ -169,6 +171,9 @@
     grid-template-rows: 1fr;
 }
 
+.BottomMenu {
+    border-top: 1px solid grey;
+}
 
 
 
@@ -178,19 +183,60 @@
 
 
 
-@media screen and (max-width:800px) {
+@media screen and (max-width:1000px) {
     .MenuHead {
+        display: none;
+    }
+    .Menu p {
         display: none;
     }
 
     .Container {
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: 80px 1fr;
     }
 }
 
 @media screen and (max-width: 600px) {
-    .MenuHead {
-        display: none;
+    .Container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .SideBar {  
+        position: fixed;
+        height: fit-content;
+        z-index: 100;
+        width: 100%;
+        top: auto;
+        bottom: 0;
+        border-top-left-radius: 30%;
+        border-top-right-radius: 30%;
+
+
 
     }
+
+    .Menu {
+        flex-direction: row;
+        height: fit-content;
+        justify-content: center;
+    }
+
+    .Menu p {
+        display: none;
+    }
+
+    .Menu ul {
+        flex-direction: row;
+    }
+
+    .BottomMenu {
+        border-top: none;
+    }
+
+    .MainWindow {
+        order: 1;
+        padding-bottom: 80px;
+    }
+
 }

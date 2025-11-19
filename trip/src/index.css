@@ -22,7 +22,7 @@
   --weak-black-cl: #080808;
   --bx-shadow: rgba(95, 39, 23, 0.68);
   --transparent-bg-cl: rgba(200, 32, 56, 0.15);
-  --transparent-bg-cl2:rgba(231, 204, 207, 0.5);
+  --transparent-bg-cl2: rgba(231, 204, 207, 0.5);
   /* Main Colors: */
   --Primary-Color: #e74211;
   --Hover-Color: #ffc7bf;
@@ -39,6 +39,7 @@
 
 
 }
+
 /* 
 #root{
   overflow-x: hidden;
@@ -97,7 +98,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
 }
 
 .FlexV {
@@ -111,6 +112,7 @@ body {
   display: flex;
   align-content: center;
   justify-content: space-between;
+
 }
 
 .FlexH {
@@ -129,6 +131,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  overflow: auto;
 
 }
 
@@ -138,6 +141,7 @@ body {
   text-wrap: nowrap;
 
 }
+
 
 /*Input ---------------------------------------*/
 .CostumeInput {
@@ -160,6 +164,10 @@ body {
 }
 
 .InValid {
+  color: red;
+}
+
+.error {
   color: red;
 }
 
@@ -324,8 +332,10 @@ body {
 
 .ActionsMenu {
 
+
   position: absolute;
 
+  min-width: fit-content;
   left: 0;
   bottom: 0;
   translate: -80% 80%;
@@ -351,7 +361,6 @@ body {
   border: none;
   background-color: transparent;
   cursor: pointer;
-
   position: relative;
   z-index: 0;
 
@@ -367,6 +376,8 @@ body {
 .ActionsMenu button {
   background-color: white;
   border: none;
+  min-width: 200px;
+  padding: 20px;
   font-size: 1em;
 }
 

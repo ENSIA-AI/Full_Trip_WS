@@ -95,7 +95,7 @@ function Ag_Costumers() {
                     </div>
 
 
-                    <div className="TableContainer">
+                    <div className="TableContainer" style={{overflow:"auto"}}>
                         <table className="CostumeTable" style={{ zIndex: 0 }}>
                             <tr>
                                 <th>Custumer</th>
@@ -132,9 +132,9 @@ function Ag_Costumers() {
 
                                             <FontAwesomeIcon icon={faEllipsisV}></FontAwesomeIcon></button>
                                         {open && (menuindex === index) &&
-                                            (<div className="ActionsMenu FlexV" style={{ gap: 0 }}>
+                                            (<div className="ActionsMenu">
                                                 <h4>Actions</h4>
-                                                <button onClick={() => deleteCustomer(costumer.customerId)} className="FlexH_spaceBetween DeleteC"> <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon><p>Delete Costumer</p></button>
+                                                <button onClick={() => deleteCustomer(costumer.customerId)} className="FlexH DeleteC" > <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon><p>Delete Costumer</p></button>
                                             </div>)}
 
                                     </td>

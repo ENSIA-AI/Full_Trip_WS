@@ -113,20 +113,23 @@ function FlightCard({ FlightInfo }) {
                         <p>{FlightInfo.ArrivalTime}</p>
                     </div>
                 </div>
+                <div className="FlightResInfo FlexH_spaceBetween">
 
-                <div className="Price">
-                    <h3>Price</h3>
-                    <p>{FlightInfo.Price}</p>
-                </div>
-                <div className=" Class">
-                    <h3>Class</h3>
-                    <div className={FlightInfo.Class}>{FlightInfo.Class}</div>
+                    <div className="Price">
+                        <h3>Price</h3>
+                        <p>{FlightInfo.Price}</p>
+                    </div>
+                    <div className=" Class">
+                        <h3>Class</h3>
+                        <div className={FlightInfo.Class}>{FlightInfo.Class}</div>
 
-                </div>
+                    </div>
 
-                <div className="Status">
-                    <h3> Status</h3>
-                    <div className={FlightInfo.Status}>{FlightInfo.Status}</div>
+                    <div className="Status">
+                        <h3> Status</h3>
+                        <div className={FlightInfo.Status}>{FlightInfo.Status}</div>
+                    </div>
+
                 </div>
             </div>
 
@@ -148,7 +151,7 @@ function Flights() {
                 <p>Manage your Current Flights</p>
             </div>
             <FlightCard FlightInfo={FlightInfo_1} />
-            <FlightCard FlightInfo={FlightInfo_2}/>
+            <FlightCard FlightInfo={FlightInfo_2} />
 
         </div>
     </>)

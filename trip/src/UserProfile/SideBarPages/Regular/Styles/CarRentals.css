@@ -6,6 +6,7 @@
 
 .Car {
     display: flex;
+
     gap: 20px;
 }
 
@@ -20,7 +21,7 @@
     border-bottom: 2px solid var(--border);
 }
 
-.CarType{
+.CarType {
     background-color: var(--Primary-Color);
     color: white;
     padding: 10px;
@@ -29,4 +30,39 @@
     position: absolute;
     right: 0;
     font-weight: bold;
+}
+
+@media screen and (max-width:1000px) {
+    .Car {
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .CarDetails {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:600px) {
+    .Car img {
+        width: 150px;
+    }
+
+    .Car {
+        font-size: 0.8em;
+    }
+
+}
+
+@media screen and (max-width:400px) {
+    .Car img {
+        width: 100px;
+    }
+    .CarType{
+        padding: 8px;
+    }
+    .Car,
+    .RemoveCard {
+        font-size: 0.7em;
+    }
 }

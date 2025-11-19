@@ -3,17 +3,18 @@ import React, { useState } from 'react'
 import titIcon from '../images/title-icon.svg'
 import SignUpForm from './SignUpForm'
 
-import UserProfile from '../../UserProfile/UserProfile'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom'
 
 
-export default function Header() {
+
+  export default function Header({setUserInfo}) {
   const [formAppear, setFormAppear] = React.useState(false);
   const [hiddenMenu, setHideMenu] = React.useState(true);
-  const [LoggedIn, SetLoggedIn] = useState(true);
+  const [LoggedIn, SetLoggedIn] = useState(false);
+
 
   const [navBarContent] = React.useState(['Stays', 'Flights', 'Airport taxis', 'attractions']);
   const navContent = navBarContent.map(navContent => (
@@ -64,25 +65,24 @@ export default function Header() {
         <ul
           id={hiddenMenu ? 'hideMin' : 'showMin'}
           className='navBar'>
-          <li><button onClick={hideMenu} name='return'><i class='bx  bx-x'  ></i> </button></li>
+          <li><button onClick={hideMenu} name='return'><i className='bx  bx-x'  ></i> </button></li>
           {navContent}</ul>
         <div className='SignLogIn'>
 
           {LoggedIn ?
-            <Link to={"/Profile"} className='PrimrayB'><FontAwesomeIcon icon={faUser}></FontAwesomeIcon></Link> :
+            <Link to={"/Profile"} className='PrimrayB'><FontAwesomeIcon size='xl' icon={faUser}></FontAwesomeIcon></Link> :
             <button onClick={showForm}>Log In</button>
-
           }
         </div>
         <div className='menu'>
           <i
-            class='bxr  bx-menu'
+            className='bxr  bx-menu'
             onClick={showMenu}></i>
         </div>
       </header >
       {
         formAppear && <SignUpForm
-          formAppearing={setFormAppear} />
+          formAppearing={setFormAppear} SetLoggedIn={SetLoggedIn} SetUserInfo={setUserInfo} />
       }
     </div >
   )

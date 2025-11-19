@@ -1,0 +1,22 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "username": "Travel With Us",
+            "password": "123",
+            "email": "TWS@gmail.com",
+            "role": "Agency",
+            "createdAt": "2025-11-18T20:30:00Z",
+            "isActive": true
+        },
+        {
+            "id": 2,
+            "username": "Zakarya",
+            "password": "123",
+            "email": "zakarya@gmail.com",
+            "role": "Regular User",
+            "createdAt": "2025-11-18T20:45:00Z",
+            "isActive": true
+        }
+    ]
+}
