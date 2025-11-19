@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import Header from './landingPage/components/Header'
 
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
@@ -9,6 +10,11 @@ import Register from './landingPage/components/Register'
 import { useState } from 'react'
 =======
 import Attraction from "./moha-pages/pages/Attractions"
+=======
+import Attraction from "./moha-pages/pages/Attractions"
+
+import CarRental from './moha-pages/pages/CarRental'
+>>>>>>> Stashed changes
 
 import CarRental from './moha-pages/pages/CarRental'
 >>>>>>> Stashed changes
@@ -23,6 +29,7 @@ function App() {
   return (
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <BrowserRouter>
       <Routes>
         <Route index element={<Navigate to="Home" replace/>}></Route>
@@ -31,6 +38,9 @@ function App() {
         <Route path="/Profile/*" element={<UserProfile Username={UserInfo.UserName} U_type={UserInfo.UserType} />} />
       </Routes>
     </BrowserRouter>
+=======
+    <CarRental></CarRental>
+>>>>>>> Stashed changes
 =======
     <CarRental></CarRental>
 >>>>>>> Stashed changes
