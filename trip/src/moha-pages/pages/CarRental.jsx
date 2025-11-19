@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-
+import NavBar from "../components/NavBar";
 import Slider from "../components/Slider";
 import CarRentalForm from "../components/CarRentalForm";
 import CarRentalCard from "../components/CarRentalCard";
@@ -7,6 +7,7 @@ import Footer from "../../landingPage/components/Footer"
 
 import "./css/CarRental.css";
 
+// IMPORT SLIDER IMAGES
 import top1 from "../img/CarRental/Uber.jpg";
 import top2 from "../img/CarRental/Yassir.png";
 import top3 from "../img/CarRental/inDrive.png";
@@ -14,10 +15,11 @@ import top4 from "../img/CarRental/heetch.png";
 import top5 from "../img/CarRental/Careem.svg";
 import top6 from "../img/CarRental/turo.webp";
 
+// IMPORT CAR IMAGES
 import carImg from "../img/Car.webp";
 
 function CarRental() {
-  const formRef = useRef(null); 
+  const formRef = useRef(null); // <--- هذا هو المرجع للفورم
 
   const sliderImages = [
     { src: top1, label: "Uber" },
@@ -28,6 +30,7 @@ function CarRental() {
     { src: top6, label: "Turo" }
   ];
 
+  // دالة لتطبيق السلاسة عند الضغط على الـh1
   const scrollToForm = () => {
     formRef.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -35,9 +38,10 @@ function CarRental() {
   return (
     <div className="carrental-main-container">
 
+      {/* NAVBAR */}
+      <NavBar />
 
-
-
+      {/* H1 CLICKABLE */}
       <h1 
   className="carrental-scroll-h1"
   onClick={scrollToForm}
@@ -57,14 +61,15 @@ function CarRental() {
 </h1>
 
 
-  
+      {/* SLIDER */}
       <Slider images={sliderImages} />
 
-
+      {/* FORM */}
       <div className="carrental-form-wrapper" ref={formRef}>
         <CarRentalForm />
       </div>
 
+      {/* CARDS */}
       <div className="carrental-cards-container">
 
         <CarRentalCard
