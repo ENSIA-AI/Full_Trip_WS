@@ -88,7 +88,33 @@ const AttractionForm = () => {
       </div>
       {errors.city && <span className="attraction-error">{errors.city}</span>}
 
-      
+      {/* Visit Date */}
+      <div className="attraction-form-group">
+        <input
+          name="Visit Date"
+          id="Visit Date"
+          type="date"
+          value={visitDate}
+          onChange={(e) => setVisitDate(e.target.value)}
+        />
+      </div>
+      {errors.visitDate && (
+        <span className="attraction-error">{errors.visitDate}</span>
+      )}
+
+      {/* People */}
+      <div className="attraction-form-group">
+        
+        <input
+          name="Poeple"
+          id="People"
+          type="number"
+          placeholder="Number of people"
+          value={people}
+          onChange={(e) => setPeople(e.target.value)}
+        />
+      </div>
+      {errors.people && <span className="attraction-error">{errors.people}</span>}
 
       {/* Category */}
       <div className="attraction-form-group">
@@ -106,7 +132,7 @@ const AttractionForm = () => {
       {errors.category && (
         <span className="attraction-error">{errors.category}</span>
       )}
-      
+
       <button type="submit">Search</button>
     </form>
   );

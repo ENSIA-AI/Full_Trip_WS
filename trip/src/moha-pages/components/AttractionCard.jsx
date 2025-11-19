@@ -1,41 +1,29 @@
-import React, { useState } from "react";
-import PaymentForm from "./PaymentForm";
-
+import React from "react";
+import "./css/CarRentalCard.css"; // same CSS as CarRentalCard
+import cardimg from '../img/Card.jpg'
 function AttractionCard({ id, image, name, type, entryFee, rating, location }) {
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-
   return (
-    <>
-      <div className="carrentalcard-card" id={`carrentalcard-card-${id}`}>
-        <div className="carrentalcard-img-container">
-          <img src={image} alt={name} className="carrentalcard-img" />
-        </div>
+    <div className="carrentalcard-card" id={`carrentalcard-card-${id}`}>
 
-        <div className="carrentalcard-info">
-          <h2>{name}</h2>
-          <p>Type: {type}</p>
-          <p>Entry Fee: {entryFee} DA</p>
-          <p>⭐ {rating} • {location}</p>
-        </div>
-
-       <div className="carrentalcard-btn-container">
-          <button
-            className="carrentalcard-rent-btn"
-            onClick={() => setShowPaymentForm(true)}
-          >
-            Reserve Ticket
-          </button>
-        </div> 
+      {/* Image */}
+      <div className="carrentalcard-img-container" id={`carrentalcard-img-${id}`}>
+        <img src={image} alt={name} className="carrentalcard-img" />
       </div>
 
-      {/* Modal OUTSIDE the card */}
-      {showPaymentForm && (
-        <PaymentForm
-          name={name}
-          onClose={() => setShowPaymentForm(false)}
-        />
-      )}
-    </>
+      {/* Info */}
+      <div className="carrentalcard-info" id={`carrentalcard-info-${id}`}>
+        <h2 className="carrentalcard-name">{name}</h2>
+        <p className="carrentalcard-model">Type: {type}</p>
+        <p className="carrentalcard-price">Entry Fee: {entryFee} DA</p>
+        <p className="carrentalcard-location">⭐ {rating} •  {location}</p>
+      </div>
+
+      {/* Button */}
+      <div className="carrentalcard-btn-container" id={`carrentalcard-btn-${id}`}>
+        <button className="carrentalcard-rent-btn">Visit Now</button>
+      </div>
+
+    </div>
   );
 }
 

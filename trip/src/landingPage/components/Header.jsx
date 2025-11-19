@@ -2,6 +2,8 @@ import '../styles/header&signUp.css'
 import React, { useState } from 'react'
 import titIcon from '../images/title-icon.svg'
 import SignUpForm from './SignUpForm'
+<<<<<<< Updated upstream
+=======
 import { Route, Routes } from 'react-router-dom'
 
 import Home from './HomePage'
@@ -12,6 +14,8 @@ import Footer from './Footer'
 import Flights from '../../pages/Flights'
 import Hotels from '../../pages/Hotels'
 import FullTrip from '../../pages/FullTrip'
+import CarRental from '../../moha-pages/pages/CarRental'
+>>>>>>> Stashed changes
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -37,6 +41,12 @@ export default function Header({ setUserInfo }) {
     </Link>
   ));
 
+  const [navBarContent] = React.useState(['Stays', 'Flights', 'Airport taxis', 'attractions']);
+  const navContent = navBarContent.map(navContent => (
+    <Link to ='carRental'>
+      <li tabindex="0" key={navContent}>{navContent}</li>
+    </Link>
+  ))
 
   const hideMenu = () => {
     setHideMenu(true);
@@ -73,6 +83,20 @@ export default function Header({ setUserInfo }) {
 
 
   return (
+<<<<<<< Updated upstream
+    <div className='header-div'>
+      <header>
+        <div className="slogo">
+          <img src={titIcon}></img>
+          <h1>TravelWUs</h1>
+        </div>
+        <ul
+          id={hiddenMenu ? 'hideMin' : 'showMin'}
+          className='navBar'>
+          <li><button onClick={hideMenu} name='return'><i class='bx  bx-x'  ></i> </button></li>
+          {navContent}</ul>
+        <div className='SignLogIn'>
+=======
     <>
       <div className='header-div'>
         <header>
@@ -116,11 +140,13 @@ export default function Header({ setUserInfo }) {
           </>
         } />
         <Route path="Flights" element={<Flights />} />
+        <Route path="Car Rental" element={<CarRental />} />
         <Route path="Hotels" element={<Hotels />} />
         <Route path="Tours" element={<FullTrip />} />
       </Routes>
     </>
 
+>>>>>>> Stashed changes
 
 
   )
