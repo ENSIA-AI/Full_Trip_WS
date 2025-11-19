@@ -42,9 +42,10 @@ header>.navBar {
   list-style: none;
   display: flex;
   place-content: center;
-  gap: clamp(14px, 6vw,20px);
+  gap: clamp(14px, 6vw, 20px);
   font-weight: 600;
 }
+
 
 .menu>i {
   font-size: 2rem;
@@ -55,23 +56,22 @@ header>.navBar {
   display: none;
 }
 
-header>.navBar>li {
+header>.navBar>a {
+  text-decoration: none;
   cursor: pointer;
   border-bottom: 3px solid transparent;
 }
 
-header>.navBar>li:hover {
+header>.navBar>a:hover {
   color: var(--btn1-color-hover);
   transition: 0.3s;
 }
 
-header>.navBar>li:focus {
+.active {
   border-bottom: 3px solid var(--btn1-color);
   color: var(--btn1-color);
-  transition: 0.3s;
+  transition: 0.15s;
 }
-
-
 
 header>.SignLogIn {
   display: flex;
