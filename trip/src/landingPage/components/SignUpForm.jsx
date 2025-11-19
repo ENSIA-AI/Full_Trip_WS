@@ -46,7 +46,7 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
   function goBack() {
     formAppearing(false);
   }
-  emailFeedback.style.display = emailAppear ? 'flex' : 'none';
+
 
   return (
     <>

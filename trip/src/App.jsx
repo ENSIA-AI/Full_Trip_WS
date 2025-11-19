@@ -1,6 +1,6 @@
 import Header from './landingPage/components/Header'
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import UserProfile from './UserProfile/UserProfile'
 
@@ -18,7 +18,8 @@ function App() {
 
     <BrowserRouter>
       <Routes>
-        <Route path="/*" element={<Header />} />
+        <Route index element={<Navigate to="Home" replace/>}></Route>
+        <Route path="/*" element={<Header setUserInfo={setUserInfo} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/Profile/*" element={<UserProfile Username={UserInfo.UserName} U_type={UserInfo.UserType} />} />
       </Routes>

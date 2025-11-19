@@ -130,20 +130,19 @@ function AddTour() {
                         <h3> Pricing And Duration:</h3>
                     </div>
                     <div className="InputContainer">
-                        <label>Duration:(Days)</label>
+                        <label>Duration (Days) :</label>
                         <div>
                             <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faClock}></FontAwesomeIcon></label>
-                            <input type="number" min={1} className="CostumeInput" placeholder="2 Days,..."></input>
+                            <input className="CostumeInput" placeholder="0"></input>
                         </div>
                     </div>
                     <div className="InputContainer">
-                        <label>Price Per Person</label>
+                        <label>Amount :</label>
                         <div>
                             <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faDollar}></FontAwesomeIcon></label>
-                            <input type="number" className="CostumeInput" placeholder="Amount"></input>
+                            <input className="CostumeInput" placeholder="0"></input>
                         </div>
                     </div>
-
                 </div>
                 <div className="div3 Section Inclusion">
                     <div className="SecHeader">
@@ -214,9 +213,16 @@ function AddTour() {
                             <label>Spots:</label>
                             <div>
                                 <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
-                                <input ref={Spotsinput} type="number" min={2} className={`CostumeInput ${SpotsValid ? "" : "InvalidIn"}`} placeholder="1"></input>
+                                <input type="text" ref={Spotsinput} className="CostumeInput" placeholder="0"></input>
                             </div>
                         </div>
+                        {/* <div className="InputContainer">
+                            <label>Spots:</label>
+                            <div>
+                                <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
+                                <input ref={Spotsinput} type="number" min={2} className={`CostumeInput ${SpotsValid ? "" : "InvalidIn"}`} placeholder="1"></input>
+                            </div>
+                        </div> */}
                     </label>
                     <button onClick={AddDepartureDate} className="PrimaryB FlexH"><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>ADD Date</button>
                     {DDates.map(Date => (
