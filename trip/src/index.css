@@ -40,10 +40,9 @@
 
 }
 
-/* 
 #root{
-  overflow-x: hidden;
-} */
+  overflow-x: clip;
+} 
 
 body {
   background: url(./landingPage/images/bg.jpg);

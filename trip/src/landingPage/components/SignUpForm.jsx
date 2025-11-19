@@ -62,7 +62,13 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
           className='sign-head'>
           Welcome
         </div>
-        <label htmlFor='email' >Email
+        <p>If you are not registred yet ,you can click here to register:</p>
+        <Link to={'/register'}>
+          <a>
+            register!
+          </a>
+        </Link>
+        <label htmlFor='email' >email
           <input
             ref={emailInput}
             id='email'

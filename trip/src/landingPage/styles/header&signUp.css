@@ -42,7 +42,7 @@ header>.navBar {
   list-style: none;
   display: flex;
   place-content: center;
-  gap: min(20px, 5vw);
+  gap: clamp(14px, 6vw,20px);
   font-weight: 600;
 }
 
@@ -71,23 +71,6 @@ header>.navBar>li:focus {
   transition: 0.3s;
 }
 
-button[name=return] {
-  font-size: 1.4rem;
-  cursor: pointer;
-  background-color: gainsboro;
-  border-radius: 50%;
-  padding: 3%;
-  border: none;
-  outline: none;
-  position: absolute;
-  top: 3%;
-  left: 2%;
-  display: none;
-}
-
-button[name=return]:hover>i {
-  color: var(--btn1-color);
-}
 
 
 header>.SignLogIn {
@@ -254,6 +237,24 @@ header>.SignLogIn>button:active {
   font-weight: 600;
 }
 
+button[name=return] {
+  font-size: 1.4rem;
+  cursor: pointer;
+  background-color: gainsboro;
+  border-radius: 50%;
+  padding: 3%;
+  border: none;
+  outline: none;
+  position: absolute;
+  top: 3%;
+  left: 2%;
+  display: none;
+}
+
+button[name=return]:hover>i {
+  color: var(--btn1-color);
+}
+
 @keyframes jello-horizontal {
   0% {
     transform: scale3d(1, 1, 1);
@@ -385,7 +386,7 @@ header>.SignLogIn>button:active {
   }
 
   button[name=return] {
-    display: block;
+    display: flex;
   }
 }
 
