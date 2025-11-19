@@ -33,6 +33,8 @@ function AddTour() {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
         setErrors(prev => ({ ...prev, [name]: "" }));//resets errors
+
+        e.target.classList.remove("InvalidIn");
     }
     function validate(values) {
         const newErrors = {};
@@ -40,29 +42,40 @@ function AddTour() {
         // Tour name
         if (!values.tourName.trim()) {
             newErrors.tourName = "Tour name is required.";
+            tourNameIn.current.classList.add("InvalidIn");
         } else if (values.tourName.trim().length < 3) {
             newErrors.tourName = "Tour name must be at least 3 characters.";
+            tourNameIn.current.classList.add("InvalidIn");
+
         }
 
         // Destination
         if (!values.destination.trim()) {
             newErrors.destination = "Destination is required.";
+            destinationIn.current.classList.add("InvalidIn");
+
         }
 
         // Description
         if (!values.description.trim()) {
             newErrors.description = "Description is required.";
+            descriptionIn.current.classList.add("InvalidIn");
+
         } else if (values.description.trim().length < 10) {
             newErrors.description = "Description must be at least 10 characters.";
+            descriptionIn.current.classList.add("InvalidIn");
+
         }
 
         // Duration
         if (!values.duration.toString().trim()) {
             newErrors.duration = "Duration is required.";
+            durationIn.current.classList.add("InvalidIn");
         }
-        //Pricin
+        //Pricing
         if (!values.amount.toString().trim()) {
-            newErrors.amount = "Amount is required"
+            newErrors.amount = "Amount is required";
+            amountIn.current.classList.add("InvalidIn");
         }
         // Departure Dates
         if (DDates.length === 0) {
@@ -95,7 +108,13 @@ function AddTour() {
                 highlight: ""
             }
         )
+        tourNameIn.current.classList.remove("InvalidIn");
+        destinationIn.current.classList.remove("InvalidIn");
+        descriptionIn.current.classList.remove("InvalidIn");
+        durationIn.current.classList.remove("InvalidIn");
+        amountIn.current.classList.remove("InvalidIn");
         setErrors({});
+
     }
 
 
@@ -187,7 +206,7 @@ function AddTour() {
                                 <div>
                                     <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faN}></FontAwesomeIcon></label>
                                     <input ref={tourNameIn} onChange={handleChange} name="tourName" value={formData.tourName} className="CostumeInput" placeholder="e.g., Paris Romance"></input>
-                                    {errors.tourName && <small class="error">{errors.tourName}</small>}
+                                    {errors && <small className="error">{errors.tourName}</small>}
                                 </div>
                             </div>
                             <div className="InputContainer">
@@ -195,7 +214,7 @@ function AddTour() {
                                 <div>
                                     <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faMap}></FontAwesomeIcon></label>
                                     <input ref={destinationIn} onChange={handleChange} name="destination" value={formData.destination} className="CostumeInput" placeholder="e.g., Paris France"></input>
-                                    {errors.destination && <small class="error">{errors.destination}</small>}
+                                    {errors.destination && <small className="error">{errors.destination}</small>}
                                 </div>
                             </div>
                             <div className="InputContainer">
@@ -203,7 +222,7 @@ function AddTour() {
                                 <div>
                                     <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faPen}></FontAwesomeIcon></label>
                                     <textarea ref={descriptionIn} onChange={handleChange} name="description" value={formData.description} className="CostumeInput" placeholder="Describe Your Package"></textarea>
-                                    {errors.description && <small class="error">{errors.description}</small>}
+                                    {errors.description && <small className="error">{errors.description}</small>}
                                 </div>
                             </div>
                             <div >
@@ -226,16 +245,16 @@ function AddTour() {
                             <label> Duration (Days) :</label>
                             <div>
                                 <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faClock}></FontAwesomeIcon></label>
-                                <input ref={durationIn} type="number" min={1} name="duration" value={FormData.duration} className="CostumeInput" placeholder="0"></input>
+                                <input ref={durationIn} type="number" min={1} name="duration" value={formData.duration} className="CostumeInput" placeholder="0"></input>
                             </div>
-                            {errors.duration && <small class="error">{errors.duration}</small>}
+                            {errors.duration && <small className="error">{errors.duration}</small>}
                         </div>
                         <div className="InputContainer">
                             <label>Amount :</label>
                             <div>
                                 <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faDollar}></FontAwesomeIcon></label>
-                                <input ref={amountIn} type="number" min={1} name="amount" className="CostumeInput" placeholder="0"></input>
-                                {errors.amount && <small class="error">{errors.amount}</small>}
+                                <input onChange={handleChange} ref={amountIn} type="number" min={1} name="amount" className="CostumeInput" placeholder="0"></input>
+                                {errors.amount && <small className="error">{errors.amount}</small>}
                             </div>
                         </div>
                     </div>
@@ -304,7 +323,7 @@ function AddTour() {
                                     <input ref={Dateinput} id="date" type="Date" min={today} className={`CostumeInput ${DateValid ? "" : "InvalidIn"}`} placeholder="Select Date" ></input>
                                 </div>
                             </div>
-                            {errors && <small class="error">{errors.date}</small>}
+                            {errors && <small className="error">{errors.date}</small>}
                             <div className="InputContainer">
                                 <label>Spots:</label>
                                 <div>
