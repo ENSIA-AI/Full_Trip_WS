@@ -21,12 +21,12 @@ import './css/page.css'
 
 
 function Flights() {
-     const slider = document.querySelector('.slider');
+     /* const slider = document.querySelector('.slider');
     let scrollAmount = 0;
 
     setInterval(() => {
-        const slideWidth = slider.clientWidth;
-        scrollAmount += slideWidth;
+         const slideWidth = slider.clientWidth; 
+         scrollAmount += slideWidth; 
 
         if (scrollAmount >= slider.scrollWidth) {
             scrollAmount = 0;
@@ -38,7 +38,7 @@ function Flights() {
         });
     }, 3000);
   
-
+ */
     const refrence = useRef(null);
 
 

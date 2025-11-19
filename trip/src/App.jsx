@@ -1,34 +1,23 @@
 import Header from './landingPage/components/Header'
-import Home from './landingPage/components/HomePage'
-import Explore from './landingPage/components/Explore'
-import AboutUs from './landingPage/components/AboutUs'
-import Feedback from './landingPage/components/Feedback/Feedback'
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import UserProfile from './UserProfile/UserProfile'
 
-
-import Footer from './landingPage/components/Footer'
 import Register from './landingPage/components/Register'
 
+import Flights from './pages/Flights'
+import Hotels from './pages/Hotels'
+import FullTrip from './pages/FullTrip'
 function App() {
 
   return (
 
     <BrowserRouter>
       <Routes>
-        <Route path="/*" element={
-          <>
-            <Header />
-            <Home />
-            <Explore />
-            <AboutUs />
-            <Feedback />
-            <Footer />
-          </>
-        } />
+        <Route path="/*" element={<Header />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/Profile/*" element={<UserProfile Username='Zoko' U_type='Regular'/>} />
+        <Route path="/Profile/*" element={<UserProfile Username='Zoko' U_type='Regular' />} />
       </Routes>
     </BrowserRouter>
   )
