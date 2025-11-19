@@ -84,7 +84,7 @@ import { Link } from 'react-router-dom'
           <div className='SignLogIn'>
 
             {LoggedIn ?
-              <Link to={"/Profile"} className='PrimrayB'><FontAwesomeIcon icon={faUser}></FontAwesomeIcon></Link> :
+              <Link to={"/Profile"} className='PrimrayB'><FontAwesomeIcon size='xl' icon={faUser}></FontAwesomeIcon></Link> :
               <button onClick={showForm}>Log In</button>
             }
 

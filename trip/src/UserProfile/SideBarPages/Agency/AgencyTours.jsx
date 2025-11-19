@@ -12,6 +12,86 @@ const today = new Date().toISOString().split("T")[0];
 
 function AddTour() {
 
+    //Form Vlidations:
+    const [formData, setFormData] = useState({
+        tourName: "",
+        destination: "",
+        description: "",
+        duration: "",
+        amount:""
+
+    })
+    const [errors, setErrors] = useState({});
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        setErrors(prev => ({ ...prev, [name]: "" }));//resets errors
+    }
+    function validate(values) {
+        const newErrors = {};
+
+        // Tour name
+        if (!values.tourName.trim()) {
+            newErrors.tourName = "Tour name is required.";
+        } else if (values.tourName.trim().length < 3) {
+            newErrors.tourName = "Tour name must be at least 3 characters.";
+        }
+
+        // Destination
+        if (!values.destination.trim()) {
+            newErrors.destination = "Destination is required.";
+        }
+
+        // Description
+        if (!values.description.trim()) {
+            newErrors.description = "Description is required.";
+        } else if (values.description.trim().length < 10) {
+            newErrors.description = "Description must be at least 10 characters.";
+        }
+
+        // Duration
+        if (!values.duration.toString().trim()) {
+            newErrors.duration = "Duration is required.";
+        }
+        if(!values.amount.toString().trim()){
+            newErrors.amount ="Amount is required"
+        }
+
+        if (DDates.length === 0) {
+            newErrors.date = "At least one departure date is required.";
+        }
+
+        return newErrors;
+    }
+
+
+    function HandleSubmit(e) {
+
+        e.preventDefault();
+
+        const validationErrors = validate(formData);
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+    }
+    function handleReset() {
+        setFormData(
+            {
+                tourName: "",
+                destination: "",
+                description: "",
+                duration: "",
+                highlight: ""
+            }
+
+        )
+    }
+
+
+
     const [HighlightsCount, SetHighlightsCount] = useState(1);
     const [HighlightsIDCount, SetHighlightsIDCount] = useState(1);
     const [Highlights, SetHighlights] = useState([{ id: 0 }]);
@@ -63,9 +143,6 @@ function AddTour() {
         SetHighlights(prev => [...prev, { id: HighlightsIDCount }]);
         SetHighlightsIDCount(HighlightsIDCount + 1);
 
-
-
-
     }
     function RemoveHighlight(idToRemove) {
 
@@ -76,171 +153,171 @@ function AddTour() {
 
 
 
+
     return (<>
         <div className="Section">
-            <div className="SecHeader FlexH_spaceBetween">
-                <div>
-                    <h3>Publish New Tour Package</h3>
-                    <p>Create and publish a new tour package for your travel agency</p>
+            <form onSubmit={HandleSubmit} onReset={handleReset} className="FlexV">
+
+
+                <div className="SecHeader FlexH_spaceBetween">
+                    <div>
+                        <h3>Publish New Tour Package</h3>
+                        <p>Create and publish a new tour package for your travel agency</p>
+                    </div>
+                    <input type="reset" className="SecondaryB"></input>
+                    <input type="submit" className="PrimaryB" value="Publish"></input    >
                 </div>
-                <button className="PrimaryB"> <FontAwesomeIcon icon={faSave}> </FontAwesomeIcon>Publish Tour</button>
-            </div>
-            <div className="parent">
-                <div className="div1 Section">
-                    <div className="SecHeader">
+                <div className="parent">
+                    <div className="div1 Section">
+                        <div className="SecHeader">
 
-                        <h3> Tour Inforamtion:</h3>
-                    </div>
-                    <div className="TourInfoForm FlexV">
-                        <div className="InputContainer">
-                            <label>Tour Name:</label>
-                            <div>
-                                <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faN}></FontAwesomeIcon></label>
-                                <input className="CostumeInput" placeholder="e.g., Paris Romance"></input>
-                            </div>
+                            <h3> Tour Inforamtion:</h3>
                         </div>
-                        <div className="InputContainer">
-                            <label>Destination:</label>
-                            <div>
-                                <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faMap}></FontAwesomeIcon></label>
-                                <input className="CostumeInput" placeholder="e.g., Paris France"></input>
-                            </div>
-                        </div>
-                        <div className="InputContainer">
-                            <label>Description:</label>
-                            <div>
-                                <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faPen}></FontAwesomeIcon></label>
-                                <textarea className="CostumeInput" placeholder="Describe Your Package"></textarea>
-                            </div>
-                        </div>
-                        <div >
-                            <label className="Upload" htmlFor="upload">
-                                <input id="upload" type="file" style={{ display: "none" }}></input>
-                                <FontAwesomeIcon className="Icon" icon={faUpload}></FontAwesomeIcon>
-                                <p> Click to Upload or drag and Drop</p>
-                                <p>PNG, JPG, or WebP (max. 5MB)</p>
-                            </label>
-                        </div>
-
-                    </div>
-
-                </div>
-                <div className="div2 Section">
-                    <div className="SecHeader">
-                        <h3> Pricing And Duration:</h3>
-                    </div>
-                    <div className="InputContainer">
-                        <label>Duration (Days) :</label>
-                        <div>
-                            <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faClock}></FontAwesomeIcon></label>
-                            <input className="CostumeInput" placeholder="0"></input>
-                        </div>
-                    </div>
-                    <div className="InputContainer">
-                        <label>Amount :</label>
-                        <div>
-                            <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faDollar}></FontAwesomeIcon></label>
-                            <input className="CostumeInput" placeholder="0"></input>
-                        </div>
-                    </div>
-                </div>
-                <div className="div3 Section Inclusion">
-                    <div className="SecHeader">
-                        <h3> Includes:</h3>
-                    </div>
-
-                    <div className="FlexV">
-                        <div className="FlexH">
-                            <input className="CostumeCheckBox" type="checkbox"></input>
-                            <FontAwesomeIcon className="Icon" icon={faPlaneUp}></FontAwesomeIcon>
-                            Flight
-                        </div>
-                    </div>
-                    <div className="FlexV">
-                        <div className="FlexH">
-                            <input className="CostumeCheckBox" type="checkbox"></input>
-                            <FontAwesomeIcon className="Icon" icon={faBed}></FontAwesomeIcon>
-                            Hotel
-                        </div>
-                    </div>
-                    <div className="FlexV">
-                        <div className="FlexH">
-                            <input className="CostumeCheckBox" type="checkbox"></input>
-                            <FontAwesomeIcon className="Icon" icon={faCamera}></FontAwesomeIcon>
-                            Guided Tours
-                        </div>
-                    </div>
-                    <div className="FlexV">
-                        <div className="FlexH">
-                            <input className="CostumeCheckBox" type="checkbox"></input>
-                            <FontAwesomeIcon className="Icon" icon={faUtensils}></FontAwesomeIcon>
-                            Meals
-                        </div>
-                    </div>
-                </div>
-                <div className="div4 Section">
-                    <div className="SecHeader">
-                        <h3> Tour Highlights:</h3>
-                    </div>
-
-                    {Highlights.map(Highlight => (
-
-                        <div id={Highlight.id} className="InputContainer FlexH" key={Highlight.id}>
-                            <div style={{ flexGrow: "1" }}>
-                                <label className="CostumeLabel inputIcon"><FontAwesomeIcon className="Icon" icon={faCamera}></FontAwesomeIcon></label>
-                                <input type="Text" className="CostumeInput SmoothAppear" placeholder="Higlight" ></input>
-                            </div>
-                            <button onClick={() => RemoveHighlight(Highlight.id)} style={{ display: HighlightsCount > 1 ? "block" : "none" }} className="SecondaryB"><FontAwesomeIcon icon={faX}></FontAwesomeIcon></button>
-                        </div>
-
-                    ))}
-
-                    <button className="PrimaryB FlexH" onClick={AddHighlight}><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>ADD a Higlight</button>
-
-                </div>
-                <div className="div6 Section">
-                    <div className="SecHeader">
-                        <h3> Departure Dates:</h3>
-                    </div>
-                    <label htmlFor="date">
-                        <div className="InputContainer">
-                            <label>Date:</label>
-                            <div>
-                                <input ref={Dateinput} id="date" type="Date" min={today} className={`CostumeInput ${DateValid ? "" : "InvalidIn"}`} placeholder="Select Date" ></input>
-                            </div>
-                        </div>
-                        <div className="InputContainer">
-                            <label>Spots:</label>
-                            <div>
-                                <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
-                                <input type="text" ref={Spotsinput} className="CostumeInput" placeholder="0"></input>
-                            </div>
-                        </div>
-                        {/* <div className="InputContainer">
-                            <label>Spots:</label>
-                            <div>
-                                <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
-                                <input ref={Spotsinput} type="number" min={2} className={`CostumeInput ${SpotsValid ? "" : "InvalidIn"}`} placeholder="1"></input>
-                            </div>
-                        </div> */}
-                    </label>
-                    <button onClick={AddDepartureDate} className="PrimaryB FlexH"><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>ADD Date</button>
-                    {DDates.map(Date => (
-                        <div key={Date.id} className="Section ">
-                            <div className="FlexH_spaceBetween">
-                                <div className="FlexH">
-                                    <FontAwesomeIcon className="DateIcon" icon={faCalendar}></FontAwesomeIcon>
-                                    <div>
-                                        <h4>{Date.Date}</h4>
-                                        <div className="Spots">{Date.SpotsTaken}/{Date.Spots} Spots</div>
-                                    </div>
+                        <div className="TourInfoForm FlexV">
+                            <div className="InputContainer">
+                                <label>Tour Name:</label>
+                                <div>
+                                    <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faN}></FontAwesomeIcon></label>
+                                    <input onChange={handleChange} name="tourName" value={formData.tourName} className="CostumeInput" placeholder="e.g., Paris Romance"></input>
                                 </div>
-                                <button className="SecondaryB" onClick={() => DeleteDate(Date.id)}><FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon></button>
+                            </div>
+                            <div className="InputContainer">
+                                <label>Destination:</label>
+                                <div>
+                                    <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faMap}></FontAwesomeIcon></label>
+                                    <input onChange={handleChange} name="destination" value={formData.destination} className="CostumeInput" placeholder="e.g., Paris France"></input>
+                                </div>
+                            </div>
+                            <div className="InputContainer">
+                                <label>Description:</label>
+                                <div>
+                                    <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faPen}></FontAwesomeIcon></label>
+                                    <textarea onChange={handleChange} name="description" value={formData.description} className="CostumeInput" placeholder="Describe Your Package"></textarea>
+                                </div>
+                            </div>
+                            <div >
+                                <label className="Upload" htmlFor="upload">
+                                    <input id="upload" type="file" style={{ display: "none" }}></input>
+                                    <FontAwesomeIcon className="Icon" icon={faUpload}></FontAwesomeIcon>
+                                    <p> Click to Upload or drag and Drop</p>
+                                    <p>PNG, JPG, or WebP (max. 5MB)</p>
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div className="div2 Section">
+                        <div className="SecHeader">
+                            <h3> Pricing And Duration:</h3>
+                        </div>
+                        <div className="InputContainer">
+                            <label> Duration (Days) :</label>
+                            <div>
+                                <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faClock}></FontAwesomeIcon></label>
+                                <input type="number" min={1} name="duration" value={FormData.duration} className="CostumeInput" placeholder="0"></input>
+                            </div>
+                            {errors.duration && <small class="error">{errors.duration}</small>}
+                        </div>
+                        <div className="InputContainer">
+                            <label>Amount :</label>
+                            <div>
+                                <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faDollar}></FontAwesomeIcon></label>
+                                <input type="number" min={1} name="amount" className="CostumeInput" placeholder="0"></input>
                             </div>
                         </div>
-                    ))}
+                    </div>
+                    <div className="div3 Section Inclusion">
+                        <div className="SecHeader">
+                            <h3> Includes:</h3>
+                        </div>
+
+                        <div className="FlexV">
+                            <div className="FlexH">
+                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <FontAwesomeIcon className="Icon" icon={faPlaneUp}></FontAwesomeIcon>
+                                Flight
+                            </div>
+                        </div>
+                        <div className="FlexV">
+                            <div className="FlexH">
+                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <FontAwesomeIcon className="Icon" icon={faBed}></FontAwesomeIcon>
+                                Hotel
+                            </div>
+                        </div>
+                        <div className="FlexV">
+                            <div className="FlexH">
+                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <FontAwesomeIcon className="Icon" icon={faCamera}></FontAwesomeIcon>
+                                Guided Tours
+                            </div>
+                        </div>
+                        <div className="FlexV">
+                            <div className="FlexH">
+                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <FontAwesomeIcon className="Icon" icon={faUtensils}></FontAwesomeIcon>
+                                Meals
+                            </div>
+                        </div>
+                    </div>
+                    <div className="div4 Section">
+                        <div className="SecHeader">
+                            <h3> Tour Highlights:</h3>
+                        </div>
+
+                        {Highlights.map(Highlight => (
+
+                            <div id={Highlight.id} className="InputContainer FlexH" key={Highlight.id}>
+                                <div style={{ flexGrow: "1" }}>
+                                    <label className="CostumeLabel inputIcon"><FontAwesomeIcon className="Icon" icon={faCamera}></FontAwesomeIcon></label>
+                                    <input type="Text" className="CostumeInput SmoothAppear" placeholder="Higlight" ></input>
+                                </div>
+                                <button onClick={() => RemoveHighlight(Highlight.id)} style={{ display: HighlightsCount > 1 ? "block" : "none" }} className="SecondaryB"><FontAwesomeIcon icon={faX}></FontAwesomeIcon></button>
+                            </div>
+
+                        ))}
+
+                        <button className="PrimaryB FlexH" onClick={AddHighlight}><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>ADD a Higlight</button>
+
+                    </div>
+                    <div className="div6 Section">
+                        <div className="SecHeader">
+                            <h3> Departure Dates:</h3>
+                        </div>
+                        <label htmlFor="date">
+                            <div className="InputContainer">
+                                <label>Date:</label>
+                                <div>
+                                    <input ref={Dateinput} id="date" type="Date" min={today} className={`CostumeInput ${DateValid ? "" : "InvalidIn"}`} placeholder="Select Date" ></input>
+                                </div>
+                            </div>
+                            <div className="InputContainer">
+                                <label>Spots:</label>
+                                <div>
+                                    <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
+                                    <input ref={Spotsinput} type="number" min={2} className={`CostumeInput ${SpotsValid ? "" : "InvalidIn"}`} placeholder="1"></input>
+                                </div>
+                            </div>
+                        </label>
+                        <button onClick={AddDepartureDate} className="PrimaryB FlexH"><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>ADD Date</button>
+                        {DDates.map(Date => (
+                            <div key={Date.id} className="Section ">
+                                <div className="FlexH_spaceBetween">
+                                    <div className="FlexH">
+                                        <FontAwesomeIcon className="DateIcon" icon={faCalendar}></FontAwesomeIcon>
+                                        <div>
+                                            <h4>{Date.Date}</h4>
+                                            <div className="Spots">{Date.SpotsTaken}/{Date.Spots} Spots</div>
+                                        </div>
+                                    </div>
+                                    <button className="SecondaryB" onClick={() => DeleteDate(Date.id)}><FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon></button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
     </>)

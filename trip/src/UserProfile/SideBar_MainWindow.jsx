@@ -140,7 +140,7 @@ function SideBar_MainWindow() {
 
               </li>
               <li>
-                <NavLink to="Home" className={({ isActive }) => (isActive ? "MainLink active" : "MainLink")}>
+                <NavLink to="/" className={({ isActive }) => (isActive ? "MainLink active" : "MainLink")}>
                   <FontAwesomeIcon icon={BottomMenu[1].icon} className="Icon" style={{ fontSize: DashBoard ? "1.2em" : "1.3em" }}></FontAwesomeIcon>
                   <p style={{ display: DashBoard ? "" : "none" }}>{BottomMenu[1].Section}</p>
                 </NavLink>

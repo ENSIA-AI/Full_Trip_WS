@@ -12,13 +12,13 @@ import Hotels from './pages/Hotels'
 import FullTrip from './pages/FullTrip'
 function App() {
 
-  const [UserInfo,setUserInfo]=useState({UserName:"Default",UserType:"Default"});
+  const [UserInfo,setUserInfo]=useState({UserName:"Default",UserType:"Agency"});
   
   return (
 
     <BrowserRouter>
       <Routes>
-        <Route index element={<Navigate to="Home" replace/>}></Route>
+        <Route index element={<Navigate to="/Home" replace/>}></Route>
         <Route path="/*" element={<Header setUserInfo={setUserInfo} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/Profile/*" element={<UserProfile Username={UserInfo.UserName} U_type={UserInfo.UserType} />} />
