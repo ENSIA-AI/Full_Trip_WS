@@ -28,7 +28,7 @@ const validateDropoffDate = (value, pickupDate) => {
     return true;
 };
 
-// ---------------------- MAIN COMPONENT ---------------------- //
+
 
 const CarRentalForm = () => {
     const {
