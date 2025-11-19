@@ -14,22 +14,26 @@ import Hotels from '../../pages/Hotels'
 import FullTrip from '../../pages/FullTrip'
 
 
-import { FontAwesomeIcon } from  "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom'
 
 
 
-  export default function Header({setUserInfo}) {
+export default function Header({ setUserInfo }) {
   const [formAppear, setFormAppear] = React.useState(false);
   const [hiddenMenu, setHideMenu] = React.useState(true);
   const [LoggedIn, SetLoggedIn] = useState(false);
+  const [active, setActive] = useState('Home');
 
 
-  const [navBarContent] = React.useState(['Home','Hotels', 'Flights', 'Car Rental', 'attractions', 'Tours']);
+  const [navBarContent] = React.useState(['Home', 'Hotels', 'Flights', 'Car Rental', 'attractions', 'Tours']);
   const navContent = navBarContent.map(item => (
     <Link key={item} to={`/${item}`}>
-      <li tabIndex="0">{item}</li>
+      <li
+        className={active === item ? 'active' : ''}
+        onClick={() => setActive(item)}>
+        {item}</li>
     </Link>
   ));
 
@@ -97,10 +101,10 @@ import { Link } from 'react-router-dom'
         </header >
         {
           formAppear && <SignUpForm
-            formAppearing={setFormAppear} SetLoggedIn={SetLoggedIn} SetUserInfo={setUserInfo}/>
+            formAppearing={setFormAppear} SetLoggedIn={SetLoggedIn} SetUserInfo={setUserInfo} />
         }
       </div >
-      
+
       <Routes>
         <Route path="Home" element={
           <>
