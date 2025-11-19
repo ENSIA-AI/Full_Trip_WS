@@ -18,7 +18,7 @@ import Attraction from '../../moha-pages/pages/Attractions'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 
 
@@ -26,15 +26,21 @@ export default function Header({ setUserInfo }) {
   const [formAppear, setFormAppear] = React.useState(false);
   const [hiddenMenu, setHideMenu] = React.useState(true);
   const [LoggedIn, SetLoggedIn] = useState(false);
-  const [active, setActive] = useState('Home');
+  const [active, setActive] = useState('');
 
 
 
-  const [navBarContent] = React.useState(['Home','Hotels', 'Flights', 'Car Rental', 'Attraction','Tours']);
+  const [navBarContent] = React.useState(['Home', 'Hotels', 'Flights', 'Car Rental', 'Attraction', 'Tours']);
   const navContent = navBarContent.map(navContent => (
-    <Link to ={`/${navContent}`}>
-      <li tabindex="0" key={navContent}>{navContent}</li>
-    </Link>
+    <NavLink
+      to={`/${navContent}`}>
+      <li
+        className={active === navContent ? 'active' : ''}
+        onclick={() => setActive(navContent)
+        }
+        key={navContent}>
+        {navContent}</li>
+    </NavLink>
   ))
 
   const hideMenu = () => {
@@ -118,8 +124,8 @@ export default function Header({ setUserInfo }) {
         <Route path="Car Rental" element={<CarRental />} />
         <Route path="Hotels" element={<Hotels />} />
         <Route path="Tours" element={<FullTrip />} />
-        <Route path='Attraction' element={<Attraction/>}></Route>
-        <Route path='Car Rental' element={<CarRental/>}></Route>
+        <Route path='Attraction' element={<Attraction />}></Route>
+        <Route path='Car Rental' element={<CarRental />}></Route>
       </Routes>
     </>
 

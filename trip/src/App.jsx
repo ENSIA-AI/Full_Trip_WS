@@ -26,7 +26,7 @@ function App() {
         <Route index element={<Navigate to="/Home" replace/>}></Route>
         <Route path="/*" element={<Header setUserInfo={setUserInfo} />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/Profile/*" element={<UserProfile Username='Zoko' U_type='Regular'/>} />
+        <Route path="/Profile/*" element={<UserProfile Username={UserInfo.UserName} U_type={UserInfo.UserType}/>} />
       </Routes>
     </BrowserRouter>
 

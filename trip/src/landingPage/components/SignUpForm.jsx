@@ -82,8 +82,6 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
             type='password'
             placeholder='Password' required />
         </label>
-        <p>If you are not registred yet ,you can click here to register:</p>
-        <a href='/register'>register!</a>
         <button name='submit'>Log In</button>
       </form>
     </>

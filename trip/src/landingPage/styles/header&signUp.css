@@ -56,13 +56,13 @@ header>.navBar {
   display: none;
 }
 
-header>.navBar>a {
+header>.navBar>li {
   text-decoration: none;
   cursor: pointer;
   border-bottom: 3px solid transparent;
 }
 
-header>.navBar>a:hover {
+header>.navBar>li:hover {
   color: var(--btn1-color-hover);
   transition: 0.3s;
 }
