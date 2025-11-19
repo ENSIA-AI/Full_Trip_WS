@@ -13,12 +13,19 @@ const today = new Date().toISOString().split("T")[0];
 function AddTour() {
 
     //Form Vlidations:
+    const tourNameIn = useRef();
+    const destinationIn = useRef();
+    const descriptionIn = useRef();
+    const durationIn = useRef();
+    const amountIn = useRef();
+
+
     const [formData, setFormData] = useState({
         tourName: "",
         destination: "",
         description: "",
         duration: "",
-        amount:""
+        amount: ""
 
     })
     const [errors, setErrors] = useState({});
@@ -53,10 +60,11 @@ function AddTour() {
         if (!values.duration.toString().trim()) {
             newErrors.duration = "Duration is required.";
         }
-        if(!values.amount.toString().trim()){
-            newErrors.amount ="Amount is required"
+        //Pricin
+        if (!values.amount.toString().trim()) {
+            newErrors.amount = "Amount is required"
         }
-
+        // Departure Dates
         if (DDates.length === 0) {
             newErrors.date = "At least one departure date is required.";
         }
@@ -86,8 +94,8 @@ function AddTour() {
                 duration: "",
                 highlight: ""
             }
-
         )
+        setErrors({});
     }
 
 
@@ -178,21 +186,24 @@ function AddTour() {
                                 <label>Tour Name:</label>
                                 <div>
                                     <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faN}></FontAwesomeIcon></label>
-                                    <input onChange={handleChange} name="tourName" value={formData.tourName} className="CostumeInput" placeholder="e.g., Paris Romance"></input>
+                                    <input ref={tourNameIn} onChange={handleChange} name="tourName" value={formData.tourName} className="CostumeInput" placeholder="e.g., Paris Romance"></input>
+                                    {errors.tourName && <small class="error">{errors.tourName}</small>}
                                 </div>
                             </div>
                             <div className="InputContainer">
                                 <label>Destination:</label>
                                 <div>
                                     <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faMap}></FontAwesomeIcon></label>
-                                    <input onChange={handleChange} name="destination" value={formData.destination} className="CostumeInput" placeholder="e.g., Paris France"></input>
+                                    <input ref={destinationIn} onChange={handleChange} name="destination" value={formData.destination} className="CostumeInput" placeholder="e.g., Paris France"></input>
+                                    {errors.destination && <small class="error">{errors.destination}</small>}
                                 </div>
                             </div>
                             <div className="InputContainer">
                                 <label>Description:</label>
                                 <div>
                                     <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faPen}></FontAwesomeIcon></label>
-                                    <textarea onChange={handleChange} name="description" value={formData.description} className="CostumeInput" placeholder="Describe Your Package"></textarea>
+                                    <textarea ref={descriptionIn} onChange={handleChange} name="description" value={formData.description} className="CostumeInput" placeholder="Describe Your Package"></textarea>
+                                    {errors.description && <small class="error">{errors.description}</small>}
                                 </div>
                             </div>
                             <div >
@@ -215,7 +226,7 @@ function AddTour() {
                             <label> Duration (Days) :</label>
                             <div>
                                 <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faClock}></FontAwesomeIcon></label>
-                                <input type="number" min={1} name="duration" value={FormData.duration} className="CostumeInput" placeholder="0"></input>
+                                <input ref={durationIn} type="number" min={1} name="duration" value={FormData.duration} className="CostumeInput" placeholder="0"></input>
                             </div>
                             {errors.duration && <small class="error">{errors.duration}</small>}
                         </div>
@@ -223,7 +234,8 @@ function AddTour() {
                             <label>Amount :</label>
                             <div>
                                 <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faDollar}></FontAwesomeIcon></label>
-                                <input type="number" min={1} name="amount" className="CostumeInput" placeholder="0"></input>
+                                <input ref={amountIn} type="number" min={1} name="amount" className="CostumeInput" placeholder="0"></input>
+                                {errors.amount && <small class="error">{errors.amount}</small>}
                             </div>
                         </div>
                     </div>
@@ -292,6 +304,7 @@ function AddTour() {
                                     <input ref={Dateinput} id="date" type="Date" min={today} className={`CostumeInput ${DateValid ? "" : "InvalidIn"}`} placeholder="Select Date" ></input>
                                 </div>
                             </div>
+                            {errors && <small class="error">{errors.date}</small>}
                             <div className="InputContainer">
                                 <label>Spots:</label>
                                 <div>
