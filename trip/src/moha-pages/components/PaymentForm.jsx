@@ -82,10 +82,10 @@ function PaymentForm({ name, onClose }) {
           </div>
 
           <div className="paymentform-buttons">
-            <button type="submit">Pay & Reserve</button>
-            <button type="button" className="paymentform-cancel" onClick={onClose}>
-              Cancel
-            </button>
+            <div className="FlexH">
+              <button className="PrimaryB" type="submit">Pay & Reserve</button>
+              <button className="PrimaryB" type="button" onClick={onClose}> Cancel</button>
+            </div>
           </div>
         </form>
       </div>

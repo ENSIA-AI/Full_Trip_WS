@@ -43,8 +43,5 @@ User Profile → My Bookings, Edit Profile, Favorites
 Agency Profile → Publish Package, Manage Packages, Agency Bookings
 About Us
 Contact Us
-6. Work Division
-Oussama Bouziane: Frontend lead, UI, Flights & Hotels pages
-Mohammed Benadda: Backend lead, API, database, authentication, bookings
 Abdelkadir Megdoud: Packages module, agency dashboard
 Zakarya Bouzid: Attractions, car rentals, About/Contact pages, testing

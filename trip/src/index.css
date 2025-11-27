@@ -170,6 +170,8 @@ a{
 
 .error {
   color: red;
+  text-align: left;
+  padding-top: 10px;
 }
 
 .CostumeInput .Icon {

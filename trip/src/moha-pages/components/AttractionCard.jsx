@@ -19,9 +19,9 @@ function AttractionCard({ id, image, name, type, entryFee, rating, location }) {
       </div>
 
       {/* Button */}
-      <div className="carrentalcard-btn-container" id={`carrentalcard-btn-${id}`}>
+      {/* <div className="carrentalcard-btn-container" id={`carrentalcard-btn-${id}`}>
         <button className="carrentalcard-rent-btn">Visit Now</button>
-      </div>
+      </div> */}
 
     </div>
   );

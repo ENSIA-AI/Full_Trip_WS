@@ -4,12 +4,103 @@ import "./css/FlightCard.css";
 function FlightCard() {
   const [showPayment, setShowPayment] = useState(false);
 
+  const [cardName, setCardName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [cvv, setCvv] = useState("");
+
+  const [errors, setErrors] = useState({});
+
   const handleReserve = () => {
     setShowPayment(true);
   };
 
   const handleClose = () => {
     setShowPayment(false);
+    setCardName("");
+    setCardNumber("");
+    setExpiry("");
+    setCvv("");
+    setErrors({});
+  };
+
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    // allow letters and spaces only
+    setCardName(value);
+    setErrors((prev) => ({ ...prev, cardName: "" }));
+  };
+
+  const handleNumberChange = (e) => {
+    const value = e.target.value;
+    // allow digits only
+    const digitsOnly = value.replace(/\D/g, "").slice(0, 16);
+    setCardNumber(digitsOnly);
+    setErrors((prev) => ({ ...prev, cardNumber: "" }));
+  };
+
+  const handleExpiryChange = (e) => {
+    const value = e.target.value;
+    setExpiry(value);
+    setErrors((prev) => ({ ...prev, expiry: "" }));
+  };
+
+  const handleCvvChange = (e) => {
+    const value = e.target.value;
+    const digitsOnly = value.replace(/\D/g, "").slice(0, 3);
+    setCvv(digitsOnly);
+    setErrors((prev) => ({ ...prev, cvv: "" }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+
+    // Name: required + letters and spaces only
+    if (!cardName.trim()) {
+      newErrors.cardName = "Cardholder name is required";
+    } else if (!/^[A-Za-z\s]+$/.test(cardName.trim())) {
+      newErrors.cardName = "Name must contain only letters";
+    }
+
+    // Card number: 16 digits
+    if (!cardNumber) {
+      newErrors.cardNumber = "Card number is required";
+    } else if (!/^\d{16}$/.test(cardNumber)) {
+      newErrors.cardNumber = "Card number must be 16 digits";
+    }
+
+    // Expiry: MM/YY and not in past
+    if (!expiry.trim()) {
+      newErrors.expiry = "Expiry is required";
+    } else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+      newErrors.expiry = "Expiry must be MM/YY";
+    } else {
+      const [m, y] = expiry.split("/").map(Number);
+      const expDate = new Date(2000 + y, m - 1, 1);
+      const now = new Date();
+      now.setDate(1);
+      if (expDate < now) {
+        newErrors.expiry = "Expiry date cannot be in the past";
+      }
+    }
+
+    // CVV: 3 digits
+    if (!cvv.trim()) {
+      newErrors.cvv = "CVV is required";
+    } else if (!/^\d{3}$/.test(cvv)) {
+      newErrors.cvv = "CVV must be 3 digits";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    alert("Flight reserved successfully! ✈️");
+    handleClose();
   };
 
   return (
@@ -85,37 +176,94 @@ function FlightCard() {
         </div>
       </div>
 
-      {/* Payment Modal */}
       {showPayment && (
-        <div className="payment-modal">
-          <div className="payment-content">
+        <div className="flight-payment-overlay">
+          <div className="flight-payment-modal">
+            <button className="flight-payment-close" onClick={handleClose}>
+              ×
+            </button>
             <h2>Payment Details</h2>
-            <form className="payment-form">
-              <label>
-                Cardholder Name
-                <input type="text" placeholder="John Doe" required />
-              </label>
-              <label>
-                Card Number
-                <input type="text" placeholder="1234 5678 9012 3456" required />
-              </label>
-              <div className="row">
+            <form
+              className="flight-payment-form"
+              onSubmit={handleSubmit}
+              noValidate
+            >
+              <div className="flight-payment-group">
                 <label>
-                  Expiry
-                  <input type="text" placeholder="MM/YY" required />
+                  Cardholder Name
+                  <input
+                    type="text"
+                    value={cardName}
+                    onChange={handleNameChange}
+                    placeholder="John Doe"
+                  />
                 </label>
-                <label>
-                  CVV
-                  <input type="text" placeholder="123" required />
-                </label>
+                {errors.cardName && (
+                  <span className="flight-payment-error">
+                    {errors.cardName}
+                  </span>
+                )}
               </div>
-              <button type="submit" className="pay-btn">
+
+              <div className="flight-payment-group">
+                <label>
+                  Card Number
+                  <input
+                    type="text"
+                    value={cardNumber}
+                    onChange={handleNumberChange}
+                    placeholder="1234567890123456"
+                    maxLength={16}
+                  />
+                </label>
+                {errors.cardNumber && (
+                  <span className="flight-payment-error">
+                    {errors.cardNumber}
+                  </span>
+                )}
+              </div>
+
+              <div className="flight-payment-row">
+                <div className="flight-payment-group">
+                  <label>
+                    Expiry
+                    <input
+                      type="text"
+                      value={expiry}
+                      onChange={handleExpiryChange}
+                      placeholder="MM/YY"
+                    />
+                  </label>
+                  {errors.expiry && (
+                    <span className="flight-payment-error">
+                      {errors.expiry}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flight-payment-group">
+                  <label>
+                    CVV
+                    <input
+                      type="text"
+                      value={cvv}
+                      onChange={handleCvvChange}
+                      placeholder="123"
+                      maxLength={3}
+                    />
+                  </label>
+                  {errors.cvv && (
+                    <span className="flight-payment-error">
+                      {errors.cvv}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <button type="submit" className="flight-pay-btn">
                 Pay 399$
               </button>
             </form>
-            <button className="close-btn" onClick={handleClose}>
-              ×
-            </button>
           </div>
         </div>
       )}
