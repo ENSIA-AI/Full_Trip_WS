@@ -36,7 +36,7 @@ export default function Header({ setUserInfo }) {
       to={`/${navContent}`}>
       <li
         className={active === navContent ? 'active' : ''}
-        onclick={() => setActive(navContent)
+        onClick={() => setActive(navContent)
         }
         key={navContent}>
         {navContent}</li>
