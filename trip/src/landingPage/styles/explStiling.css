@@ -25,7 +25,7 @@
   animation-range: entry 0 cover 23%;
 }
 
-.explore-page>.trip-form {
+.explore-page>.tr-form {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -35,17 +35,19 @@
   width: 90%;
 }
 
-.explore-page>.trip-form>label {
+.explore-page>.tr-form>.kra {
   background-color: var(--transparent-bg-cl);
   border-radius: 20px;
   padding: 10px 15px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
   margin-bottom: 3vh;
+  width: clamp(140px, 20vw, 220px);
+  display: flex;
+  align-items: center;
+  height: 40px;
+  justify-content: center;
 }
 
-.explore-page>.trip-form>label>input {
+.explore-page>.tr-form>.kra>.kr {
   font-size: 0.9rem;
   background-color: transparent;
   border: none;
@@ -53,12 +55,12 @@
   width: clamp(120px, 25vw, 200px);
 }
 
-.explore-page>.trip-form>label>input[type=number]::-webkit-inner-spin-button,
+.explore-page>.tr-form>.kra>input[type=number]::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
   display: none;
 }
 
-.explore-page>.trip-form>button {
+.explore-page>.tr-form>button {
   width: clamp(120px, 25vw, 200px);
   background: linear-gradient(135deg, var(--btn1-color), var(--btn3-color));
   cursor: pointer;
@@ -68,7 +70,7 @@
   padding: 10px 25px;
 }
 
-.explore-page>.trip-form>button:active {
+.explore-page>.tr-form>button:active {
   background: linear-gradient(135deg, var(--btn3-color), var(--btn1-color));
   transition: 100ms;
 }
