@@ -38,9 +38,9 @@
 
 }
 
-#root{
+#root {
   overflow-x: clip;
-} 
+}
 
 body {
   background: url(./landingPage/images/bg.jpg);
@@ -139,7 +139,7 @@ body {
 
 }
 
-a{
+a {
   text-decoration: none;
 }
 
@@ -356,8 +356,6 @@ a{
   animation: SmoothAppear 0.2s;
 
 }
-
-
 
 .ActionsB {
   font-size: 1.3em;
