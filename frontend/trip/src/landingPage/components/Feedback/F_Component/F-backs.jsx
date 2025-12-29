@@ -2,9 +2,11 @@ import '../F-Stiling/F-backs.css'
 import { useState, useEffect } from 'react'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
+import { addFeedback } from '../../../service';
 
 export default function Fbacks() {
   const [expandedItems, setExpandedItems] = useState([0]);
+  const [feedback, setFeedback] = useState({ email: '', feedback: '' });
 
   function showDetails(index) {
     setExpandedItems((prev) => {
@@ -33,8 +35,13 @@ export default function Fbacks() {
 
   useEffect(() => {
     Aos.init({ duration: 1000 });
-  })
+  },[])
 
+  async function handelSubmit(e) {
+    e.preventDefault();
+    await addFeedback(feedback);
+    setFeedback({ email: '',feedback: '' });
+  }
 
   return (
     <div className="feedback-section">
@@ -63,10 +70,22 @@ export default function Fbacks() {
       <div className="add-feedback">
         <h1 data-aos='fade-up'>Add Feedback Here:</h1>
         <p data-aos='fade-up'>Please fill the form below with your feedbacks.</p>
-        <form>
-          <input data-aos='fade-up-left' placeholder='Enter email address' required />
-          <textarea data-aos='fade-up-left' placeholder='Enter your Feedbacks here' required />
-          <button data-aos='fade-up-left'>Submit Feedback</button>
+        <form onSubmit={handelSubmit}>
+          <input
+            type='email'
+            data-aos='fade-up-left'
+            value={feedback.email}
+            onChange={(e) => setFeedback(f => ({ ...f, email: e.target.value }))}
+            placeholder='Enter email address'
+            required />
+          <textarea
+            type='text'
+            data-aos='fade-up-left'
+            value={feedback.feedback}
+            onChange={(e) => setFeedback(f => ({ ...f, feedback: e.target.value }))}
+            placeholder='Enter your Feedbacks here'
+            required />
+          <button type='submit' data-aos='fade-up-left'>Submit Feedback</button>
         </form>
       </div>
     </div >
