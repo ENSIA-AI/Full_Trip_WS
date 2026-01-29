@@ -21,12 +21,17 @@ function App() {
   
   return (
 
+    // <BrowserRouter>
+    //   <Routes>
+    //     <Route index element={<Navigate to="/Home" replace/>}></Route>
+    //     <Route path="/*" element={<Header setUserInfo={setUserInfo} />} />
+    //     <Route path="/register" element={<Register />} />
+    //     <Route path="/Profile/*" element={<UserProfile Username={UserInfo.UserName} U_type={UserInfo.UserType}/>} />
+    //   </Routes>
+    // </BrowserRouter>
     <BrowserRouter>
       <Routes>
-        <Route index element={<Navigate to="/Home" replace/>}></Route>
-        <Route path="/*" element={<Header setUserInfo={setUserInfo} />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/Profile/*" element={<UserProfile Username={UserInfo.UserName} U_type={UserInfo.UserType}/>} />
+        <Route path="/*" element={<UserProfile Username="Zakarya" U_type="Agency"/>} />
       </Routes>
     </BrowserRouter>
 

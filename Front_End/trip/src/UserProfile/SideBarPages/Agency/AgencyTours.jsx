@@ -2,13 +2,25 @@ import { faN, faCompass, faPlus, faSave, faD, faPen, faClock, faDollar, faUpload
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink, Routes, Route, Navigate, Form } from "react-router-dom";
 
+
 import './styles/AgencyTours.css'
 import { faMap } from "@fortawesome/free-regular-svg-icons";
 import { useEffect, useRef, useState } from "react";
 
 import { createPortal } from 'react-dom';
 
+import api from "../../API/PHP_API";
+
+
+
+
 const today = new Date().toISOString().split("T")[0];
+
+
+
+
+
+
 
 function AddTour() {
 
@@ -19,8 +31,34 @@ function AddTour() {
     const durationIn = useRef();
     const amountIn = useRef();
 
+    //Iclusions:
+    const [SelectedOptions, setSelectedOptions] = useState([]);
+
+    function handleCheckBoxChange(e) {
+
+        const value = e.target.value;
+        const checked = e.target.checked;
+
+
+
+
+        if (checked) {
+
+            setSelectedOptions([...SelectedOptions, value]);
+        }
+        else {
+
+            setSelectedOptions(SelectedOptions.filter((item) => item !== value));
+        }
+
+
+    }
+
+
+
 
     const [formData, setFormData] = useState({
+
         tourName: "",
         destination: "",
         description: "",
@@ -86,7 +124,8 @@ function AddTour() {
     }
 
 
-    function HandleSubmit(e) {
+
+    async function HandleSubmit(e) {
 
         e.preventDefault();
 
@@ -97,6 +136,34 @@ function AddTour() {
             return;
         }
 
+
+        const data = {
+            ...formData,
+            Departure_Dates: DDates,
+            Highlights: Highlights,
+            Inclusions: SelectedOptions
+        };
+
+
+
+        try {
+
+            const response = await api.post('/Add_Tours.php', data)
+
+            console.log("Data Sent Succefully:", response.data);
+
+            if(response.data==="Transaction Completed"){
+
+                alert("Tour Published");
+            };
+        }
+
+        catch (error) {
+
+            console.log("Data Not Sent:", error);
+        }
+
+
     }
     function handleReset() {
         setFormData(
@@ -105,7 +172,7 @@ function AddTour() {
                 destination: "",
                 description: "",
                 duration: "",
-                highlight: ""
+                amount: ""
             }
         )
         tourNameIn.current.classList.remove("InvalidIn");
@@ -115,13 +182,16 @@ function AddTour() {
         amountIn.current.classList.remove("InvalidIn");
         setErrors({});
 
+        setDDates([]);
+
+
     }
 
 
 
     const [HighlightsCount, SetHighlightsCount] = useState(1);
     const [HighlightsIDCount, SetHighlightsIDCount] = useState(1);
-    const [Highlights, SetHighlights] = useState([{ id: 0 }]);
+    const [Highlights, SetHighlights] = useState([{ id: 0 ,Highlight_Detail:""}]);
 
     //Dates Management:
     const [DDates, setDDates] = useState([]);
@@ -132,7 +202,8 @@ function AddTour() {
 
     const Dateinput = useRef();
     const Spotsinput = useRef();
-    function AddDepartureDate() {
+    function AddDepartureDate(e) {
+        e.preventDefault();
         const date = Dateinput.current.value.trim();
         const spots = Spotsinput.current.value.trim();
         var Valid = true;
@@ -164,26 +235,36 @@ function AddTour() {
     }
     //--------------------------------------------
 
-    function AddHighlight() {
+    function AddHighlight(e) {
+        e.preventDefault();
 
         SetHighlightsCount(HighlightsCount + 1);
-        SetHighlights(prev => [...prev, { id: HighlightsIDCount }]);
+        SetHighlights(prev => [...prev, { id: HighlightsIDCount, Highlight_Detail: "" }]);
         SetHighlightsIDCount(HighlightsIDCount + 1);
 
     }
     function RemoveHighlight(idToRemove) {
 
-        SetHighlights(prev => prev.filter(i => i.id !== idToRemove));
+        SetHighlights(prev => prev.filter((i) => i.id !== idToRemove));
         SetHighlightsCount(HighlightsCount - 1);
 
     }
+function HandleHighlightChange(id, event) {
+    const text = event.target.value;
 
+    SetHighlights(prev => 
+        prev.map(hgh => 
+            hgh.id === id ? { ...hgh, Highlight_Detail: text } : hgh
+        )
+    );
+
+}
 
 
 
     return (<>
         <div className="Section">
-            <form onSubmit={HandleSubmit} onReset={handleReset} className="FlexV">
+            <form action onSubmit={HandleSubmit} onReset={handleReset} className="FlexV">
 
 
                 <div className="SecHeader FlexH_spaceBetween">
@@ -242,10 +323,12 @@ function AddTour() {
                             <h3> Pricing And Duration:</h3>
                         </div>
                         <div className="InputContainer">
+
+                            {/* Duration ----------------------- */}
                             <label> Duration (Days) :</label>
                             <div>
                                 <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faClock}></FontAwesomeIcon></label>
-                                <input ref={durationIn} type="number" min={1} name="duration" value={formData.duration} className="CostumeInput" placeholder="0"></input>
+                                <input ref={durationIn} onChange={handleChange} type="number" min={1} name="duration" className="CostumeInput" placeholder="0"></input>
                             </div>
                             {errors.duration && <small className="error">{errors.duration}</small>}
                         </div>
@@ -265,28 +348,28 @@ function AddTour() {
 
                         <div className="FlexV">
                             <div className="FlexH">
-                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <input onChange={handleCheckBoxChange} value="Flight" className="CostumeCheckBox" type="checkbox"></input>
                                 <FontAwesomeIcon className="Icon" icon={faPlaneUp}></FontAwesomeIcon>
                                 Flight
                             </div>
                         </div>
                         <div className="FlexV">
                             <div className="FlexH">
-                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <input onChange={handleCheckBoxChange} value="Hotel" className="CostumeCheckBox" type="checkbox"></input>
                                 <FontAwesomeIcon className="Icon" icon={faBed}></FontAwesomeIcon>
                                 Hotel
                             </div>
                         </div>
                         <div className="FlexV">
                             <div className="FlexH">
-                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <input onChange={handleCheckBoxChange} value="Guided_Tours" className="CostumeCheckBox" type="checkbox"></input>
                                 <FontAwesomeIcon className="Icon" icon={faCamera}></FontAwesomeIcon>
                                 Guided Tours
                             </div>
                         </div>
                         <div className="FlexV">
                             <div className="FlexH">
-                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <input onChange={handleCheckBoxChange} value="Meals" className="CostumeCheckBox" type="checkbox"></input>
                                 <FontAwesomeIcon className="Icon" icon={faUtensils}></FontAwesomeIcon>
                                 Meals
                             </div>
@@ -302,14 +385,14 @@ function AddTour() {
                             <div id={Highlight.id} className="InputContainer FlexH" key={Highlight.id}>
                                 <div style={{ flexGrow: "1" }}>
                                     <label className="CostumeLabel inputIcon"><FontAwesomeIcon className="Icon" icon={faCamera}></FontAwesomeIcon></label>
-                                    <input type="Text" className="CostumeInput SmoothAppear" placeholder="Higlight" ></input>
+                                    <input id={Highlight.id} type="Text" onChange={() => HandleHighlightChange(Highlight.id,event)} className="CostumeInput SmoothAppear" placeholder="Highlight"  ></input>
                                 </div>
                                 <button onClick={() => RemoveHighlight(Highlight.id)} style={{ display: HighlightsCount > 1 ? "block" : "none" }} className="SecondaryB"><FontAwesomeIcon icon={faX}></FontAwesomeIcon></button>
                             </div>
 
                         ))}
 
-                        <button className="PrimaryB FlexH" onClick={AddHighlight}><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>ADD a Higlight</button>
+                        <button className="PrimaryB FlexH" onClick={AddHighlight}><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>ADD a Highlight</button>
 
                     </div>
                     <div className="div6 Section">
@@ -327,8 +410,8 @@ function AddTour() {
                             <div className="InputContainer">
                                 <label>Spots:</label>
                                 <div>
-                                    <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
-                                    <input ref={Spotsinput} type="number" min={2} className={`CostumeInput ${SpotsValid ? "" : "InvalidIn"}`} placeholder="1"></input>
+                                    <label className=" inputIcon" ><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
+                                    <input ref={Spotsinput} type="number" min={2} className={`CostumeInput ${SpotsValid ? "" : "InvalidIn"}`} placeholder="1" ></input>
                                 </div>
                             </div>
                         </label>
@@ -340,7 +423,7 @@ function AddTour() {
                                         <FontAwesomeIcon className="DateIcon" icon={faCalendar}></FontAwesomeIcon>
                                         <div>
                                             <h4>{Date.Date}</h4>
-                                            <div className="Spots">{Date.SpotsTaken}/{Date.Spots} Spots</div>
+                                            <div className="Spots" >{Date.SpotsTaken}/{Date.Spots} Spots</div>
                                         </div>
                                     </div>
                                     <button className="SecondaryB" onClick={() => DeleteDate(Date.id)}><FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon></button>

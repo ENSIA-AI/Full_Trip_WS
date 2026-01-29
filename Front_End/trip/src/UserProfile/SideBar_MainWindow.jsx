@@ -162,11 +162,11 @@ function SideBar_MainWindow() {
 
               {
                 SideBar.map((item, index) => (
-                  <Route key={index} path={`${item.Section}/*`} element={<item.Component />} ></Route>
+                  <Route key={index} path={`Profile/${item.Section}/*`} element={<item.Component />} ></Route>
                 ))
 
               }
-              <Route path="Settings/*" element={<Settings />}></Route>
+              <Route path="Profile/Settings/*" element={<Settings />}></Route>
             </Routes>
 
           </div>
