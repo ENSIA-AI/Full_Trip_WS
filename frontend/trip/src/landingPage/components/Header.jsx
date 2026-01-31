@@ -5,7 +5,7 @@ import SignUpForm from './SignUpForm'
 import { Route, Routes } from 'react-router-dom'
 
 import Home from './HomePage'
-import Explore from './Explore'
+import Explore from './Explore/Explore'
 import AboutUs from './AboutUs'
 import Feedback from './Feedback/Feedback'
 import Footer from './Footer'

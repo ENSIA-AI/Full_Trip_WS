@@ -2,7 +2,7 @@ import '../F-Stiling/F-backs.css'
 import { useState, useEffect } from 'react'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
-import { addFeedback } from '../../../service';
+import { addFeedback } from '../../../services/fb_service';
 
 export default function Fbacks() {
   const [expandedItems, setExpandedItems] = useState([0]);
@@ -17,7 +17,7 @@ export default function Fbacks() {
   const feedbacks = [
     {
       summary: 'The booking process was fast and easy to navigate.',
-      details: 'I’ve used several travel websites before, but this one stands out for its clean interface and speed. I was able to compare destinations, manage my budget, and confirm all reservations within minutes. The confirmation emails and reminders were timely and professional.'
+      details: 'Iâ€™ve used several travel websites before, but this one stands out for its clean interface and speed. I was able to compare destinations, manage my budget, and confirm all reservations within minutes. The confirmation emails and reminders were timely and professional.'
     },
     {
       summary: 'Perfect for solo travelers looking for new adventures.',
@@ -25,10 +25,10 @@ export default function Fbacks() {
     },
     {
       summary: 'A truly reliable service for planning group trips!',
-      details: 'We planned a university trip for eight people, and I expected chaos — but everything went perfectly. The platform handled multiple travelers, provided budget tracking, and even suggested places that fit everyone’s preferences. Customer support responded in under 10 minutes every time.'
+      details: 'We planned a university trip for eight people, and I expected chaos â€" but everything went perfectly. The platform handled multiple travelers, provided budget tracking, and even suggested places that fit everyoneâ€™s preferences. Customer support responded in under 10 minutes every time.'
     },
     {
-      summary: 'Absolutely loved my trip to Santorini — everything was organized perfectly!',
+      summary: 'Absolutely loved my trip to Santorini â€" everything was organized perfectly!',
       details: 'From the moment I booked through this platform, everything went smoothly. The hotel recommendations were spot-on, and the itinerary suggestions saved me hours of research. I even got a local guide who made the experience unforgettable. Definitely using this service again!'
     }
   ]
@@ -39,8 +39,14 @@ export default function Fbacks() {
 
   async function handelSubmit(e) {
     e.preventDefault();
-    await addFeedback(feedback);
-    setFeedback({ email: '',feedback: '' });
+    try {
+      await addFeedback(feedback);
+      setFeedback({ email: '',feedback: '' });
+      alert('Feedback submitted successfully!');
+    } catch (error) {
+      alert('Failed to submit feedback. Please try again.');
+      console.error(error);
+    }
   }
 
   return (

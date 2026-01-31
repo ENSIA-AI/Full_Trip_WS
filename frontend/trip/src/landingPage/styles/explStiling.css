@@ -9,6 +9,55 @@
   padding: min(100px, 15vh) min(100px, 15vw);
 }
 
+.explore-page>.tr-form>.kra {
+  position: relative;
+  background-color: var(--transparent-bg-cl);
+  border-radius: 20px;
+  padding: 10px 15px;
+  margin-bottom: 3vh;
+  width: clamp(140px, 20vw, 220px);
+  display: flex;
+  align-items: center;
+  height: 40px;
+  justify-content: center;
+  overflow: visible;
+  z-index: 1;
+}
+
+/* Add this new rule for when autocomplete is active */
+.explore-page>.tr-form>.kra:has(.autoCompleteList) {
+  z-index: 1000; /* Boost z-index when dropdown is present */
+}
+
+.autoCompleteList {
+  height: fit-content;
+  max-height: 60vh;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 4px; /* Add small gap */
+  z-index: 9999;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+}
+
+.autoCompleteList>li {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.autoCompleteList>li:hover {
+  background-color: #f5f5f5;
+}
+
 .explore-page>p {
   color: red;
   font-size: clamp(12px, 4vw, 15px);
@@ -33,18 +82,7 @@
   margin: min(5vw, 8%) min(2vw, 8%);
   gap: min(16px, 8%);
   width: 90%;
-}
-
-.explore-page>.tr-form>.kra {
-  background-color: var(--transparent-bg-cl);
-  border-radius: 20px;
-  padding: 10px 15px;
-  margin-bottom: 3vh;
-  width: clamp(140px, 20vw, 220px);
-  display: flex;
-  align-items: center;
-  height: 40px;
-  justify-content: center;
+  position: relative;
 }
 
 .explore-page>.tr-form>.kra>.kr {
@@ -53,6 +91,8 @@
   border: none;
   outline: none;
   width: clamp(120px, 25vw, 200px);
+  box-shadow: none;
+  transform: none;
 }
 
 .explore-page>.tr-form>.kra>input[type=number]::-webkit-inner-spin-button,
@@ -68,11 +108,13 @@
   outline: none;
   border-radius: 15px;
   padding: 10px 25px;
+  margin-bottom: 3vh;
 }
 
 .explore-page>.tr-form>button:active {
   background: linear-gradient(135deg, var(--btn3-color), var(--btn1-color));
   transition: 100ms;
+  transform: none;
 }
 
 .explore-page>nav {
