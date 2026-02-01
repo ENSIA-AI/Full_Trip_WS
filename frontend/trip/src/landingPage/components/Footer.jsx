@@ -56,7 +56,7 @@ export default function Footer() {
 
   };
   return (
-    <footer>
+    <footer id='myFooter'>
       <div className="footer">
         <div className="social-contact">
           <div className="slogo">

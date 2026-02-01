@@ -6,12 +6,6 @@ import CityAutocomplete from './cityAutoComplete'
 
 export default function Explore() {
   const [date, setDate] = useState('');
-  let [images, setImages] = useState(['TouristPlace/tourist-Place1.jpg', 'TouristPlace/tourist-Place2.jpg', 'TouristPlace/tourist-Place3.jpg', 'TouristPlace/tourist-Place4.jpg', 'TouristPlace/tourist-Place5.jpg', 'TouristPlace/tourist-Place6.jpg', 'TouristPlace/tourist-Place7.jpeg', 'TouristPlace/tourist-Place8.jpg'])
-
-  let image = images.map((img) => (
-    <img data-aos='fade-up' src={img} key={img} />
-  ))
-
   let [active, setActive] = useState('All');
   const catigories = ['All', 'Recommended', 'Beach', 'Park', 'Nature', 'Mountain']
 
@@ -104,12 +98,6 @@ export default function Explore() {
         </label>
         <button data-aos='fade-left'><i class='bxr  bx-search'  ></i> Search</button>
       </form>
-      <nav data-aos='zoom-out'>
-        {Catigories}
-      </nav>
-      <div className='exp-images'>
-        {image}
-      </div>
     </div>
   )
 }
