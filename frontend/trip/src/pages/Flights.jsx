@@ -12,49 +12,54 @@ import top8 from './pics/Atop8.avif'
 import top9 from './pics/Atop9.webp'
 import top10 from './pics/Atop10.avif'
 import plane from './pics/plane-departure-solid-full.svg'
-import Footer2 from"../components/Footer2"
+import Footer2 from "../components/Footer2"
 import Searcharea from "../components/SearchbarF.jsx";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 
 import './css/page.css'
 
 
 function Flights() {
-     /* const slider = document.querySelector('.slider');
-    let scrollAmount = 0;
+    const { state } = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 400);
+    }, [state]);
+    /* const slider = document.querySelector('.slider');
+   let scrollAmount = 0;
 
-    setInterval(() => {
-         const slideWidth = slider.clientWidth; 
-         scrollAmount += slideWidth; 
+   setInterval(() => {
+        const slideWidth = slider.clientWidth; 
+        scrollAmount += slideWidth; 
 
-        if (scrollAmount >= slider.scrollWidth) {
-            scrollAmount = 0;
-        }
+       if (scrollAmount >= slider.scrollWidth) {
+           scrollAmount = 0;
+       }
 
-        slider.scrollTo({
-            left: scrollAmount,
-            behavior: 'smooth'
-        });
-    }, 3000);
-  
- */
+       slider.scrollTo({
+           left: scrollAmount,
+           behavior: 'smooth'
+       });
+   }, 3000);
+ 
+*/
     const refrence = useRef(null);
 
 
-     function handleScroll() { 
-    
-         refrence.current.scrollIntoView({
+    function handleScroll() {
+
+        refrence.current.scrollIntoView({
             behavior: "smooth",
             block: "center",
-         });
-         
+        });
+
     }
 
     return (<>
 
-        
-        <h1 className="header" onClick={handleScroll} style={{cursor:"pointer"}}><img src={plane} className="icon" /> Fly Beyond Limits</h1>
+
+        <h1 className="header" onClick={handleScroll} style={{ cursor: "pointer" }}><img src={plane} className="icon" /> Fly Beyond Limits</h1>
 
         <section className="container">
             <div className="slider-wrapper">
@@ -153,17 +158,21 @@ function Flights() {
 
         <div className="output" >
             <div className="search" ref={refrence}>
-                <Searcharea></Searcharea>
+                <Searcharea
+                    initialDate={state?.date}
+                    initialDestination={state?.to}
+                    initialBudget={state?.budget}
+                ></Searcharea>
             </div>
-            
+
             <div className="outputarea">
-               <FlightCard></FlightCard>
-              
+                <FlightCard></FlightCard>
+
             </div>
-            
+
         </div>
-      <Footer2></Footer2>
-    
+        <Footer2></Footer2>
+
     </>);
 }
 export default Flights;

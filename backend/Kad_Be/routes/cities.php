@@ -14,7 +14,6 @@ if (strlen($query) < 3) {
   exit;
 }
 
-// OpenStreetMap Nominatim API (free, no API key needed)
 $url = 'https://nominatim.openstreetmap.org/search?' . http_build_query([
   'q' => $query,
   'format' => 'json',

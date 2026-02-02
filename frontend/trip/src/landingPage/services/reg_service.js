@@ -4,6 +4,7 @@ export async function addUser(userData) {
   try {
     const response = await fetch(API_URL, {
       method: 'POST',
+      credentials: 'include',
       headers: { 
         'Content-Type': 'application/json' 
       },
@@ -19,7 +20,6 @@ export async function addUser(userData) {
       })
     });
 
-    // ✅ Check if the response is ok
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
@@ -27,11 +27,23 @@ export async function addUser(userData) {
 
     const data = await response.json();
     
-    // ✅ Check if backend returned success
     if (!data.success && data.error) {
       throw new Error(data.error);
     }
     
+    // Try to login the user on the server so session cookie is set (best-effort)
+    try {
+      await fetch('http://localhost/Full_Trip_WS/backend/Kad_Be/routes/login.php', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: userData.email, password: userData.password })
+      });
+    } catch (err) {
+      // ignore login errors (we still return the created user)
+      console.warn('Server-side auto-login failed:', err);
+    }
+
     return data;
   } catch (error) {
     // ✅ Better error logging

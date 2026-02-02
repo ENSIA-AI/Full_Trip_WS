@@ -1,9 +1,7 @@
 import './css/FlightSearch.css'; 
 import React, { useState, useEffect } from 'react';
 
-function Searcharea()
-  
-  {
+function Searcharea({initialDate ='' ,initialDestination ='',initialBudget}){
   const [tripType, setTripType] = useState('roundTrip');
   const [from, setFrom] = useState('New York (JFK)');
   const [to, setTo] = useState('Los Angeles (LAX)');
@@ -13,6 +11,11 @@ function Searcharea()
   const [flightClass, setFlightClass] = useState('Economy');
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+
+  useEffect(()=>{
+    setDepartureDate(initialDate);
+    setTo(initialDestination);
+  },[initialDate,initialDestination,initialBudget]);
 
   const validateForm = () => {
     const newErrors = {};
