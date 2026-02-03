@@ -14,7 +14,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($success) {
   echo json_encode(['success' => 'Feedback Added Successfuly']);
-} else {
+              } 
+  else {
   http_response_code(401);
   echo json_encode(['error' => 'There is a problem in the backend of the feedback']);
-}
+       }

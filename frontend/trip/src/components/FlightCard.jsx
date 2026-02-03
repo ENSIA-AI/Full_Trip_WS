@@ -1,7 +1,24 @@
 import React, { useState } from "react";
 import "./css/FlightCard.css";
 
-function FlightCard() {
+function formatTime(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function formatDuration(minutes) {
+  if (!minutes && minutes !== 0) return '0h';
+  const h = Math.floor(Number(minutes) / 60);
+  const m = Number(minutes) % 60;
+  return m > 0 ? `${h}h${m}m` : `${h}h`;
+}
+
+function FlightCard({ flight, returnDate = null, onBooked }) {
   const [showPayment, setShowPayment] = useState(false);
 
   const [cardName, setCardName] = useState("");
@@ -95,19 +112,49 @@ function FlightCard() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    alert("Flight reserved successfully! ✈️");
-    handleClose();
+    if (onBooked && flight?.id) {
+      try {
+        await onBooked(flight.id);
+        alert("Flight reserved successfully! ✈️");
+        handleClose();
+      } catch (err) {
+        alert(err.message || "Reservation failed. Please try again.");
+      }
+    } else {
+      alert("Flight reserved successfully! ✈️");
+      handleClose();
+    }
   };
+
+  // Fallback to demo data when no flight prop
+  const f = flight || {
+    airline_name: 'Emirates Airlines',
+    flight_number: 'E2-460',
+    departure_airport: 'DXB',
+    departure_city: 'Dubai',
+    arrival_airport: 'LHR',
+    arrival_city: 'London',
+    departure_time: '2025-11-02T08:00:00',
+    arrival_time: '2025-11-02T14:30:00',
+    duration_minutes: 390,
+    price: 399,
+    class: 'Economy',
+    status: 'Active'
+  };
+
+  const dateLabel = returnDate
+    ? `${formatDate(f.departure_time)} - ${formatDate(returnDate)}`
+    : formatDate(f.departure_time);
 
   return (
     <>
       <div className="flight-card">
         <div className="date-header">
-          02 November 2025 - 03 November 2025
+          {dateLabel}
         </div>
 
         <div className="flight-content">
@@ -118,17 +165,17 @@ function FlightCard() {
               </svg>
             </div>
             <div className="airline-info">
-              <h2 className="airline-name">Emirates Airlines</h2>
-              <p className="flight-number">E2-460</p>
+              <h2 className="airline-name">{f.airline_name}</h2>
+              <p className="flight-number">{f.flight_number}</p>
             </div>
           </div>
 
           <div className="flight-details">
             <div className="location-section">
-              <h3 className="location-label">Emirates</h3>
-              <p className="location-name">Dubai Airport</p>
+              <h3 className="location-label">{f.departure_airport}</h3>
+              <p className="location-name">{f.departure_city} Airport</p>
               <div className="departure-dot"></div>
-              <p className="time">8:00 AM</p>
+              <p className="time">{formatTime(f.departure_time)}</p>
             </div>
 
             <div className="flight-path">
@@ -136,7 +183,7 @@ function FlightCard() {
                 <svg className="plane-icon" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
                 </svg>
-                <span className="duration">6h30m</span>
+                <span className="duration">{formatDuration(f.duration_minutes)}</span>
               </div>
               <div className="path-line"></div>
               <div className="stop-indicator">
@@ -146,25 +193,25 @@ function FlightCard() {
             </div>
 
             <div className="location-section">
-              <h3 className="location-label">UK</h3>
-              <p className="location-name">London Airport</p>
+              <h3 className="location-label">{f.arrival_airport}</h3>
+              <p className="location-name">{f.arrival_city} Airport</p>
               <div className="arrival-dot"></div>
-              <p className="time">2:00 PM</p>
+              <p className="time">{formatTime(f.arrival_time)}</p>
             </div>
           </div>
 
           <div className="booking-info">
             <div className="info-group">
               <span className="info-label">Price</span>
-              <span className="price">399$</span>
+              <span className="price">{parseFloat(f.price).toFixed(0)}$</span>
             </div>
             <div className="info-group">
               <span className="info-label">Class</span>
-              <span className="class-badge">Economy</span>
+              <span className="class-badge">{f.class}</span>
             </div>
             <div className="info-group">
               <span className="info-label">Status</span>
-              <span className="status-badge">Active</span>
+              <span className="status-badge">{f.status}</span>
             </div>
           </div>
         </div>
@@ -261,7 +308,7 @@ function FlightCard() {
               </div>
 
               <button type="submit" className="flight-pay-btn">
-                Pay 399$
+                Pay {parseFloat(f.price).toFixed(0)}$
               </button>
             </form>
           </div>

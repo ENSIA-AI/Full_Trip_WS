@@ -1,6 +1,7 @@
-
+import { useState, useRef } from "react";
 import Navbar from "../components/Navbar";
 import FlightCard from "../components/FlightCard.jsx";
+import { searchFlights, bookFlight } from "../services/flights_service";
 import top1 from './pics/Atop1.jpg'
 import top2 from './pics/Atop2.jpg'
 import top3 from './pics/Atop3.jpg'
@@ -15,10 +16,7 @@ import plane from './pics/plane-departure-solid-full.svg'
 import Footer2 from"../components/Footer2"
 import Searcharea from "../components/SearchbarF.jsx";
 
-import { useRef } from "react";
-
 import './css/page.css'
-
 
 function Flights() {
      /* const slider = document.querySelector('.slider');
@@ -40,9 +38,34 @@ function Flights() {
   
  */
     const refrence = useRef(null);
+    const [flights, setFlights] = useState([]);
+    const [returnFlights, setReturnFlights] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [searchParams, setSearchParams] = useState(null);
 
+    const handleSearch = async (params) => {
+        setIsLoading(true);
+        setError(null);
+        setSearchParams(params);
+        try {
+            const res = await searchFlights(params);
+            setFlights(res.data?.outbound || []);
+            setReturnFlights(res.data?.return || []);
+        } catch (err) {
+            setError(err.message || 'Failed to search flights');
+            setFlights([]);
+            setReturnFlights([]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-     function handleScroll() { 
+    const handleBookFlight = async (flightId) => {
+        await bookFlight(flightId, '', searchParams?.passengers || 1);
+    };
+
+    function handleScroll() { 
     
          refrence.current.scrollIntoView({
             behavior: "smooth",
@@ -153,12 +176,23 @@ function Flights() {
 
         <div className="output" >
             <div className="search" ref={refrence}>
-                <Searcharea></Searcharea>
+                <Searcharea onSearch={handleSearch} isLoading={isLoading} />
             </div>
             
             <div className="outputarea">
-               <FlightCard></FlightCard>
-              
+                {error && <p style={{ color: '#e74c3c', textAlign: 'center', margin: '1rem 0' }}>{error}</p>}
+                {isLoading && <p style={{ color: '#666', textAlign: 'center' }}>Searching for flights...</p>}
+                {!isLoading && flights.length === 0 && !error && (
+                    <p style={{ color: '#666', textAlign: 'center' }}>Enter your search criteria and click Search to find flights.</p>
+                )}
+                {!isLoading && flights.map((flight) => (
+                    <FlightCard
+                        key={flight.id}
+                        flight={flight}
+                        returnDate={searchParams?.returnDate || null}
+                        onBooked={handleBookFlight}
+                    />
+                ))}
             </div>
             
         </div>

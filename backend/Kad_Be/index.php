@@ -28,6 +28,10 @@ switch ($endpoint) {
     require_once __DIR__ . '/routes/cities.php';
     break;
 
+  case 'flights':
+    require_once __DIR__ . '/routes/flights.php';
+    break;
+
   default:
     http_response_code(404);
     echo json_encode(["error" => "Unknown endpoint"]);

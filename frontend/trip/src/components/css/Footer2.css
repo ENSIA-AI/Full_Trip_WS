@@ -4,15 +4,24 @@
 
 footer {
   background-color: var(--transparent-bg-cl);
-  padding: 40px 100px;
-  margin: -40px;
+  padding: 40px 24px;
+  margin: 0;
 }
 
 .footer {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: start;
-  gap: 120px;
+  justify-items: center;
+  gap: 60px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.social-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .social-contact .slogo {
@@ -75,12 +84,14 @@ footer {
 .contact-details {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
 }
 
 .contact-details h1 {
   font-size: 20px;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .contact-details a {
@@ -98,12 +109,13 @@ footer {
 
 @media (max-width: 992px) {
   footer {
-    padding: 40px 50px;
+    padding: 40px 24px;
   }
 
   .footer {
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    gap: 40px 60px;
+    justify-items: center;
   }
 
   .copy {
@@ -115,22 +127,26 @@ footer {
 
 @media (max-width: 768px) {
   footer {
-    padding: 40px 25px;
+    padding: 40px 20px;
   }
 
   .footer {
     grid-template-columns: 1fr;
-    gap: 40px;
-    text-align: left;
+    gap: 36px;
+    text-align: center;
   }
 
   .social-contact,
   .contact-details {
-    align-items: flex-start;
+    align-items: center;
   }
 
   .copy {
-    justify-content: flex-start;
+    justify-content: center;
+  }
+
+  .contact-details a {
+    text-align: center;
   }
 }
 
