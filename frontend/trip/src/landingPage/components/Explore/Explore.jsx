@@ -1,26 +1,18 @@
 import '../../styles/explStiling.css'
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import CityAutocomplete from './cityAutoComplete'
 
 export default function Explore() {
   const [date, setDate] = useState('');
-  let [active, setActive] = useState('All');
-  const catigories = ['All', 'Recommended', 'Beach', 'Park', 'Nature', 'Mountain']
-
-  const Catigories = catigories.map((cat) => (
-    <button
-      key={cat}
-      onClick={() => setActive(cat)}
-      className={active === cat ? 'active' : ''}
-    >
-      {cat}</button>
-  ))
-
   const [location, setLocation] = useState(false);
+  const [destination, setDestination] = useState('');
   const [resetForm, setResetForm] = useState(false);
   const [cityValid, setCityValid] = useState(false);
+
+  const navigate = useNavigate();
 
   function onsubmit(e) {
     e.preventDefault();
@@ -36,8 +28,14 @@ export default function Explore() {
     setDate('');
     setPrice('');
     setResetForm(true);
-    // Reset the flag after clearing
     setTimeout(() => setResetForm(false), 0);
+    navigate('/Flights', {
+      state: {
+        date: formData.get('depDate'),
+        to: formData.get('destination'),
+        budget: formData.get('budget')
+      },
+    });
   }
 
   const [price, setPrice] = useState('');
@@ -71,7 +69,7 @@ export default function Explore() {
         <label className='kra' data-aos='fade-up'>
           {location ? (<i class='bxr  bx-location-check'  ></i>)
             : (<i class='bxr  bx-location'  ></i>)}
-          <CityAutocomplete onAppearChange reset={resetForm} onValidationChange={setCityValid} />
+          <CityAutocomplete value={destination} onChange={setDestination} onAppearChange reset={resetForm} onValidationChange={setCityValid} />
         </label>
         <label className='kra' data-aos='fade-up'>
           <i class='bxr  bx-calendar-minus'  ></i>
@@ -79,6 +77,7 @@ export default function Explore() {
             className='kr'
             type='text'
             value={price}
+            name='budget'
             onChange={handleChange}
             placeholder='budget'
             required
@@ -89,6 +88,7 @@ export default function Explore() {
           <input
             className='kr'
             type='date'
+            name='depDate'
             value={date}
             onChange={(e) => setDate(e.target.value)}
             min={today}

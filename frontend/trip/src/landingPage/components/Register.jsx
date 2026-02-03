@@ -4,7 +4,9 @@ import { Country, State, City } from 'country-state-city'
 import Aos from 'aos'
 import { addUser } from '../services/reg_service'
 
-export default function Register() {
+import { useNavigate } from 'react-router-dom'
+
+export default function Register({ setUserInfo }) {
   const [countries] = useState(Country.getAllCountries());
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [countrySelected, setCountrySelected] = useState(false);
@@ -16,6 +18,8 @@ export default function Register() {
   const [validePwd, setValidePwd] = useState(true);
   const [confirmPwd, setConfirmPwd] = useState('');
   const [valideConfirmPassword, setValideConfirmPassword] = useState(true);
+
+  const navigate = useNavigate();
 
   const [user, setUser] = useState({
     first_name: '',
@@ -116,7 +120,15 @@ export default function Register() {
     }
 
     try {
-      await addUser(user);
+      const data = await addUser(user);
+
+      if (data && data.user) {
+        const u = data.user;
+        const uObj = { UserName: u.first_name || u.email, UserType: u.role || 'user', ...u };
+        localStorage.setItem('FT_user', JSON.stringify(uObj));
+        if (typeof setUserInfo === 'function') setUserInfo(uObj);
+      }
+
       alert('✅ Account created successfully!');
 
       setUser({
@@ -134,6 +146,9 @@ export default function Register() {
       setPhoneNum('');
       setSelectedCountry(null);
       setCountrySelected(false);
+
+      navigate('/Home');
+
     } catch (error) {
       alert('❌ Error creating account: ' + error.message);
     }

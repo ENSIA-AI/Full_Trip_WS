@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
 import '../../styles/explStiling.css';
 
-export default function CityAutocomplete({ onAppearChange, reset, onValidationChange }) {
-  const [query, setQuery] = useState("");
+export default function CityAutocomplete({ value, onChange, onAppearChange, reset, onValidationChange }) {
+  const [query, setQuery] = useState(value || "");
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    setQuery(value || "");
+  }, [value]);
+
+  useEffect(() => {
     if (reset) {
+      onChange('');
       setQuery("");
       setCities([]);
       setSelected(null);
@@ -42,15 +47,15 @@ export default function CityAutocomplete({ onAppearChange, reset, onValidationCh
       }
     }
 
-
     fetchCities();
     return () => controller.abort();
   }, [query]);
 
-
   function selectCity(city) {
     setSelected(city);
-    setQuery(city.name);
+    const cityName = city.name;
+    setQuery(cityName);
+    onChange(cityName);
     setCities([]);
     setError("");
     if (onValidationChange) {
@@ -73,11 +78,14 @@ export default function CityAutocomplete({ onAppearChange, reset, onValidationCh
   return (
     <div>
       <input
+        name="destination"
         type="text"
         placeholder="destination city"
         value={query}
         onChange={(e) => {
-          setQuery(e.target.value);
+          const newValue = e.target.value;
+          setQuery(newValue); 
+          onChange(newValue); 
           setSelected(null);
           setError("");
         }}
@@ -94,7 +102,6 @@ export default function CityAutocomplete({ onAppearChange, reset, onValidationCh
         }}
       />
 
-
       {error && <div style={{ color: 'red', fontSize: '0.8rem' }}>{error}</div>}
       {loading && <div>Loading...</div>}
 
@@ -105,14 +112,13 @@ export default function CityAutocomplete({ onAppearChange, reset, onValidationCh
               key={city.id}
               onClick={() => selectCity(city)}
               className="dest_input"
-              style={{boxShadow:'none'}}
+              style={{ boxShadow: 'none' }}
             >
               {city.name.split(",")[0].trim()}
             </li>
           ))}
         </ul>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }
