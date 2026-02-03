@@ -1,137 +1,59 @@
 import React, { useState } from "react";
 import "./css/AttractionForm.css";
 
-const AttractionForm = () => {
-  // -------------------- STATE VARIABLES -------------------- //
-  const [attractionName, setAttractionName] = useState("");
+const AttractionForm = ({ onSearch }) => {
+  // لازلنا نستخدم متغير اسمه city للكود، لكنه الآن يعني "كلمة البحث"
   const [city, setCity] = useState("");
+  const [category, setCategory] = useState("");
+  
+  // حقول التاريخ والأشخاص (شكلية حالياً)
   const [visitDate, setVisitDate] = useState("");
   const [people, setPeople] = useState("");
-  const [category, setCategory] = useState("");
 
-  // -------------------- ERROR STATES -------------------- //
-  const [errors, setErrors] = useState({});
-
-  // -------------------- VALIDATION FUNCTION -------------------- //
-  const validateForm = () => {
-    const newErrors = {};
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (!city.trim()) newErrors.city = "City is required";
-
-    if (!visitDate) newErrors.visitDate = "Visit date is required";
-    else if (new Date(visitDate) < today)
-      newErrors.visitDate = "Visit date must be in the future";
-
-    if (!people) newErrors.people = "Number of people is required";
-    else if (Number(people) < 1) newErrors.people = "At least 1 person";
-
-    if (!category) newErrors.category = "Category is required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // -------------------- SUBMIT HANDLER -------------------- //
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (validateForm()) {
-      alert("Form submitted successfully!");
-      console.log({
-        attractionName,
-        city,
-        visitDate,
-        people,
-        category,
-      });
-
-      // Optional reset
-      setAttractionName("");
-      setCity("");
-      setVisitDate("");
-      setPeople("");
-      setCategory("");
-      setErrors({});
-    }
+    onSearch({
+        city,      // سيرسل هذا النص للبحث في الاسم والموقع
+        category
+    });
   };
 
   return (
     <form className="attraction-form-container" onSubmit={handleSubmit}>
 
-      {/* Attraction Name */}
+      {/* 1. Search Field (التغيير هنا) */}
       <div className="attraction-form-group">
         <input
-          id="Attraction Name"
-          name="Attraction Name"
           type="text"
-          placeholder="Attraction Name"
-          value={attractionName}
-          onChange={(e) => setAttractionName(e.target.value)}
-        />
-      </div>
-      {errors.attractionName && (
-        <span className="attraction-error">{errors.attractionName}</span>
-      )}
-
-      {/* City */}
-      <div className="attraction-form-group">
-        <input
-          name="City"
-          id="City"
-          type="text"
-          placeholder="City"
+          // ✅ تغيير النص ليوضح للمستخدم أنه يمكنه البحث عن اسم المعلم أو المدينة
+          placeholder="Where to? (City or Attraction)" 
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
       </div>
-      {errors.city && <span className="attraction-error">{errors.city}</span>}
 
-      {/* Visit Date */}
+      {/* 2. Visit Date */}
       <div className="attraction-form-group">
         <input
-          name="Visit Date"
-          id="Visit Date"
           type="date"
           value={visitDate}
           onChange={(e) => setVisitDate(e.target.value)}
         />
       </div>
-      {errors.visitDate && (
-        <span className="attraction-error">{errors.visitDate}</span>
-      )}
 
-      {/* People */}
-      <div className="attraction-form-group">
-        
-        <input
-          name="Poeple"
-          id="People"
-          type="number"
-          placeholder="Number of people"
-          value={people}
-          onChange={(e) => setPeople(e.target.value)}
-        />
-      </div>
-      {errors.people && <span className="attraction-error">{errors.people}</span>}
 
-      {/* Category */}
+      {/* 4. Category */}
       <div className="attraction-form-group">
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="">Select category</option>
-          <option value="museum">Museum</option>
-          <option value="park">Park</option>
-          <option value="historic">Historic Site</option>
-          <option value="entertainment">Entertainment</option>
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <option value="">All Categories</option>
+          <option value="Museum">Museum</option>
+          <option value="Park">Park</option>
+          <option value="Historical">Historical</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Nature">Nature</option>
+          <option value="Monument">Monument</option>
         </select>
       </div>
-      {errors.category && (
-        <span className="attraction-error">{errors.category}</span>
-      )}
 
       <button type="submit">Search</button>
     </form>

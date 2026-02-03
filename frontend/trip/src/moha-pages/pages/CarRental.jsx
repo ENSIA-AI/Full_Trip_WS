@@ -1,10 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import Slider from "../components/Slider";
 import CarRentalForm from "../components/CarRentalForm";
 import CarRentalCard from "../components/CarRentalCard";
 import Footer from "../../landingPage/components/Footer"
-
 import "./css/CarRental.css";
 
 // IMPORT SLIDER IMAGES
@@ -15,12 +14,62 @@ import top4 from "../img/CarRental/heetch.png";
 import top5 from "../img/CarRental/Careem.svg";
 import top6 from "../img/CarRental/turo.webp";
 
-// IMPORT CAR IMAGES
+// IMPORT DEFAULT CAR IMAGE (Fallback)
 import carImg from "../img/Car.webp";
 
 function CarRental() {
-  const formRef = useRef(null); // <--- هذا هو المرجع للفورم
+  const formRef = useRef(null);
 
+  // 1. STATE MANAGEMENT
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // 2. FETCH FUNCTION (Connects to PHP)
+  const fetchCars = async (searchParams = {}) => {
+    setLoading(true);
+    try {
+      // ✅ MAKE SURE THIS URL IS CORRECT FOR YOUR LOCALHOST
+      const response = await fetch("http://localhost:8000/backend/Mohammed/Cars/search_cars.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(searchParams),
+      });
+
+      const data = await response.json();
+
+      // Check if data is an array before setting state
+      if (Array.isArray(data)) {
+        setCars(data);
+      } else {
+        console.error("PHP Error:", data);
+        setCars([]);
+      }
+    } catch (error) {
+      console.error("Connection Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 3. LOAD ALL CARS ON PAGE LOAD
+  useEffect(() => {
+    fetchCars(); 
+  }, []);
+
+  // 4. HANDLE FORM SUBMIT
+  const handleSearch = (formData) => {
+    // Map React Form fields -> PHP expected fields
+    const payload = {
+      car_type: formData.carType,         // "economy", "suv", etc.
+      location: formData.pickupLocation,  // "Algiers", "Oran"
+      brand_model: ""                     // Optional: leave empty for now
+    };
+
+    console.log("Sending to PHP:", payload); // Debugging line
+    fetchCars(payload);
+  };
+
+  // Slider Logic
   const sliderImages = [
     { src: top1, label: "Uber" },
     { src: top2, label: "Yassir" },
@@ -37,9 +86,6 @@ function CarRental() {
   return (
     <div className="carrental-main-container">
 
-
-
-      {/* H1 CLICKABLE */}
       <h1 style={{marginTop:"50px"}}
         className="carrental-scroll-h1"
         onClick={scrollToForm}
@@ -58,44 +104,36 @@ function CarRental() {
         Book Your Ride
       </h1>
 
-
-      {/* SLIDER */}
       <Slider images={sliderImages} />
 
-      {/* FORM */}
+      {/* FORM SECTION */}
       <div className="carrental-form-wrapper" ref={formRef}>
-        <CarRentalForm />
+        {/* Pass the handleSearch function down to the form */}
+        <CarRentalForm onSearch={handleSearch} />
       </div>
 
-      {/* CARDS */}
+      {/* CARDS SECTION */}
       <div className="carrental-cards-container">
-
-        <CarRentalCard
-          id={1}
-          image={carImg}
-          name="Audi A4"
-          model="2023"
-          price="15000"
-          location="Algiers"
-        />
-
-        <CarRentalCard
-          id={2}
-          image={carImg}
-          name="BMW M3"
-          model="2022"
-          price="18000"
-          location="Oran"
-        />
-
-        <CarRentalCard
-          id={3}
-          image={carImg}
-          name="Golf 7"
-          model="2020"
-          price="9000"
-          location="Constantine"
-        />
+        
+        {loading ? (
+           <h3 style={{color:'white', textAlign:'center'}}>Loading available cars...</h3>
+        ) : cars.length > 0 ? (
+          // Map through the database results
+          cars.map((car) => (
+            <CarRentalCard
+              key={car.car_id}
+              id={car.car_id}
+              // Use DB image or fallback to local import
+              image={car.car_image_url ? car.car_image_url : carImg}
+              name={`${car.car_brand} ${car.model}`}
+              model={car.car_type} 
+              price={car.price}
+              location={car.location || "Algeria"}
+            />
+          ))
+        ) : (
+          <h3 style={{color:'white', textAlign:'center'}}>No cars found matching your criteria.</h3>
+        )}
 
       </div>
       <Footer></Footer>
