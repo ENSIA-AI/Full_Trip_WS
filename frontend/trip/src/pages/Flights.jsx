@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import FlightCard from "../components/FlightCard.jsx";
 import { searchFlights, bookFlight } from "../services/flights_service";
@@ -16,7 +16,6 @@ import plane from './pics/plane-departure-solid-full.svg'
 import Footer2 from "../components/Footer2"
 import Searcharea from "../components/SearchbarF.jsx";
 
-import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 import './css/page.css'
@@ -184,6 +183,8 @@ function Flights() {
         <div className="output" >
             <div className="search" ref={refrence}>
                 <Searcharea
+                    onSearch={handleSearch}
+                    isLoading={isLoading}
                     initialDate={state?.date}
                     initialDestination={state?.to}
                     initialBudget={state?.budget}
@@ -191,8 +192,28 @@ function Flights() {
             </div>
 
             <div className="outputarea">
-                <FlightCard></FlightCard>
-
+                {isLoading && <p>Loading flights...</p>}
+                {error && <p className="error">{error}</p>}
+                {!isLoading && !error && flights.length === 0 && searchParams && <p>No flights found.</p>}
+                {flights.map(flight => (
+                    <FlightCard 
+                        key={flight.id} 
+                        flight={flight} 
+                        onBooked={() => handleBookFlight(flight.id)}
+                    />
+                ))}
+                {returnFlights.length > 0 && (
+                    <>
+                        <h3>Return Flights</h3>
+                        {returnFlights.map(flight => (
+                            <FlightCard 
+                                key={flight.id} 
+                                flight={flight} 
+                                onBooked={() => handleBookFlight(flight.id)}
+                            />
+                        ))}
+                    </>
+                )}
             </div>
 
         </div>

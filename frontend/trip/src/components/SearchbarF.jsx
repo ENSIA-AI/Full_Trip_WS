@@ -1,7 +1,7 @@
 import './css/FlightSearch.css'; 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function Searcharea({ onSearch, isLoading = false })
+function Searcharea({ onSearch, isLoading = false, initialDate, initialDestination, initialBudget })
   
   {
   const [tripType, setTripType] = useState('roundTrip');
