@@ -22,11 +22,86 @@ import { Link, NavLink } from 'react-router-dom'
 
 
 
-export default function Header({ setUserInfo }) {
+export default function Header({ setUserInfo, userInfo }) {
   const [formAppear, setFormAppear] = React.useState(false);
   const [hiddenMenu, setHideMenu] = React.useState(true);
   const [LoggedIn, SetLoggedIn] = useState(false);
   const [active, setActive] = useState('');
+
+  userInfo = userInfo || { UserName: 'Default', UserType: 'Agency' };
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function checkSession() {
+      try {
+        // Prefer parent-supplied userInfo if available
+        if (typeof userInfo !== 'undefined' && userInfo && userInfo.UserName && userInfo.UserName !== 'Default') {
+          SetLoggedIn(true);
+          if (typeof setUserInfo === 'function') setUserInfo(userInfo);
+          return;
+        }
+
+        const resp = await fetch('/Full_Trip_WS/backend/Kad_Be/routes/me.php', {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        if (!resp.ok) {
+          throw new Error('Server error while checking session');
+        }
+
+        const body = await resp.json();
+        if (cancelled) return;
+
+        if (body.logged_in && body.user) {
+          const u = body.user;
+          const uObj = { UserName: u.first_name || u.email, UserType: u.role || 'user', ...u };
+          try { localStorage.setItem('FT_user', JSON.stringify(uObj)); } catch (e) { /* ignore */ }
+          SetLoggedIn(true);
+          if (typeof setUserInfo === 'function') setUserInfo(uObj);
+        } else {
+          // Clear any stale client session if server indicates no session
+          try { localStorage.removeItem('FT_user'); } catch (e) { /* ignore */ }
+          SetLoggedIn(false);
+          if (typeof setUserInfo === 'function') setUserInfo({ UserName: 'Default', UserType: 'Agency' });
+        }
+      } catch (e) {
+        // On error, fall back to client local storage
+        try {
+          const s = localStorage.getItem('FT_user');
+          if (s) {
+            const user = JSON.parse(s);
+            SetLoggedIn(true);
+            if (typeof setUserInfo === 'function') setUserInfo(user);
+          } else {
+            SetLoggedIn(false);
+          }
+        } catch (ex) {
+          SetLoggedIn(false);
+        }
+      }
+    }
+
+    checkSession();
+
+    return () => { cancelled = true; };
+  }, [userInfo]);
+
+  async function handleLogout() {
+    localStorage.removeItem('FT_user');
+    try {
+      await fetch('/Full_Trip_WS/backend/Kad_Be/routes/logout.php', {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (err) {
+      console.warn('Server-side logout failed:', err);
+    }
+
+    SetLoggedIn(false);
+    if (typeof setUserInfo === 'function') setUserInfo({ UserName: 'Default', UserType: 'Agency' });
+  }
 
 
 
@@ -93,7 +168,10 @@ export default function Header({ setUserInfo }) {
           <div className='SignLogIn'>
 
             {LoggedIn ?
-              <Link to={"/Profile"} className='PrimrayB'><FontAwesomeIcon size='xl' icon={faUser}></FontAwesomeIcon></Link> :
+              <>
+                <Link to={'/Profile'} className='PrimrayB'><FontAwesomeIcon size='xl' icon={faUser}></FontAwesomeIcon></Link>
+                <button onClick={handleLogout} className='secondaryB'>Logout</button>
+              </> :
               <button onClick={showForm}>Log In</button>
             }
 

@@ -1,72 +1,90 @@
 import '../styles/header&signUp.css'
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Users from '../../../Temp/TempUsers.json';
 
 function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
   const [emailAppear, setEmailAppear] = useState(false);
-  const emailFeedback = document.querySelector('.add-feedback form input');
 
   const emailInput = useRef();
   const PasswordInput = useRef();
 
-  function submitForm() {
+  async function submitForm(e) {
+    e.preventDefault();
 
-    const email = emailInput.current;
-    const Password = PasswordInput.current;
+    const email = emailInput.current?.value?.trim() || '';
+    const Password = PasswordInput.current?.value || '';
 
     setEmailAppear(true);
 
-    const UsersList = Users; // if imported as JSON
-    console.log(UsersList);
+    try {
+      const resp = await fetch('http://localhost/Full_Trip_WS/backend/Kad_Be/routes/login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, password: Password })
+      });
 
-    let found = false;
-
-    for (const user of UsersList.users) {
-
-      if (email.value === user.email  && Password.value === user.password ) {
-
+      if (resp.ok) {
+        const user = await resp.json();
         SetLoggedIn(true);
-        SetUserInfo({ UserName: user.username, UserType: user.role });
-        found = true;
-
+        const uObj = { UserName: (user.first_name || user.username || user.email), UserType: user.role || 'user', ...user };
+        SetUserInfo(uObj);
+        localStorage.setItem('FT_user', JSON.stringify(uObj));
         formAppearing(false);
-        // break;
-
+        return;
       }
+
+      if (resp.status === 401) {
+        alert('Wrong Email or Password');
+        return;
+      }
+
+      let respText = '';
+      respText = await resp.text();
+      console.warn('Server login endpoint returned non-OK status; falling back to local users file', { status: resp.status, body: respText });
+    } catch (err) {
+      console.warn('Login request failed, falling back to local users file', err);
     }
 
-    if (!found) {
-      alert("Wrong Email or Password");
+    const usersList = Users;
+    const foundUser = usersList.users.find(u => u.email === email && u.password === Password);
+
+    if (foundUser) {
+      SetLoggedIn(true);
+      const uObj = { UserName: foundUser.username, UserType: foundUser.role, email: foundUser.email };
+      SetUserInfo(uObj);
+      localStorage.setItem('FT_user', JSON.stringify(uObj));
+      formAppearing(false);
+      return;
     }
+
+    alert('Wrong Email or Password');
   }
 
-
-
-  function goBack() {
+  function goBack(e) {
+    e.preventDefault();
     formAppearing(false);
   }
-
 
   return (
     <>
       <form
-        class='submit-form'
-        action={submitForm}>
+        className='submit-form'
+        onSubmit={submitForm}>
         <button
+          type='button'
           name='go-back'
           onClick={goBack}>
-          <i class='bx  bx-x'  ></i>
+          <i className='bx  bx-x'  ></i>
         </button>
         <div
           className='sign-head'>
           Welcome
         </div>
-        <p>If you are not registred yet ,you can click here to register:</p>
+        <p>If you are not registered yet, you can click here to register:</p>
         <Link to={'/register'}>
-          <a>
-            register!
-          </a>
+          register!
         </Link>
         <label htmlFor='email' >email
           <input
@@ -82,7 +100,7 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
             type='password'
             placeholder='Password' required />
         </label>
-        <button name='submit'>Log In</button>
+        <button type='submit' name='submit'>Log In</button>
       </form>
     </>
   );

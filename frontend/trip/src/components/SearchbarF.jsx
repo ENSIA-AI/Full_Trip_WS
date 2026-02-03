@@ -14,6 +14,11 @@ function Searcharea({ onSearch, isLoading = false })
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
+  useEffect(()=>{
+    setDepartureDate(initialDate);
+    setTo(initialDestination);
+  },[initialDate,initialDestination,initialBudget]);
+
   const validateForm = () => {
     const newErrors = {};
 

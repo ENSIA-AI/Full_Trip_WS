@@ -1,9 +1,10 @@
 @import url(../../index.css);
 
-footer {
+#myFooter {
   background-color: var(--transparent-bg-cl);
-  padding: 0 min(100px, 10vw);
+  padding: 15px min(100px, 10vw);
   width: 100vw;
+  margin: 0;
 }
 
 footer>.footer {

@@ -13,30 +13,37 @@ import top8 from './pics/Atop8.avif'
 import top9 from './pics/Atop9.webp'
 import top10 from './pics/Atop10.avif'
 import plane from './pics/plane-departure-solid-full.svg'
-import Footer2 from"../components/Footer2"
+import Footer2 from "../components/Footer2"
 import Searcharea from "../components/SearchbarF.jsx";
+
+import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 
 import './css/page.css'
 
 function Flights() {
-     /* const slider = document.querySelector('.slider');
-    let scrollAmount = 0;
+    const { state } = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 400);
+    }, [state]);
+    /* const slider = document.querySelector('.slider');
+   let scrollAmount = 0;
 
-    setInterval(() => {
-         const slideWidth = slider.clientWidth; 
-         scrollAmount += slideWidth; 
+   setInterval(() => {
+        const slideWidth = slider.clientWidth; 
+        scrollAmount += slideWidth; 
 
-        if (scrollAmount >= slider.scrollWidth) {
-            scrollAmount = 0;
-        }
+       if (scrollAmount >= slider.scrollWidth) {
+           scrollAmount = 0;
+       }
 
-        slider.scrollTo({
-            left: scrollAmount,
-            behavior: 'smooth'
-        });
-    }, 3000);
-  
- */
+       slider.scrollTo({
+           left: scrollAmount,
+           behavior: 'smooth'
+       });
+   }, 3000);
+ 
+*/
     const refrence = useRef(null);
     const [flights, setFlights] = useState([]);
     const [returnFlights, setReturnFlights] = useState([]);
@@ -65,19 +72,19 @@ function Flights() {
         await bookFlight(flightId, '', searchParams?.passengers || 1);
     };
 
-    function handleScroll() { 
-    
-         refrence.current.scrollIntoView({
+    function handleScroll() {
+
+        refrence.current.scrollIntoView({
             behavior: "smooth",
             block: "center",
-         });
-         
+        });
+
     }
 
     return (<>
 
-        
-        <h1 className="header" onClick={handleScroll} style={{cursor:"pointer"}}><img src={plane} className="icon" /> Fly Beyond Limits</h1>
+
+        <h1 className="header" onClick={handleScroll} style={{ cursor: "pointer" }}><img src={plane} className="icon" /> Fly Beyond Limits</h1>
 
         <section className="container">
             <div className="slider-wrapper">
@@ -176,28 +183,21 @@ function Flights() {
 
         <div className="output" >
             <div className="search" ref={refrence}>
-                <Searcharea onSearch={handleSearch} isLoading={isLoading} />
+                <Searcharea
+                    initialDate={state?.date}
+                    initialDestination={state?.to}
+                    initialBudget={state?.budget}
+                ></Searcharea>
             </div>
-            
+
             <div className="outputarea">
-                {error && <p style={{ color: '#e74c3c', textAlign: 'center', margin: '1rem 0' }}>{error}</p>}
-                {isLoading && <p style={{ color: '#666', textAlign: 'center' }}>Searching for flights...</p>}
-                {!isLoading && flights.length === 0 && !error && (
-                    <p style={{ color: '#666', textAlign: 'center' }}>Enter your search criteria and click Search to find flights.</p>
-                )}
-                {!isLoading && flights.map((flight) => (
-                    <FlightCard
-                        key={flight.id}
-                        flight={flight}
-                        returnDate={searchParams?.returnDate || null}
-                        onBooked={handleBookFlight}
-                    />
-                ))}
+                <FlightCard></FlightCard>
+
             </div>
-            
+
         </div>
-      <Footer2></Footer2>
-    
+        <Footer2></Footer2>
+
     </>);
 }
 export default Flights;
