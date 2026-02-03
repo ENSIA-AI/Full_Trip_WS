@@ -28,9 +28,8 @@ const validateDropoffDate = (value, pickupDate) => {
     return true;
 };
 
-
-
-const CarRentalForm = () => {
+// 1. Accept the 'onSearch' prop from the parent
+const CarRentalForm = ({ onSearch }) => {
     const {
         register,
         handleSubmit,
@@ -41,6 +40,10 @@ const CarRentalForm = () => {
     const pickupDate = watch("pickupDate");
 
     const onSubmit = (data) => {
+        // 2. Pass the form data to the parent component
+        if (onSearch) {
+            onSearch(data);
+        }
         console.log("Form submitted successfully:", data);
     };
 
