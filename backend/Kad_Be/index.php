@@ -1,6 +1,5 @@
 <?php
 
-// CORS configuration - allow the local dev frontend origins and credentials
 $allowed_origins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
@@ -12,8 +11,6 @@ if (in_array($origin, $allowed_origins, true)) {
   header('Access-Control-Allow-Origin: ' . $origin);
   header('Vary: Origin');
 } else {
-  // For development you can allow all origins by setting '*', but avoid this in production.
-  // header('Access-Control-Allow-Origin: *');
   if ($origin) {
     header('Access-Control-Allow-Origin: ' . $origin);
   }
@@ -25,7 +22,6 @@ header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-  // Preflight request - return OK with CORS headers
   http_response_code(204);
   exit(0);
 }

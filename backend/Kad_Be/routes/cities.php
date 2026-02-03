@@ -50,7 +50,6 @@ if ($httpCode !== 200) {
 
 $results = json_decode($response, true) ?: [];
 
-// Transform Nominatim results to match frontend expectations
 $cities = array_map(function($item) {
   return [
     'id' => $item['place_id'],

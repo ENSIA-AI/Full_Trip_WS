@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
   exit(0);
 }
 
-// Destroy session
 $SESSION_TIMEOUT = 60 * 60 * 24 * 7;
 session_set_cookie_params([
   'lifetime' => $SESSION_TIMEOUT,
@@ -31,12 +30,9 @@ session_set_cookie_params([
 ]);
 session_start();
 
-// Unset and destroy session on server
 session_unset();
 session_destroy();
 
-// Expire the session cookie using the same options used during creation
-// Use PHP 7.3+ style setcookie with options array to include SameSite
 setcookie(session_name(), '', [
   'expires' => time() - 3600,
   'path' => '/',
@@ -46,7 +42,6 @@ setcookie(session_name(), '', [
   'samesite' => 'None'
 ]);
 
-// Also try clearing common domain variants (localhost with and without port)
 setcookie(session_name(), '', time() - 3600, '/', 'localhost');
 setcookie(session_name(), '', time() - 3600, '/');
 

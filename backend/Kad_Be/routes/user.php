@@ -2,9 +2,6 @@
 
 $SESSION_TIMEOUT = 60 * 60 * 24 * 7;
 
-// Session cookie settings - for development we allow sameSite=None to make
-// cross-origin POSTs (e.g., registration/login from a dev frontend) more likely to work.
-// NOTE: Browsers may require Secure=true for SameSite=None; adjust for production.
 session_set_cookie_params([
   'lifetime' => $SESSION_TIMEOUT,
   'path' => '/',

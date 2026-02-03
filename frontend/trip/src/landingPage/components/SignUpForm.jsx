@@ -18,7 +18,6 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
     setEmailAppear(true);
 
     try {
-      // Ensure request goes to the Apache backend (not the dev server)
       const resp = await fetch('http://localhost/Full_Trip_WS/backend/Kad_Be/routes/login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -31,7 +30,7 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
         SetLoggedIn(true);
         const uObj = { UserName: (user.first_name || user.username || user.email), UserType: user.role || 'user', ...user };
         SetUserInfo(uObj);
-        try { localStorage.setItem('FT_user', JSON.stringify(uObj)); } catch (e) { /* ignore */ }
+        localStorage.setItem('FT_user', JSON.stringify(uObj));
         formAppearing(false);
         return;
       }
@@ -41,9 +40,8 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
         return;
       }
 
-      // Log response body to help debugging before falling back to the local users file
       let respText = '';
-      try { respText = await resp.text(); } catch (e) { /* ignore */ }
+      respText = await resp.text();
       console.warn('Server login endpoint returned non-OK status; falling back to local users file', { status: resp.status, body: respText });
     } catch (err) {
       console.warn('Login request failed, falling back to local users file', err);

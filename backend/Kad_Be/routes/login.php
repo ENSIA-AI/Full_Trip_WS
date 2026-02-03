@@ -1,6 +1,5 @@
 <?php
 
-// Minimal CORS handling for direct route access from local dev frontend
 $allowed_origins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
@@ -23,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/../db.php';
 
-// Match session settings used in user.php
 $SESSION_TIMEOUT = 60 * 60 * 24 * 7;
 session_set_cookie_params([
   'lifetime' => $SESSION_TIMEOUT,
@@ -64,10 +62,8 @@ try {
     exit;
   }
 
-  // Remove password before returning
   unset($user['password']);
 
-  // Set server session
   session_regenerate_id(true);
   $_SESSION['user_id'] = $user['user_id'];
   $_SESSION['email'] = $user['email'];

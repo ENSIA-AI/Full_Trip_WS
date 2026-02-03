@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
   exit(0);
 }
 
-// Start session with same params
 $SESSION_TIMEOUT = 60 * 60 * 24 * 7;
 session_set_cookie_params([
   'lifetime' => $SESSION_TIMEOUT,
@@ -32,7 +31,6 @@ session_set_cookie_params([
 session_start();
 
 if (isset($_SESSION['user_id'])) {
-  // fetch fresh user record
   require_once __DIR__ . '/../db.php';
   try {
     $db = connectDB();
@@ -50,5 +48,4 @@ if (isset($_SESSION['user_id'])) {
   }
 }
 
-// Not logged in
 echo json_encode(['logged_in' => false]);
