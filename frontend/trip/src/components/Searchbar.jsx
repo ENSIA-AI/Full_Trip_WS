@@ -1,7 +1,7 @@
 import './css/Searcharea.css';
 import React, { useState } from 'react';
 
-function Searcharea() {
+function Searcharea({ onSearch }) {
   const today = new Date().toISOString().split('T')[0];
 
   const [form, setForm] = useState({
@@ -23,34 +23,16 @@ function Searcharea() {
   function validate() {
     let newErrors = {};
 
-    if (!form.place || form.place.trim().length < 3) {
-      newErrors.place = "Please enter a valid city or hotel name.";
+    if (!form.place.trim() && !form.budget) {
+      newErrors.place = "Please enter a destination or a budget.";
     }
 
-    if (!form.checkin) {
-      newErrors.checkin = "Check-in date is required.";
-    }
-
-    if (!form.checkout) {
-      newErrors.checkout = "Check-out date is required.";
-    } else if (form.checkout < form.checkin) {
+    if (form.checkout < form.checkin) {
       newErrors.checkout = "Check-out must be after check-in.";
     }
 
-    if (!form.adults || Number(form.adults) < 1) {
-      newErrors.adults = "At least 1 adult is required.";
-    }
-
-    if (form.children < 0) {
-      newErrors.children = "Children cannot be negative.";
-    }
-
-    if (form.pets < 0) {
-      newErrors.pets = "Pets cannot be negative.";
-    }
-
-    if (form.budget < 0) {
-      newErrors.budget = "Budget cannot be negative.";
+    if (form.budget && Number(form.budget) < 0) {
+        newErrors.budget = "Budget cannot be negative";
     }
 
     return newErrors;
@@ -61,90 +43,52 @@ function Searcharea() {
     setErrors(v);
 
     if (Object.keys(v).length === 0) {
-      alert("Form is valid ✔️");
+      if (onSearch) {
+        onSearch(form);
+      }
     }
   }
 
   return (
-    <>
-      <div className='inforamtions'>
-
+    <div className='inforamtions'>
+      <div className="input-group">
         <input 
           type="text" 
           id="place" 
-          placeholder="City Or Hotle name"
+          placeholder="City Or Hotel name"
           value={form.place}
           onChange={handleChange}
         />
-        {errors.place && <p className="error">{errors.place}</p>}
+        {errors.place && <p className="error-text" style={{color:'red', fontSize:'0.8rem'}}>{errors.place}</p>}
+      </div>
 
-        <form>
-          <input 
-            type="date" 
-            id="checkin" 
-            value={form.checkin}
-            onChange={handleChange}
-          />
-        </form>
-        {errors.checkin && <p className="error">{errors.checkin}</p>}
+      <div className="date-group">
+        <input type="date" id="checkin" value={form.checkin} onChange={handleChange} />
+        <input type="date" id="checkout" value={form.checkout} onChange={handleChange} />
+      </div>
+      {errors.checkout && <p className="error-text" style={{color:'red', fontSize:'0.8rem'}}>{errors.checkout}</p>}
 
-        <form>
-          <input 
-            type="date" 
-            id="checkout" 
-            value={form.checkout}
-            onChange={handleChange}
-          />
-        </form>
-        {errors.checkout && <p className="error">{errors.checkout}</p>}
+      <div className="persons">
+        <input type="number" id="adults" placeholder="Adults" value={form.adults} onChange={handleChange} min="1" />
+        <input type="number" id="children" placeholder="Children" value={form.children} onChange={handleChange} min="0" />
+        <input type="number" id="pets" placeholder="Pets" value={form.pets} onChange={handleChange} min="0" />
+      </div>
 
-        <form className="persons">
-          <input 
-            type="number" 
-            id="adults" 
-            placeholder="Adults"
-            value={form.adults}
-            min="1"
-            onChange={handleChange}
-          />
-          <input 
-            type="number" 
-            id="children" 
-            placeholder="Children"
-            min="0"
-            value={form.children}
-            onChange={handleChange}
-          />
-          <input 
-            type="number" 
-            id="pets" 
-            placeholder="Pets"
-            min="0"
-            value={form.pets}
-            onChange={handleChange}
-          />
-        </form>
-
-        {errors.adults && <p className="error">{errors.adults}</p>}
-        {errors.children && <p className="error">{errors.children}</p>}
-        {errors.pets && <p className="error">{errors.pets}</p>}
-
+      <div className="input-group">
         <input 
           type="number" 
           id="budget" 
-          placeholder="Enter your budget"
+          placeholder="Max Price ($)"
           value={form.budget}
-          min="0"
           onChange={handleChange}
         />
-        {errors.budget && <p className="error">{errors.budget}</p>}
-
-        <button id="Search" className="form" onClick={handleSubmit}>
-          Search
-        </button>
-
+        {errors.budget && <p className="error-text" style={{color:'red', fontSize:'0.8rem'}}>{errors.budget}</p>}
       </div>
-    </>
+
+      <button id="Search" className="search-button" onClick={handleSubmit}>
+        Search Hotels
+      </button>
+    </div>
   );
 }
 

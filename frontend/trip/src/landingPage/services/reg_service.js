@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost/Full_Trip_WS/backend/Kad_Be/index.php?endpoint=users';
+const API_URL = 'http://localhost:8000?endpoint=users';
 
 export async function addUser(userData) {
   try {
@@ -33,7 +33,7 @@ export async function addUser(userData) {
     
     // Try to login the user on the server so session cookie is set (best-effort)
     try {
-      await fetch('http://localhost/Full_Trip_WS/backend/Kad_Be/routes/login.php', {
+      await fetch('http://localhost:8000?endpoint=login', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

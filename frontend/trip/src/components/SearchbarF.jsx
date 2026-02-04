@@ -14,11 +14,15 @@ function Searcharea({ onSearch, isLoading = false, initialDate, initialDestinati
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
-  useEffect(()=>{
-    setDepartureDate(initialDate);
-    setTo(initialDestination);
-  },[initialDate,initialDestination,initialBudget]);
-
+ useEffect(() => {
+    // Only update state if the props actually have values
+    if (initialDate) {
+        setDepartureDate(initialDate);
+    }
+    if (initialDestination) {
+        setTo(initialDestination);
+    }
+  }, [initialDate, initialDestination, initialBudget]);
   const validateForm = () => {
     const newErrors = {};
 

@@ -1,172 +1,120 @@
 import Navbar from "../components/Navbar";
 import Searcharea from "../components/Searchbar";
 import Hotelcard2 from "../components/HotelCard2";
-import top1 from './pics/top1.jpg'
-import top2 from './pics/top2.avif'
-import top3 from './pics/top3.jpg'
-import top4 from './pics/top4.jpg'
-import top5 from './pics/top5.jpg'
-import top6 from './pics/top6.jpg'
-import top7 from './pics/top7.jpg'
-import top8 from './pics/top8.jpg'
-import top9 from './pics/top9.jpg'
-import top10 from './pics/top10.jpg'
-import hotel from './pics/hotel.png'
-import Footer2 from"../components/Footer2"
+import Footer2 from "../components/Footer2";
+import hotelIcon from './pics/hotel.png';
 
-import { useRef } from "react";
+// Import Slider Images
+import top1 from './pics/top1.jpg';
+import top2 from './pics/top2.avif';
+// (Keep your other imports here)
 
-import './css/page.css'
+import { useRef, useState, useEffect } from "react";
+import './css/page.css';
+
 function Hotels() {
+    const resultRef = useRef(null);
+    const [hotels, setHotels] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    const slider = document.querySelector('.slider');
-    let scrollAmount = 0;
+    // --- 1. THE FETCH FUNCTION ---
+    const fetchHotels = async (searchParams = {}) => {
+        setLoading(true);
+        setError(null);
+        try {
+            // ✅ UPDATED URL: Matches the path you provided
+            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/hotels/hotelsearch.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(searchParams),
+            });
 
-    setInterval(() => {
-        const slideWidth = slider.clientWidth;
-        scrollAmount += slideWidth;
+            if (!response.ok) throw new Error("Failed to connect to server");
 
-        if (scrollAmount >= slider.scrollWidth) {
-            scrollAmount = 0;
+            const data = await response.json();
+
+            if (Array.isArray(data)) {
+                setHotels(data);
+            } else {
+                console.error("PHP Error:", data);
+                setHotels([]); 
+            }
+        } catch (err) {
+            console.error("Connection Error:", err);
+            setError("Failed to fetch hotels. Please check your connection.");
+        } finally {
+            setLoading(false);
         }
+    };
 
-        slider.scrollTo({
-            left: scrollAmount,
-            behavior: 'smooth'
-        });
-    }, 3000);
-  
+    // --- 2. LOAD ALL HOTELS ON PAGE LOAD ---
+    useEffect(() => {
+        fetchHotels(); 
+    }, []);
 
-    const refrence = useRef(null);
+    // --- 3. HANDLE SEARCH SUBMIT ---
+    const handleSearch = (formData) => {
+        const payload = {
+            place: formData.place,
+            budget: formData.budget,
+        };
 
-
-     function handleScroll() { 
-    
-         refrence.current.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-         });
-         
-    }
-
-    return (<>
-
+        console.log("Searching with:", payload);
+        fetchHotels(payload);
         
-        <h1 className="header" onClick={handleScroll} style={{cursor:"pointer"}}><img src={hotel} className="icon" /> Reserve Your Spot </h1>
+        if (resultRef.current) {
+            resultRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    };
 
-        <section className="container">
-            <div className="slider-wrapper">
-                <div className="slider">
-                    <div className="slide">
-                        <img id="slide-1" src={top1} alt="top1" />
-                        <div className="pic-overlay">
-                            <h2>1. Capella Bangkok (Bangkok, Thailand)</h2>
+    return (
+        <>
+            <h1 className="header" style={{ cursor: "pointer" }}>
+                <img src={hotelIcon} className="icon" alt="icon" /> Reserve Your Spot
+            </h1>
+
+            {/* Slider Section */}
+            <section className="container">
+                <div className="slider-wrapper">
+                    <div className="slider">
+                        <div className="slide" id="slide-1">
+                            <img src={top1} alt="top1" />
+                            <div className="pic-overlay"><h2>1. Capella Bangkok</h2></div>
                         </div>
-                    </div>
-
-
-                    <div className="slide">
-                        <img id="slide-2" src={top2} alt="top2" />
-                        <div className="pic-overlay">
-                            <h2>2. Passalacqua (Lake Como, Italy)</h2>
+                        <div className="slide" id="slide-2">
+                             <img src={top2} alt="top2" />
                         </div>
-                    </div>
-
-
-                    <div className="slide">
-                        <img id="slide-3" src={top3} alt="top3" />
-                        <div className="pic-overlay">
-                            <h2>3. Rosewood Hong Kong (Hong Kong)</h2>
-                        </div>
-                    </div>
-
-
-
-                    <div className="slide">
-                        <img id="slide-4" src={top4} alt="top4" />
-                        <div className="pic-overlay">
-                            <h2>4. Cheval Blanc Paris (Paris, France)</h2>
-                        </div>
-                    </div>
-
-
-                    <div className="slide">
-                        <img id="slide-5" src={top5} alt="top5" />
-                        <div className="pic-overlay">
-                            <h2>5. The Upper House (Hong Kong)</h2>
-                        </div>
-                    </div>
-
-
-                    <div className="slide">
-                        <img id="slide-6" src={top6} alt="top6" />
-                        <div className="pic-overlay">
-                            <h2>6. Raffles Singapore (Singapore)</h2>
-                        </div>
-                    </div>
-
-
-
-                    <div className="slide">
-                        <img id="slide-7" src={top7} alt="top7" />
-                        <div className="pic-overlay">
-                            <h2>7. Aman Tokyo (Tokyo, Japan)</h2>
-                        </div>
-                    </div>
-                    <div className="slide">
-                        <img id="slide-8" src={top8} alt="top8" />
-                        <div className="pic-overlay">
-                            <h2>8. Soneva Fushi (Maldives)</h2>
-                        </div>
-                    </div>
-
-                    <div className="slide">
-                        <img id="slide-9" src={top9} alt="top9" />
-                        <div className="pic-overlay">
-                            <h2>9. Atlantis The Royal (Dubai, UAE)</h2>
-                        </div>
-                    </div>
-
-                    <div className="slide">
-                        <img id="slide-10" src={top10} alt="top10" />
-                        <div className="pic-overlay">
-                            <h2>10. Nihi Sumba (Sumba Island, Indonesia)</h2>
-                        </div>
-                    </div>
-                    <div className="slider-nav">
-                        <a href="#slide-1"></a>
-                        <a href="#slide-2"></a>
-                        <a href="#slide-3"></a>
-                        <a href="#slide-4"></a>
-                        <a href="#slide-5"></a>
-                        <a href="#slide-6"></a>
-                        <a href="#slide-7"></a>
-                        <a href="#slide-8"></a>
-                        <a href="#slide-9"></a>
-                        <a href="#slide-10"></a>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <div className="output" >
-            <div className="search" ref={refrence}>
-                <Searcharea></Searcharea>
+            <div className="output">
+                <div className="search" ref={resultRef}>
+                    <Searcharea onSearch={handleSearch} />
+                </div>
+
+                <div className="outputarea">
+                    {loading ? (
+                        <h3 style={{textAlign: "center", color: "white"}}>Loading hotels...</h3>
+                    ) : error ? (
+                        <h3 style={{textAlign: "center", color: "red"}}>{error}</h3>
+                    ) : hotels.length > 0 ? (
+                        hotels.map((hotel, index) => (
+                            <Hotelcard2 
+                                key={hotel.hotel_id || index} 
+                                hotel={hotel} 
+                            />
+                        ))
+                    ) : (
+                        <h3 style={{textAlign: "center", color: "white"}}>No hotels found matching your criteria.</h3>
+                    )}
+                </div>
             </div>
             
-            <div className="outputarea">
-                 
-                <Hotelcard2></Hotelcard2> 
-                <Hotelcard2></Hotelcard2> 
-                <Hotelcard2></Hotelcard2> 
-            </div>
-            
-        </div>
-      <Footer2></Footer2>
-    
-    </>);
-
+            <Footer2 />
+        </>
+    );
 }
-
 
 export default Hotels;
