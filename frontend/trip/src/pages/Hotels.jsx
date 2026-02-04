@@ -3,12 +3,8 @@ import Searcharea from "../components/Searchbar";
 import Hotelcard2 from "../components/HotelCard2";
 import Footer2 from "../components/Footer2";
 import hotelIcon from './pics/hotel.png';
-
-// Import Slider Images
 import top1 from './pics/top1.jpg';
 import top2 from './pics/top2.avif';
-// (Keep your other imports here)
-
 import { useRef, useState, useEffect } from "react";
 import './css/page.css';
 
@@ -18,54 +14,115 @@ function Hotels() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // --- 1. THE FETCH FUNCTION ---
-    const fetchHotels = async (searchParams = {}) => {
+    // Store search params to pass to cards for calculation
+    const [searchParams, setSearchParams] = useState({
+        checkin: new Date().toISOString().split('T')[0],
+        checkout: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
+        people: 1, 
+        children: 0
+    });
+
+    const fetchHotels = async (params = {}) => {
         setLoading(true);
         setError(null);
         try {
-            // ✅ UPDATED URL: Matches the path you provided
+            // Note: Ensure this path matches your XAMPP/WAMP folder structure exactly
             const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/hotels/hotelsearch.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(searchParams),
+                body: JSON.stringify(params),
             });
-
             if (!response.ok) throw new Error("Failed to connect to server");
-
             const data = await response.json();
 
             if (Array.isArray(data)) {
-                setHotels(data);
+                setHotels(data.map(h => ({...h, status: h.status || 'Available'})));
             } else {
-                console.error("PHP Error:", data);
                 setHotels([]); 
             }
         } catch (err) {
-            console.error("Connection Error:", err);
-            setError("Failed to fetch hotels. Please check your connection.");
+            console.error(err);
+            setError("Failed to fetch hotels.");
         } finally {
             setLoading(false);
         }
     };
 
-    // --- 2. LOAD ALL HOTELS ON PAGE LOAD ---
     useEffect(() => {
         fetchHotels(); 
     }, []);
 
-    // --- 3. HANDLE SEARCH SUBMIT ---
-    const handleSearch = (formData) => {
-        const payload = {
-            place: formData.place,
-            budget: formData.budget,
-        };
-
-        console.log("Searching with:", payload);
-        fetchHotels(payload);
+    // --- 🟢 FIX: Handles the booking request from the Child Component ---
+    const handleBookHotel = async (hotelId, calculatedTotal, paymentData, bookingDates) => {
+        const storedUser = localStorage.getItem("FT_user");
+        if (!storedUser) return false;
         
-        if (resultRef.current) {
-            resultRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        let userId;
+        try {
+             const parsed = JSON.parse(storedUser);
+             userId = parsed.user_id || parsed.id || parsed.ID;
+        } catch (e) { return false; }
+
+        if (!userId) {
+            alert("Please log in again.");
+            return false;
         }
+
+        try {
+            // Pointing to your specific PHP path
+            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/hotels/hotelres.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: userId,
+                    hotel_id: hotelId,
+                    total_price: calculatedTotal, // Changed 'amount' to 'total_price' to match DB
+                    checkin: bookingDates.checkin,
+                    checkout: bookingDates.checkout,
+                    guests: searchParams.people // Optional: pass guest count
+                })
+            });
+            
+            // Check if response is valid JSON
+            const text = await response.text();
+            let result;
+            try {
+                result = JSON.parse(text);
+            } catch (err) {
+                console.error("Server returned non-JSON:", text);
+                alert("Server Error. Check console.");
+                return false;
+            }
+
+            if (result.success) {
+                // Update local state to show 'Reserved' button immediately
+                setHotels(prev => prev.map(h => 
+                    (h.hotel_id === hotelId || h.id === hotelId || h.h_id === hotelId) 
+                    ? { ...h, status: 'Reserved' } : h
+                ));
+                return true; // Tells the card to show Green Success Popup
+            } else {
+                console.error("Booking Failed:", result);
+                alert("Booking Failed: " + (result.message || result.error));
+                return false; 
+            }
+        } catch (e) {
+            console.error("Network Error:", e); 
+            alert("Could not connect to server.");
+            return false;
+        }
+    };
+
+    const handleSearch = (formData) => {
+        setSearchParams({
+            checkin: formData.checkin || new Date().toISOString().split('T')[0],
+            checkout: formData.checkout || new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
+            people: formData.people || 1,
+            children: formData.children || 0
+        });
+
+        fetchHotels(formData);
+        if (resultRef.current) resultRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
     return (
@@ -74,7 +131,6 @@ function Hotels() {
                 <img src={hotelIcon} className="icon" alt="icon" /> Reserve Your Spot
             </h1>
 
-            {/* Slider Section */}
             <section className="container">
                 <div className="slider-wrapper">
                     <div className="slider">
@@ -104,14 +160,15 @@ function Hotels() {
                             <Hotelcard2 
                                 key={hotel.hotel_id || index} 
                                 hotel={hotel} 
+                                searchParams={searchParams} 
+                                onBook={handleBookHotel}
                             />
                         ))
                     ) : (
-                        <h3 style={{textAlign: "center", color: "white"}}>No hotels found matching your criteria.</h3>
+                        <h3 style={{textAlign: "center", color: "white"}}>No hotels found.</h3>
                     )}
                 </div>
             </div>
-            
             <Footer2 />
         </>
     );

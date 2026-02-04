@@ -89,38 +89,39 @@ function Flights() {
         }
     };
 
-    // --- 4. HANDLE BOOKING (ROBUST CHECK) ---
+    // --- 4. HANDLE BOOKING (UPDATED FOR REFRESH & RED STATUS) ---
     const handleBookFlight = async (flightId, price, paymentDetails) => {
-        // 1. Get the raw string from storage
-        // NOTE: Ensure this key matches what you set in Login/SignUp ("FT_user")
+        // 1. Check User Session
         const storedUser = localStorage.getItem("FT_user"); 
 
         if (!storedUser) {
-            alert("You must be logged in to book a flight.");
+            // ✅ FORCE BROWSER REFRESH TO LOGIN PAGE
+            if (window.confirm("You must be logged in to book a flight. Go to Login page?")) {
+                window.location.href = "/Login"; // This forces a full reload
+            }
             return;
         }
 
-        // 2. Parse safely to find the ID
+        // 2. Parse User ID
         let userId = null;
         try {
             const userObj = JSON.parse(storedUser);
-            // Check for 'user_id' (DB style) or 'id' (Frontend style)
             userId = userObj.user_id || userObj.id;
         } catch (e) {
             console.error("JSON Parse Error:", e);
-            alert("Session invalid. Please log in again.");
+            localStorage.removeItem("FT_user");
+            window.location.reload(); 
             return;
         }
 
         if (!userId) {
-            alert("User ID not found in session. Please log in again.");
+            alert("User ID not found. Please log in again.");
             return;
         }
 
-        // 3. Send Booking to PHP
+        // 3. Send to Backend (Using book_flight.php)
         try {
-            // Check this path matches your folder structure exactly
-            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/flightres.php", {
+            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/book_flight.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -135,7 +136,24 @@ function Flights() {
 
             if (data.success || response.ok) {
                 alert("Reservation Successful! Flight Booked.");
-                // Optional: window.location.reload();
+
+                // ✅ UPDATE UI INSTANTLY: Set status to "Reserved" (Red)
+                // This updates the local list without needing to refresh the page
+                setFlights(prevFlights => prevFlights.map(flight => {
+                    if (flight.flight_id === flightId || flight.id === flightId) {
+                        return { ...flight, status: "Reserved" }; 
+                    }
+                    return flight;
+                }));
+
+                // Update Return Flights if they exist
+                setReturnFlights(prev => prev.map(flight => {
+                    if (flight.flight_id === flightId || flight.id === flightId) {
+                        return { ...flight, status: "Reserved" };
+                    }
+                    return flight;
+                }));
+
             } else {
                 alert("Booking Failed: " + (data.message || data.error || "Unknown error"));
             }
@@ -203,8 +221,8 @@ function Flights() {
                         <FlightCard 
                             key={flight.flight_id || flight.id} 
                             flight={flight} 
-                            // Pass the robust handler here
-                            onBooked={(id, price, payment) => handleBookFlight(id, price, payment)}
+                            // Using standard prop 'onBook' as discussed, or keep 'onBooked' if your card uses that
+                            onBook={(id, price, payment) => handleBookFlight(id, price, payment)}
                         />
                     ))}
 
@@ -217,8 +235,7 @@ function Flights() {
                                 <FlightCard 
                                     key={flight.flight_id || flight.id} 
                                     flight={flight} 
-                                    // Pass the robust handler here too
-                                    onBooked={(id, price, payment) => handleBookFlight(id, price, payment)}
+                                    onBook={(id, price, payment) => handleBookFlight(id, price, payment)}
                                 />
                             ))}
                         </>
