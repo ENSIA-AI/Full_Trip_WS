@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import FlightCard from "../components/FlightCard.jsx";
 import Footer2 from "../components/Footer2"
 import Searcharea from "../components/SearchbarF.jsx"; 
-import { useLocation, useNavigate } from "react-router-dom"; // Added useNavigate
+import { useLocation, useNavigate } from "react-router-dom"; 
 
 // Images
 import top1 from './pics/Atop1.jpg'
@@ -22,7 +22,7 @@ import './css/page.css'
 
 function Flights() {
     const { state } = useLocation();
-    const navigate = useNavigate(); // For redirecting to login if needed
+    const navigate = useNavigate(); 
     const refrence = useRef(null);
     
     // State
@@ -44,6 +44,7 @@ function Flights() {
         setIsLoading(true);
         setError(null);
         try {
+            // Check this path matches your folder structure exactly
             const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/flightssearch.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -88,42 +89,60 @@ function Flights() {
         }
     };
 
-    // --- 4. HANDLE BOOKING (UPDATED) ---
+    // --- 4. HANDLE BOOKING (ROBUST CHECK) ---
     const handleBookFlight = async (flightId, price, paymentDetails) => {
-        // ✅ A. Check if user is logged in
-        // Assuming you store 'user_id' in localStorage after login
-        const userId = localStorage.getItem("user_id");
+        // 1. Get the raw string from storage
+        // NOTE: Ensure this key matches what you set in Login/SignUp ("FT_user")
+        const storedUser = localStorage.getItem("FT_user"); 
 
-        if (!userId) {
+        if (!storedUser) {
             alert("You must be logged in to book a flight.");
-            // Optional: navigate('/login'); 
             return;
         }
 
-        // ✅ B. Send Booking Request to PHP
+        // 2. Parse safely to find the ID
+        let userId = null;
         try {
-            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/book_flight.php", {
+            const userObj = JSON.parse(storedUser);
+            // Check for 'user_id' (DB style) or 'id' (Frontend style)
+            userId = userObj.user_id || userObj.id;
+        } catch (e) {
+            console.error("JSON Parse Error:", e);
+            alert("Session invalid. Please log in again.");
+            return;
+        }
+
+        if (!userId) {
+            alert("User ID not found in session. Please log in again.");
+            return;
+        }
+
+        // 3. Send Booking to PHP
+        try {
+            // Check this path matches your folder structure exactly
+            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/flightres.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     user_id: userId,
                     flight_id: flightId,
-                    price: price, // Sending the price to the backend
-                    payment: paymentDetails
+                    amount: price, 
+                    payment_details: paymentDetails
                 }),
             });
 
             const data = await response.json();
 
-            if (data.success) {
-                alert("Reservation Successful! Your Booking ID is: " + (data.booking_id || "Confirmed"));
+            if (data.success || response.ok) {
+                alert("Reservation Successful! Flight Booked.");
+                // Optional: window.location.reload();
             } else {
-                alert("Booking Failed: " + data.error);
+                alert("Booking Failed: " + (data.message || data.error || "Unknown error"));
             }
 
         } catch (err) {
-            console.error("Booking Error:", err);
-            alert("An error occurred while connecting to the server.");
+            console.error("Booking Fetch Error:", err);
+            alert("An error occurred. Check if XAMPP is running.");
         }
     };
 
@@ -184,7 +203,7 @@ function Flights() {
                         <FlightCard 
                             key={flight.flight_id || flight.id} 
                             flight={flight} 
-                            // ✅ UPDATED: Pass params (id, price, payment) to the handler
+                            // Pass the robust handler here
                             onBooked={(id, price, payment) => handleBookFlight(id, price, payment)}
                         />
                     ))}
@@ -198,7 +217,7 @@ function Flights() {
                                 <FlightCard 
                                     key={flight.flight_id || flight.id} 
                                     flight={flight} 
-                                    // ✅ UPDATED: Pass params (id, price, payment) to the handler
+                                    // Pass the robust handler here too
                                     onBooked={(id, price, payment) => handleBookFlight(id, price, payment)}
                                 />
                             ))}

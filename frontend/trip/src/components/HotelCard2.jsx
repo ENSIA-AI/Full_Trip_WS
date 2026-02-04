@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import './css/HotelCard2.css';
+// ✅ Import the SignUpForm
+import SignUpForm from "../landingPage/components/SignUpForm"; 
 
 function HotelCard2({ hotel }) {
+  // --- STATE ---
   const [showPayment, setShowPayment] = useState(false);
+  const [showLogin, setShowLogin] = useState(false); // ✅ Controls Login Popup
 
-  // --- 1. Setup Defaults (Use DB data if available, else use Dummy Data) ---
+  // --- 1. Setup Defaults ---
   const name = hotel?.h_name || "The Grand Plaza Hotel";
   const location = hotel?.h_location || "Manhattan, New York";
   const price = hotel?.price || 299;
   const description = hotel?.h_description || "Luxurious 5-star hotel in the heart of the city with stunning views.";
   const rating = hotel?.h_rating || 9.2;
   const starCount = hotel?.h_stars ? parseInt(hotel.h_stars) : 5;
-  // Use a fallback image if your DB image URL is empty or null
   const image = hotel?.h_image_url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80";
 
   const [paymentData, setPaymentData] = useState({
@@ -23,8 +26,33 @@ function HotelCard2({ hotel }) {
 
   const [errors, setErrors] = useState({});
 
+  // --- 2. USER CHECK HELPER ---
+  const getUserId = () => {
+    const storedUser = localStorage.getItem("FT_user");
+    if (!storedUser) return null;
+    try {
+      const userObj = JSON.parse(storedUser);
+      return userObj.user_id || userObj.id || null;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  // --- 3. HANDLERS ---
   const handleReserve = () => {
-    setShowPayment(true);
+    const userId = getUserId();
+    if (userId) {
+      // User is logged in, show payment
+      setShowPayment(true);
+    } else {
+      // User NOT logged in, show Signup/Login
+      setShowLogin(true);
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    setShowLogin(false);
+    setShowPayment(true); // Open payment immediately after login
   };
 
   const handleClose = () => {
@@ -35,51 +63,51 @@ function HotelCard2({ hotel }) {
 
   function handleChange(e) {
     const { name, value } = e.target;
+    let newValue = value;
 
     if (name === "cardNumber") {
-      // keep only digits for card number
-      const onlyDigits = value.replace(/\D/g, "");
-      setPaymentData(prev => ({ ...prev, [name]: onlyDigits }));
+      newValue = value.replace(/\D/g, ""); // Only digits
     } else if (name === "cvv") {
-      // keep only digits and max 3 chars
-      const onlyDigits = value.replace(/\D/g, "").slice(0, 3);
-      setPaymentData(prev => ({ ...prev, [name]: onlyDigits }));
-    } else {
-      setPaymentData(prev => ({ ...prev, [name]: value }));
+      newValue = value.replace(/\D/g, "").slice(0, 3); // Max 3 digits
     }
 
-    setErrors(prev => ({ ...prev, [name]: "" }));
+    setPaymentData(prev => ({ ...prev, [name]: newValue }));
+    
+    // Clear error for this field as user types
+    if (errors[name]) {
+        setErrors(prev => ({ ...prev, [name]: "" }));
+    }
   }
 
   function validate() {
     const newErrors = {};
 
-    // Name: required + letters and spaces only
+    // Name
     if (!paymentData.name.trim()) {
       newErrors.name = "Cardholder name is required";
     } else if (!/^[A-Za-z\s]+$/.test(paymentData.name.trim())) {
       newErrors.name = "Name must contain only letters";
     }
 
-    // Card number: 16 digits
+    // Card number
     if (!paymentData.cardNumber) {
       newErrors.cardNumber = "Card number is required";
     } else if (!/^\d{16}$/.test(paymentData.cardNumber)) {
       newErrors.cardNumber = "Card number must be 16 digits";
     }
 
-    // Expiry: MM/YY basic check
+    // Expiry
     if (!paymentData.expiry.trim()) {
-      newErrors.expiry = "Expiry date is required";
+      newErrors.expiry = "Required";
     } else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(paymentData.expiry)) {
-      newErrors.expiry = "Use format MM/YY";
+      newErrors.expiry = "MM/YY";
     }
 
-    // CVV: 3 digits
+    // CVV
     if (!paymentData.cvv.trim()) {
-      newErrors.cvv = "CVV is required";
+      newErrors.cvv = "Required";
     } else if (!/^\d{3}$/.test(paymentData.cvv)) {
-      newErrors.cvv = "CVV must be 3 digits";
+      newErrors.cvv = "3 digits";
     }
 
     setErrors(newErrors);
@@ -92,8 +120,6 @@ function HotelCard2({ hotel }) {
 
     // mock payment success
     console.log("Processing payment for:", name);
-    console.log("Amount:", price);
-    console.log("Payment data:", paymentData);
     alert(`Payment of $${price} successful for ${name}!`);
     handleClose();
   }
@@ -102,10 +128,7 @@ function HotelCard2({ hotel }) {
     <>
       <div className="hotel-card">
         <div className="hotel-image">
-          <img 
-            src={image} 
-            alt={name}
-          />
+          <img src={image} alt={name} />
         </div>
         
         <div className="hotel-details">
@@ -113,7 +136,6 @@ function HotelCard2({ hotel }) {
             <div>
               <h1 className="hotel-name">{name}</h1>
               <div className="star-rating">
-                {/* Dynamically render stars based on DB rating */}
                 {[...Array(5)].map((_, i) => (
                     <span key={i} className={`star ${i < starCount ? 'filled' : ''}`}>★</span>
                 ))}
@@ -129,9 +151,7 @@ function HotelCard2({ hotel }) {
             <span>{location}</span>
           </div>
 
-          <p className="description">
-            {description}
-          </p>
+          <p className="description">{description}</p>
 
           <div className="amenities">
             <span className="amenity">Wi-Fi</span>
@@ -155,7 +175,18 @@ function HotelCard2({ hotel }) {
         </div>
       </div>
 
-      {/* Payment Modal */}
+      {/* --- LOGIN OVERLAY --- */}
+      {showLogin && (
+        <div className="payment-modal" style={{background: 'rgba(0,0,0,0.55)', display:'flex', alignItems:'center', justifyContent:'center'}}> 
+           <SignUpForm 
+             formAppearing={setShowLogin} 
+             SetLoggedIn={handleLoginSuccess}
+             SetUserInfo={() => {}} 
+           />
+        </div>
+      )}
+
+      {/* --- PAYMENT MODAL --- */}
       {showPayment && (
         <div className="payment-modal">
           <div className="payment-content">
@@ -166,6 +197,7 @@ function HotelCard2({ hotel }) {
               <label>
                 Cardholder Name
                 <input
+                  className={errors.name ? "input-error" : ""}
                   type="text"
                   name="name"
                   placeholder="John Doe"
@@ -178,6 +210,7 @@ function HotelCard2({ hotel }) {
               <label>
                 Card Number
                 <input
+                  className={errors.cardNumber ? "input-error" : ""}
                   type="text"
                   name="cardNumber"
                   placeholder="1234567890123456"
@@ -192,6 +225,7 @@ function HotelCard2({ hotel }) {
                 <label>
                   Expiry
                   <input
+                    className={errors.expiry ? "input-error" : ""}
                     type="text"
                     name="expiry"
                     placeholder="MM/YY"
@@ -203,6 +237,7 @@ function HotelCard2({ hotel }) {
                 <label>
                   CVV
                   <input
+                    className={errors.cvv ? "input-error" : ""}
                     type="text"
                     name="cvv"
                     placeholder="123"
