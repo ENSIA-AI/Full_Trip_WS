@@ -429,8 +429,8 @@
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  background: #ff5722;
-  color: #fff;
+  background: #ff5722 !important;
+  color: #fff !important;
   box-shadow: 0 6px 14px rgba(255, 87, 34, 0.35);
   transition: 0.25s;
 }
@@ -466,6 +466,42 @@
   .flight-payment-modal h2 {
     font-size: 1.2rem;
   }
+}
+/* ==================================
+   VALIDATION ERROR STYLES
+   ================================== */
+.input-error {
+    border-color: #e74c3c !important; /* Red border */
+    background-color: #fdf2f2; /* Light red background */
+}
+
+.error-text {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    font-weight: 600;
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==================================
+   FIX BUTTON COLOR (FORCE ORANGE)
+   ================================== */
+.flight-pay-btn {
+  /* ... existing styles ... */
+  /* Add !important to ensure Orange overrides Blue */
+  background: #ff5722 !important; 
+  color: #ffffff !important;
+}
+
+.flight-pay-btn:hover {
+  background: #ffffff !important;
+  color: #ff5722 !important;
 }
 
 

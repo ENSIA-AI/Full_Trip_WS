@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./css/FlightCard.css"; 
-// ✅ Import the SignUpForm so we can show it if they aren't logged in
 import SignUpForm from "../landingPage/components/SignUpForm"; 
 
 function formatTime(isoString) {
@@ -18,7 +17,7 @@ function formatDate(isoString) {
 function FlightCard({ flight, returnDate = null, onBooked }) {
   // --- STATE ---
   const [showPayment, setShowPayment] = useState(false);
-  const [showLogin, setShowLogin] = useState(false); // ✅ Controls the Login Popup
+  const [showLogin, setShowLogin] = useState(false);
 
   // Payment Form State
   const [cardName, setCardName] = useState("");
@@ -43,10 +42,8 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
   const handleReserveClick = () => {
     const userId = getUserId();
     if (userId) {
-      // User is logged in, go straight to payment
       setShowPayment(true);
     } else {
-      // User is NOT logged in, show Sign Up form
       setShowLogin(true);
     }
   };
@@ -54,7 +51,7 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
   // --- 3. HANDLE LOGIN SUCCESS ---
   const handleLoginSuccess = () => {
     setShowLogin(false);
-    setShowPayment(true); // Open payment immediately after login
+    setShowPayment(true);
   };
 
   // --- DATA MAPPING ---
@@ -83,19 +80,36 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
     setCardName(""); setCardNumber(""); setExpiry(""); setCvv(""); setErrors({});
   };
 
+  // ✅ IMPROVED VALIDATION LOGIC
   const validate = () => {
     const newErrors = {};
-    if (!cardName.trim()) newErrors.cardName = "Required";
-    if (!cardNumber || cardNumber.length < 16) newErrors.cardNumber = "Invalid Card";
-    if (!expiry) newErrors.expiry = "Required";
-    if (!cvv || cvv.length < 3) newErrors.cvv = "Invalid CVV";
+    
+    // Validate Name
+    if (!cardName.trim()) newErrors.cardName = "Name on card is required";
+    
+    // Validate Card Number (Remove spaces first)
+    const cleanCardNum = cardNumber.replace(/\s/g, "");
+    if (!cleanCardNum || cleanCardNum.length < 16 || isNaN(cleanCardNum)) {
+      newErrors.cardNumber = "Enter a valid 16-digit card number";
+    }
+
+    // Validate Expiry (MM/YY format)
+    if (!expiry || !/^\d{2}\/\d{2}$/.test(expiry)) {
+       newErrors.expiry = "Format: MM/YY";
+    }
+
+    // Validate CVV
+    if (!cvv || cvv.length < 3 || isNaN(cvv)) {
+      newErrors.cvv = "Invalid CVV";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate()) return; // Stop if validation fails
 
     const paymentData = { cardName, cardNumber, expiry, cvv };
 
@@ -111,12 +125,11 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
 
   return (
     <>
-      {/* --- ORIGINAL UI PRESERVED --- */}
+      {/* --- FLIGHT CARD UI --- */}
       <div className="flight-card">
         <div className="date-header">{dateLabel}</div>
 
         <div className="flight-content">
-          {/* AIRLINE */}
           <div className="airline-section">
             <div className="airline-logo">
                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
@@ -127,7 +140,6 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
             </div>
           </div>
 
-          {/* FLIGHT DETAILS */}
           <div className="flight-details">
             <div className="location-section">
               <h3 className="location-label">{f.departure_code}</h3>
@@ -156,7 +168,6 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
             </div>
           </div>
 
-          {/* PRICE & BUTTON */}
           <div className="booking-info">
             <div className="info-group">
               <span className="info-label">Price</span>
@@ -177,15 +188,13 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
         </div>
 
         <div className="action-section">
-          {/* ✅ Changed onClick to check login first */}
           <button className="reserve-btn" onClick={handleReserveClick}>Reserve</button>
         </div>
       </div>
       
-      {/* --- LOGIN OVERLAY (Shows if user not logged in) --- */}
+      {/* --- LOGIN OVERLAY --- */}
       {showLogin && (
         <div className="flight-payment-overlay"> 
-           {/* Wrapping SignUpForm in your overlay style so it centers correctly */}
            <SignUpForm 
              formAppearing={setShowLogin} 
              SetLoggedIn={handleLoginSuccess}
@@ -194,7 +203,7 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
         </div>
       )}
 
-      {/* --- PAYMENT MODAL (Uses YOUR original structure) --- */}
+      {/* --- PAYMENT MODAL --- */}
       {showPayment && (
         <div className="flight-payment-overlay">
            <div className="flight-payment-modal">
@@ -202,43 +211,69 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
              <h2>Payment Details</h2>
              
              <form className="flight-payment-form" onSubmit={handleSubmit}>
-                {/* Wrapped inputs in divs to match your CSS .flight-payment-group */}
+                
+                {/* CARD NAME */}
                 <div className="flight-payment-group">
                     <label>Card Name</label>
                     <input 
+                        className={errors.cardName ? "input-error" : ""}
                         value={cardName} 
-                        onChange={(e) => setCardName(e.target.value)} 
+                        onChange={(e) => {
+                            setCardName(e.target.value);
+                            if (errors.cardName) setErrors({...errors, cardName: null});
+                        }} 
                         placeholder="John Doe"
                     />
+                    {errors.cardName && <span className="error-text">{errors.cardName}</span>}
                 </div>
 
+                {/* CARD NUMBER */}
                 <div className="flight-payment-group">
                     <label>Card Number</label>
                     <input 
+                        className={errors.cardNumber ? "input-error" : ""}
                         value={cardNumber} 
-                        onChange={(e) => setCardNumber(e.target.value)} 
-                        maxLength="16"
+                        onChange={(e) => {
+                            setCardNumber(e.target.value);
+                            if (errors.cardNumber) setErrors({...errors, cardNumber: null});
+                        }} 
+                        maxLength="19"
                         placeholder="0000 0000 0000 0000"
                     />
+                    {errors.cardNumber && <span className="error-text">{errors.cardNumber}</span>}
                 </div>
                 
                 <div className="flight-payment-row">
+                    {/* EXPIRY */}
                     <div className="flight-payment-group" style={{width: '100%'}}>
                         <label>Expiry</label>
                         <input 
+                            className={errors.expiry ? "input-error" : ""}
                             value={expiry} 
-                            onChange={(e) => setExpiry(e.target.value)} 
+                            onChange={(e) => {
+                                setExpiry(e.target.value);
+                                if (errors.expiry) setErrors({...errors, expiry: null});
+                            }} 
                             placeholder="MM/YY"
+                            maxLength="5"
                         />
+                        {errors.expiry && <span className="error-text">{errors.expiry}</span>}
                     </div>
+
+                    {/* CVV */}
                     <div className="flight-payment-group" style={{width: '100%'}}>
                         <label>CVV</label>
                         <input 
+                            className={errors.cvv ? "input-error" : ""}
                             value={cvv} 
-                            onChange={(e) => setCvv(e.target.value)} 
+                            onChange={(e) => {
+                                setCvv(e.target.value);
+                                if (errors.cvv) setErrors({...errors, cvv: null});
+                            }} 
                             maxLength="3"
                             placeholder="123"
                         />
+                        {errors.cvv && <span className="error-text">{errors.cvv}</span>}
                     </div>
                 </div>
                 
