@@ -25,6 +25,7 @@ function Slider({ images }) {
     setActiveIndex(index);
     sliderRef.current.scrollTo({
       left: sliderRef.current.clientWidth * index,
+      
       behavior: "smooth",
     });
   };
