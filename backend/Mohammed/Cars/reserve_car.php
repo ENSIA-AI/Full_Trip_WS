@@ -1,63 +1,52 @@
 <?php
-// reserve_car.php
-
-header("Access-Control-Allow-Origin: *");
+// 1. CORS Headers
+header("Access-Control-Allow-Origin: http://localhost:5173"); 
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json; charset=UTF-8");
+header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
-    exit();
+    exit;
 }
 
-require_once 'db.php'; 
-
-$data = json_decode(file_get_contents("php://input"));
-
-// 1. Validation: Ensure all fields from your TABLE are present
-if (
-    !isset($data->user_id) || 
-    !isset($data->car_id) || 
-    !isset($data->pickup_d) || 
-    !isset($data->return_d) || 
-    !isset($data->pickup_l) || 
-    !isset($data->return_l)
-) {
-    echo json_encode([
-        "success" => false, 
-        "error" => "Missing required data (dates or locations)."
-    ]);
-    exit();
-}
+// ✅ PATH FIXED: db.php is in the same folder
+require_once __DIR__ . '/db.php'; 
 
 try {
-    $pdo = connectDB();
-
-    // 2. Insert into 'car_reservations' (Matching your screenshot)
-    $stmt = $pdo->prepare("
-        INSERT INTO car_reservations 
-        (user_id, car_id, pickup_d, return_d, pickup_l, return_l, status) 
-        VALUES 
-        (:uid, :cid, :pd, :rd, :pl, :rl, 'Pending')
-    ");
-
-    $result = $stmt->execute([
-        ':uid' => $data->user_id,
-        ':cid' => $data->car_id,
-        ':pd'  => $data->pickup_d,
-        ':rd'  => $data->return_d,
-        ':pl'  => $data->pickup_l,
-        ':rl'  => $data->return_l
-    ]);
-
-    if ($result) {
-        echo json_encode(["success" => true, "message" => "Reservation created successfully"]);
-    } else {
-        echo json_encode(["success" => false, "error" => "Failed to create reservation"]);
+    $input = json_decode(file_get_contents("php://input"), true);
+    
+    if (!$input) {
+        throw new Exception("No data received");
     }
 
-} catch (PDOException $e) {
-    echo json_encode(["success" => false, "error" => "Database Error: " . $e->getMessage()]);
+    $db = connectDB();
+
+    // 2. Insert Command 
+    // We let the database auto-generate 'creservation_id'
+    $sql = "INSERT INTO car_reservations 
+            (user_id, car_id, pickup_d, return_d, pickup_l, return_l, status) 
+            VALUES 
+            (:uid, :cid, :pickup_d, :return_d, :pickup_l, :return_l, 'active')";
+
+    $stmt = $db->prepare($sql);
+    
+    $stmt->execute([
+        ':uid' => $input['user_id'],
+        ':cid' => $input['car_id'],
+        ':pickup_d' => $input['pickup_d'],
+        ':return_d' => $input['return_d'],
+        ':pickup_l' => $input['pickup_l'],
+        ':return_l' => $input['return_l']
+    ]);
+
+    echo json_encode(["success" => true, "message" => "Reservation created"]);
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        "success" => false, 
+        "error" => "Database Error: " . $e->getMessage()
+    ]);
 }
 ?>

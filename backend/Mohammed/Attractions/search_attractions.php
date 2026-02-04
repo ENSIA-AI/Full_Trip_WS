@@ -1,7 +1,7 @@
 <?php
 // search_attractions.php
 
-// إعدادات الرأس (Headers)
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -16,28 +16,27 @@ require_once 'db.php';
 
 $input = json_decode(file_get_contents("php://input"));
 
-// نستقبل المتغير "city" من الفرونت اند، لكننا سنستخدمه للبحث في الاسم والمكان
+
 $searchTerm = isset($input->city) ? trim($input->city) : '';
 $category = isset($input->category) ? trim($input->category) : '';
 
 try {
     $pdo = connectDB();
 
-    // جملة الاستعلام الأساسية
     $sql = "SELECT attrac_id, name, location, category, price, rating, attrac_img_url 
             FROM attractions 
             WHERE 1=1";
     
     $params = [];
 
-    // 🔥 التغيير الجوهري هنا: البحث في الاسم (name) أو الموقع (location) 🔥
+
     if (!empty($searchTerm)) {
-        // لاحظ الأقواس () مهمة جداً لدمج الشرطين
+        
         $sql .= " AND (name ILIKE :search OR location ILIKE :search)";
         $params[':search'] = "%" . $searchTerm . "%";
     }
 
-    // التصفية حسب الفئة
+
     if (!empty($category)) {
         $sql .= " AND category = :category";
         $params[':category'] = $category;

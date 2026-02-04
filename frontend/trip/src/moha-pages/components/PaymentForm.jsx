@@ -1,83 +1,172 @@
-import React, { useState } from "react";
-import "./css/PaymentForm.css"; // Ensure you have this CSS file
+import React, { useState, useEffect } from "react";
+import "./css/PaymentForm.css";
 
-function PaymentForm({ carId, carName, pricePerDay, onClose }) {
+function PaymentForm({ car, searchParams, onClose }) {
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  // --- 1. GET DATES & LOCATIONS FROM SEARCH PARAMS ---
+  // Ensure we have valid dates from the previous screen
+  const startDateStr = searchParams?.startDate || new Date().toISOString().split('T')[0];
+  const endDateStr = searchParams?.endDate || new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  
+  const pickupLoc = searchParams?.location || "";
+  // If your search form has a separate field for dropoff, use it. 
+  // Otherwise, default to pickup location or force user to enter it.
+  const dropoffLoc = searchParams?.dropoffLocation || searchParams?.location || ""; 
+
+  // --- 2. CALCULATE PRICE ---
+  const start = new Date(startDateStr);
+  const end = new Date(endDateStr);
+  const diffTime = Math.abs(end - start);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1; // Minimum 1 day
+  const pricePerDay = car.price || car.price_per_day || 0;
+  const totalPrice = diffDays * pricePerDay;
+
+  // --- 3. VALIDATION ---
+  const validate = () => {
+    const newErrors = {};
+
+    // Critical: Block if no location is set
+    if (!pickupLoc || !dropoffLoc) {
+        alert("⚠️ Please go back and select a Pickup and Drop-off location.");
+        onClose();
+        return false;
+    }
+
+    if (!/^\d{16}$/.test(cardNumber.replace(/\s+/g, ""))) newErrors.cardNumber = "Card number must be 16 digits";
     
-    // State for DB columns: pickup_d, return_d, pickup_l, return_l
-    const [pickupDate, setPickupDate] = useState("");
-    const [returnDate, setReturnDate] = useState("");
-    const [pickupLoc, setPickupLoc] = useState("Algiers"); 
-    const [returnLoc, setReturnLoc] = useState("Algiers");
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+      newErrors.expiry = "Use MM/YY";
+    } else {
+      const [month, year] = expiry.split("/").map(Number);
+      const expiryDate = new Date(2000 + year, month - 1, 1);
+      const now = new Date();
+      now.setDate(1); 
+      if (expiryDate < now) newErrors.expiry = "Card expired";
+    }
+
+    if (!/^\d{3}$/.test(cvv)) newErrors.cvv = "3 digits required";
     
-    const handlePayment = async (e) => {
-        e.preventDefault();
-        
-        const userId = localStorage.getItem("user_id");
-        if (!userId) {
-            alert("Error: You must be logged in.");
-            return;
-        }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-        // Map data to match PHP & Database columns
-        const reservationData = {
-            user_id: userId,
-            car_id: carId,
-            pickup_d: pickupDate,
-            return_d: returnDate,
-            pickup_l: pickupLoc,
-            return_l: returnLoc
-        };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setLoading(true);
 
-        try {
-            // ✅ Make sure this URL matches your folder structure
-            const response = await fetch("http://localhost/FULL_TRIP_WS/backend/Mohammed/Cars/reserve_car.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(reservationData),
-            });
+    const storedUser = localStorage.getItem('FT_user');
+    let userId = null;
+    if (storedUser) {
+        try { userId = JSON.parse(storedUser).user_id || JSON.parse(storedUser).id; } 
+        catch (err) { console.error(err); }
+    }
 
-            const result = await response.json();
+    if (!userId) {
+        alert("Please log in to reserve.");
+        setLoading(false);
+        return;
+    }
 
-            if (result.success) {
-                alert("Payment Successful! Reservation Saved.");
-                onClose(); // Close the modal
-            } else {
-                alert("Failed: " + result.error);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Connection error. Please try again.");
-        }
+    const bookingData = {
+        user_id: userId,
+        car_id: car.id || car.car_id,
+        pickup_d: startDateStr,
+        return_d: endDateStr,
+        pickup_l: pickupLoc,
+        return_l: dropoffLoc
     };
 
-    return (
-        <div className="paymentform-overlay">
-            <div className="paymentform-content">
-                <button className="close-btn" onClick={onClose} style={{float:'right'}}>X</button>
-                <h2>Book: {carName}</h2>
-                <p>Price: {pricePerDay} DA / day</p>
+    try {
+        const response = await fetch('http://localhost/FULL_TRIP_WS/backend/Mohammed/Cars/reserve_car.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bookingData)
+        });
 
-                <form onSubmit={handlePayment} style={{display:'flex', flexDirection:'column', gap:'10px'}}>
-                    
-                    <label>Pickup Date:</label>
-                    <input type="date" required value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} />
+        const result = await response.json();
 
-                    <label>Return Date:</label>
-                    <input type="date" required value={returnDate} onChange={(e) => setReturnDate(e.target.value)} />
+        if (result.success) {
+            alert(`✅ Reservation Complete!\nCar: ${car.brand}\nDates: ${startDateStr} to ${endDateStr}\nTotal: ${totalPrice} DA`);
+            onClose();
+        } else {
+            alert(`❌ Failed: ${result.error || result.message}`);
+        }
+    } catch (error) {
+        alert("❌ Connection Error.");
+    } finally {
+        setLoading(false);
+    }
+  };
 
-                    <label>Pickup Location:</label>
-                    <input type="text" required value={pickupLoc} onChange={(e) => setPickupLoc(e.target.value)} />
+  return (
+    <div className="paymentform-overlay">
+      <div className="paymentform-modal">
+        <h2>Reserve: {car.brand} {car.model}</h2>
 
-                    <label>Return Location:</label>
-                    <input type="text" required value={returnLoc} onChange={(e) => setReturnLoc(e.target.value)} />
-
-                    <button type="submit" className="pay-btn" style={{marginTop:'15px', padding:'10px'}}>
-                        Confirm & Pay
-                    </button>
-                </form>
+        {/* ✅ UPDATED SUMMARY BOX */}
+        <div style={{
+            backgroundColor: "#f8f9fa", 
+            padding: "15px", 
+            borderRadius: "10px", 
+            marginBottom: "20px",
+            fontSize: "0.9rem",
+            border: "1px solid #e9ecef"
+        }}>
+            <div style={{display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "10px"}}>
+                <div>
+                    <strong>📍 Pickup:</strong><br/>
+                    {pickupLoc || <span style={{color:"red"}}>Not selected</span>}
+                </div>
+                <div>
+                    <strong>🏁 Drop-off:</strong><br/>
+                    {dropoffLoc || <span style={{color:"red"}}>Same as Pickup</span>}
+                </div>
             </div>
+            
+            <p style={{margin: "5px 0", borderTop:"1px solid #ddd", paddingTop:"8px"}}>
+                <strong>📅 Dates:</strong> {startDateStr} <span style={{color:"#888"}}>➝</span> {endDateStr}
+            </p>
+
+            <p style={{marginTop: "10px", fontSize: "1.1rem", fontWeight: "bold", textAlign: "right", color: "#007bff"}}>
+                Total: {totalPrice} DA <span style={{fontSize:"0.8rem", color:"#555", fontWeight:"normal"}}>({diffDays} days)</span>
+            </p>
         </div>
-    );
+
+        <form onSubmit={handleSubmit} noValidate>
+          {/* Inputs remain the same */}
+          <div className="paymentform-group">
+            <input type="text" placeholder="Card Number" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} />
+            <div className="attraction-error">{errors.cardNumber}</div>
+          </div>
+
+          <div className="paymentform-group">
+            <input type="text" placeholder="Expiry MM/YY" value={expiry} onChange={(e) => setExpiry(e.target.value)} />
+            <div className="attraction-error">{errors.expiry}</div>
+          </div>
+
+          <div className="paymentform-group">
+            <input type="text" placeholder="CVV" value={cvv} onChange={(e) => setCvv(e.target.value)} />
+            <div className="attraction-error">{errors.cvv}</div>
+          </div>
+
+          <div className="paymentform-buttons">
+            <button type="submit" disabled={loading}>
+                {loading ? "Processing..." : `Pay ${totalPrice} DA`}
+            </button>
+            <button type="button" className="paymentform-cancel" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default PaymentForm;
