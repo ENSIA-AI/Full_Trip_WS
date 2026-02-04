@@ -5,7 +5,7 @@ define("DB_NAME", "postgres");
 define("DB_USER", "postgres.hmfopukitqzankwplsjf");
 define("DB_PWD", "5d!&cgfvs6!uCNU");
 
-header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Origin: *');
 header('Content-Type:application/json');
 header('Access-Control-Allow-Headers:Content-Type');
 header('Access-Control-Allow-Methods:PUT ,POST ,GET,DELETE, OPTIONS');
