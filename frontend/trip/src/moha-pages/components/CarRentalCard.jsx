@@ -1,29 +1,64 @@
 import React, { useState } from "react";
 import "./css/CarRentalCard.css";
 import PaymentForm from "./PaymentForm";
-import SignUpForm from "../../landingPage/components/SignUpForm.jsx"; // Adjust path if needed
+import SignUpForm from "../../landingPage/components/SignUpForm"; 
 
-function CarRentalCard({ id, image, name, model, price, location }) {
+// ✅ Added 'searchParams' to props so we receive the real user search data
+function CarRentalCard({ id, image, name, model, price, location, searchParams }) {
     const [showPayment, setShowPayment] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
 
-    // 1. Handle Rent Click
-    const handleRentClick = () => {
-        const userId = localStorage.getItem("user_id");
+    // 1. Helper: Get User ID from FT_user
+    const getUserId = () => {
+        const storedUser = localStorage.getItem("FT_user");
+        if (!storedUser) return null;
+        try {
+            const userObj = JSON.parse(storedUser);
+            return userObj.user_id || userObj.id || null;
+        } catch (e) {
+            return null;
+        }
+    };
 
+    const handleRentClick = () => {
+        const userId = getUserId();
         if (userId) {
-            // User IS logged in -> Show Payment
             setShowPayment(true);
         } else {
-            // User IS NOT logged in -> Show Login
             setShowLogin(true);
         }
     };
 
-    // 2. Callback: What happens after they log in?
     const handleLoginSuccess = () => {
-        setShowLogin(false);  // Close Login
-        setShowPayment(true); // Open Payment immediately
+        setShowLogin(false);
+        setShowPayment(true);
+    };
+
+    // -----------------------------------------------------------
+    // ✅ DATA PREPARATION
+    // -----------------------------------------------------------
+    
+    const carDataForForm = {
+        id: id,
+        brand: name,      
+        model: model,
+        price_per_day: price,
+        price: price      
+    };
+
+    // ✅ LOGIC UPDATE: Use passed searchParams if available, otherwise use defaults.
+    // This allows the strict dates/locations from the search bar to pass through.
+    const finalSearchParams = searchParams ? {
+        ...searchParams,
+        // Ensure location fallback if missing in searchParams
+        location: searchParams.location || location, 
+        dropoffLocation: searchParams.dropoffLocation || searchParams.location || location
+    } : {
+        // Fallback defaults (Today -> Tomorrow) if card is shown without a search
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+        location: location,
+        dropoffLocation: location // Default dropoff to same location
     };
 
     return (
@@ -41,29 +76,27 @@ function CarRentalCard({ id, image, name, model, price, location }) {
                 </div>
 
                 <div className="carrentalcard-btn-container">
-                    <button 
-                        className="carrentalcard-rent-btn" 
-                        onClick={handleRentClick}
-                    >
+                    <button className="carrentalcard-rent-btn" onClick={handleRentClick}>
                         Rent Now
                     </button>
                 </div>
             </div>
 
-            {/* 3. Conditional Rendering */}
-            
             {showLogin && (
-                <SignUpForm 
-                    formAppearing={setShowLogin} // Allows form to close itself
-                    onLoginSuccess={handleLoginSuccess} // Triggers payment after login
-                />
+                <div className="paymentform-overlay">
+                    <SignUpForm 
+                        formAppearing={setShowLogin} 
+                        SetLoggedIn={() => handleLoginSuccess()}
+                        SetUserInfo={() => {}} 
+                    />
+                </div>
             )}
 
             {showPayment && (
                 <PaymentForm
-                    carId={id}           
-                    carName={name}       
-                    pricePerDay={price}  
+                    car={carDataForForm} 
+                    // ✅ We pass the merged params (User Search or Defaults)
+                    searchParams={finalSearchParams} 
                     onClose={() => setShowPayment(false)}
                 />
             )}

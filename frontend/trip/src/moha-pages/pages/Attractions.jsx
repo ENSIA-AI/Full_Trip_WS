@@ -6,7 +6,6 @@ import AttractionCard from "../components/AttractionCard";
 import Footer from "../../landingPage/components/Footer";
 import "./css/Attraction.css";
 
-// Images imports (تأكد أن مسارات الصور صحيحة عندك)
 import top1 from "../img/Attractions/top1.webp";
 // ... باقي الصور
 
@@ -18,7 +17,7 @@ const sliderImages = [
 function Attractions() {
   const formRef = useRef(null);
 
-  // تخزين البيانات القادمة من الباك اند
+
   const [attractionsList, setAttractionsList] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,8 +29,7 @@ function Attractions() {
   const handleSearch = async (searchData) => {
     setLoading(true);
     try {
-      // ✅ الرابط يشير إلى سيرفر PHP الذي يعمل حالياً
-      const response = await fetch("http://localhost:8000/search_attractions.php", {
+      const response = await fetch("http://localhost/FULL_TRIP_WS/backend/Mohammed/Attractions/search_attractions.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
