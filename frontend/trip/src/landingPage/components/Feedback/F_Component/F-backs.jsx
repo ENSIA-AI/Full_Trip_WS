@@ -7,12 +7,42 @@ import { addFeedback } from '../../../services/fb_service';
 export default function Fbacks() {
   const [expandedItems, setExpandedItems] = useState([0]);
   const [feedback, setFeedback] = useState({ email: '', feedback: '' });
+  const [sessionChecked, setSessionChecked] = useState(false);
 
   function showDetails(index) {
     setExpandedItems((prev) => {
       return (prev.includes(index) ? [] : [index])
     })
   }
+
+  useEffect(() => {
+    Aos.init({ duration: 1000 });
+
+    async function loadSessionEmail() {
+      try {
+        const resp = await fetch(
+          'http://localhost/Full_Trip_WS/backend/Kad_Be/routes/login.php',
+          { credentials: 'include' }
+        );
+
+        if (!resp.ok) {
+          return;
+        }
+
+        const data = await resp.json();
+
+        setFeedback(f => ({ ...f, email: data.email }));
+      } catch (err) {
+        console.warn('Session check failed', err);
+      } finally {
+        setSessionChecked(true);
+      }
+    }
+
+    loadSessionEmail();
+  }, []);
+
+
 
   const feedbacks = [
     {
@@ -33,15 +63,11 @@ export default function Fbacks() {
     }
   ]
 
-  useEffect(() => {
-    Aos.init({ duration: 1000 });
-  },[])
-
   async function handelSubmit(e) {
     e.preventDefault();
     try {
       await addFeedback(feedback);
-      setFeedback({ email: '',feedback: '' });
+      setFeedback({ email: '', feedback: '' });
       alert('Feedback submitted successfully!');
     } catch (error) {
       alert('Failed to submit feedback. Please try again.');
@@ -62,8 +88,8 @@ export default function Fbacks() {
                 {feedback.summary}
                 <button id='btn' onClick={() => showDetails(index)}>
                   {expandedItems.includes(index) ?
-                    <i id='app-arrow' class='bxr  bx-arrow-up-stroke-circle'  ></i>
-                    : <i class='bxr  bx-arrow-down-circle'></i>}
+                    <i id='app-arrow' className='bxr  bx-arrow-up-stroke-circle'  ></i>
+                    : <i className='bxr  bx-arrow-down-circle'></i>}
                 </button>
               </p>
               <small className={
@@ -77,22 +103,44 @@ export default function Fbacks() {
         <h1 data-aos='fade-up'>Add Feedback Here:</h1>
         <p data-aos='fade-up'>Please fill the form below with your feedbacks.</p>
         <form onSubmit={handelSubmit}>
-          <input
-            type='email'
-            data-aos='fade-up-left'
-            value={feedback.email}
-            onChange={(e) => setFeedback(f => ({ ...f, email: e.target.value }))}
-            placeholder='Enter email address'
-            required />
+          {sessionChecked && !feedback.email && (
+            <input
+              type="email"
+              data-aos="fade-up-left"
+              value={feedback.email}
+              onChange={(e) =>
+                setFeedback(f => ({ ...f, email: e.target.value }))
+              }
+              placeholder="enter your email here"
+              required
+            />
+          )}
+
+          {sessionChecked && feedback.email && (
+            <div className="logged-email" data-aos="fade-up-left">
+              <label>
+                Logged in as: <strong>{feedback.email}</strong>
+              </label>
+            </div>
+          )}
+
           <textarea
-            type='text'
-            data-aos='fade-up-left'
+            data-aos="fade-up-left"
             value={feedback.feedback}
-            onChange={(e) => setFeedback(f => ({ ...f, feedback: e.target.value }))}
-            placeholder='Enter your Feedbacks here'
-            required />
-          <button type='submit' data-aos='fade-up-left'>Submit Feedback</button>
+            onChange={(e) =>
+              setFeedback(f => ({ ...f, feedback: e.target.value }))
+            }
+            placeholder="Enter your feedback here"
+            required
+          />
+
+          <button type="submit" data-aos="fade-up-left">
+            Submit Feedback
+          </button>
+
         </form>
+
+
       </div>
     </div >
   )
