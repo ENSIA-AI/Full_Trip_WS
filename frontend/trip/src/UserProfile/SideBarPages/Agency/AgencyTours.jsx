@@ -740,21 +740,28 @@ function ToursManagement() {
     const [bookings, setbookings] = useState([]);
 
 
-    async function GetCostumers(tour_id = 35) {
+    async function GetCostumers(tour_id) {
 
-        const response = await api.get('./tour_bookings.php', {
-            params: {
-                tour_id: tour_id
-            }
-        })
-        const result = response.data;
-        if (result.status === "success") {
+     
+
+        try {
+            const response = await api.get('/tour_bookings.php', {
+                params: { id: tour_id }
+            });
+
+            const result = response.data;
             return result.data;
+        } catch (error) {
+            console.error('Error fetching customers for tour', tour_id, error);
+            return [];
         }
     }
-    function OpenCostumers_list(tour_id) {
 
-        result = GetCostumers(tour_id);
+
+    async function OpenCostumers_list(tour_id) {
+        const result = await GetCostumers(tour_id);
+        console.log(result)
+        
 
         setbookings(result);
 
@@ -793,7 +800,7 @@ return (<>
                                 <h4>Actions</h4>
                                 <button onClick={() => OpenCostumers_list(Tour.tour_id)} className="FlexH"> <FontAwesomeIcon className="Icon" icon={faUsers}></FontAwesomeIcon><p>View Costumers</p></button>
 
-                                <button onClick={() => setManageDatesOpen((prev) => ({ ...prev, [Tour.tour_id]: true }))} className="FlexH"> <FontAwesomeIcon className="Icon" icon={faCalendar}></FontAwesomeIcon><p>Manage Dates</p></button>
+                                <button onClick={() => OpenCostumers_list(Tour.tour_id)} className="FlexH"> <FontAwesomeIcon className="Icon" icon={faCalendar}></FontAwesomeIcon><p>Manage Dates</p></button>
 
                                 <div onClick={() => DeleteTour(Tour.tour_id)} className="FlexH DeleteC"> <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon><p>Delete Tour</p></div>
                             </div>)
@@ -860,13 +867,13 @@ return (<>
 
                             {bookings.map((costumer, index) => (
                                 <tr key={index} style={{ color: "brown" }}>
-                                    <td style={{ color: "black" }}><div ><p>{costumer.customer}</p><p style={{ color: "red" }}>{costumer.customerId}</p></div></td>
+                                    <td style={{ color: "black" }}><div ><p>{costumer.first_name + costumer.last_name}</p><p style={{ color: "red" }}>{costumer.user_id}</p></div></td>
                                     <td><div className="Contact">
                                         <p><FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon> {costumer.email}</p>
-                                        <p><FontAwesomeIcon icon={faPhone}></FontAwesomeIcon> {costumer.phone}</p>
+                                        <p><FontAwesomeIcon icon={faPhone}></FontAwesomeIcon> {costumer.phone_num}</p>
 
                                     </div></td>
-                                    <td><FontAwesomeIcon icon={faCalendar} style={{ color: "red" }}></FontAwesomeIcon> {costumer.departureDate}</td>
+                                    <td><FontAwesomeIcon icon={faCalendar} style={{ color: "red" }}></FontAwesomeIcon> {costumer.date}</td>
                                     <td >{costumer.bookingDate}</td>
                                     <td style={{ textAlign: "center", color: "black" }}>{costumer.tickets}</td>
                                     <td className="Money">{costumer.paid}DA</td>

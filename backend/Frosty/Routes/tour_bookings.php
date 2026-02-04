@@ -12,9 +12,20 @@ $_SESSION['user_id'] = 19;
 
 try {
 
-    $tour_id = $_GET['tour_id'];
 
-    $sql = "SELECT users.user_id, users.email, users.phone_num,
+    $json = file_get_contents('php://input');
+    $payload = json_decode($json, true);
+    $tour_id = $payload['id'] ?? $_GET['id'] ?? $_POST['id'] ?? null;
+
+    if ($tour_id === null) {
+        echo json_encode([
+            "status" => "error",
+            "message" => "Missing 'id' in request"
+        ]);
+        exit;
+    }
+
+    $sql = "SELECT users.first_name, users.last_name, users.user_id, users.email, users.phone_num,
                 departure_dates.date,
                 tour_reservations.reserved_at,
                 tour_reservations.tickets_n,
@@ -27,25 +38,21 @@ try {
                 departure_dates ON departure_dates.tour_id= t_published.tour_id
                 JOIN
                 users ON users.user_id = tour_reservations.user_id;";
-    $stmt= $db->prepare($sql);
+    $stmt = $db->prepare($sql);
 
     $stmt->execute([
-        "id"=>$tour_id
+        "id" => $tour_id
     ]);
 
-    $data=array();
-    while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-        array_push($data,$row);
+    $data = array();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        array_push($data, $row);
     }
 
     echo json_encode([
-        "status"=>"success",
-        "data"=>$data
+        "status" => "success",
+        "data" => $data
     ]);
-
-
-
-
 } catch (\Throwable $th) {
     echo "Error Fetching costumers: " . $th;
 }
