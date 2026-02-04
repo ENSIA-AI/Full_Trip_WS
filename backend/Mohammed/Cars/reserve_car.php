@@ -22,12 +22,13 @@ try {
 
     $db = connectDB();
 
-    // 2. Insert Command 
-    // We let the database auto-generate 'creservation_id'
-    $sql = "INSERT INTO car_reservations 
-            (user_id, car_id, pickup_d, return_d, pickup_l, return_l, status) 
+        // 2. Insert Command 
+        // We let the database auto-generate 'creservation_id'
+        // Explicitly set created_at using NOW() to avoid null issues when DB defaults are not applied
+        $sql = "INSERT INTO car_reservations 
+            (user_id, car_id, pickup_d, return_d, pickup_l, return_l, status, created_at) 
             VALUES 
-            (:uid, :cid, :pickup_d, :return_d, :pickup_l, :return_l, 'active')";
+            (:uid, :cid, :pickup_d, :return_d, :pickup_l, :return_l, 'active'"; 
 
     $stmt = $db->prepare($sql);
     
