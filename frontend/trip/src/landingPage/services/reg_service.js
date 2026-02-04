@@ -5,8 +5,8 @@ export async function addUser(userData) {
     const response = await fetch(API_URL, {
       method: 'POST',
       credentials: 'include',
-      headers: { 
-        'Content-Type': 'application/json' 
+      headers: {
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         first_name: userData.first_name,
@@ -26,14 +26,13 @@ export async function addUser(userData) {
     }
 
     const data = await response.json();
-    
+
     if (!data.success && data.error) {
       throw new Error(data.error);
     }
-    
-    // Try to login the user on the server so session cookie is set (best-effort)
+
     try {
-      await fetch('http://localhost/Full_Trip_WS/backend/Kad_Be/routes/login.php', {
+      await fetch('http://localhost/Full_Trip_WS/backend/Kad_Be/index.php?endpoint=login', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -48,12 +47,12 @@ export async function addUser(userData) {
   } catch (error) {
     // ✅ Better error logging
     console.error('Error in addUser:', error);
-    
+
     // If it's a network error, provide more detail
     if (error.message === 'Failed to fetch') {
       throw new Error('Cannot connect to server. Make sure XAMPP Apache is running.');
     }
-    
+
     throw error;
   }
 }

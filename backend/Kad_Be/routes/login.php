@@ -32,6 +32,23 @@ session_set_cookie_params([
 ]);
 session_start();
 
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+  if (!isset($_SESSION['user_id'], $_SESSION['email'])) {
+    http_response_code(401);
+    echo json_encode(['logged_in' => false]);
+    exit;
+  }
+
+  echo json_encode([
+    'logged_in' => true,
+    'email' => $_SESSION['email'],
+    'user_id' => $_SESSION['user_id']
+  ]);
+  exit;
+}
+
+
 $input_raw = file_get_contents('php://input');
 error_log("login.php: Received request from origin=" . ($_SERVER['HTTP_ORIGIN'] ?? '') . " body=" . $input_raw);
 $input = json_decode($input_raw);

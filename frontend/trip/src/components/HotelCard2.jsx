@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import './css/HotelCard2.css';
 
-function HotelCard2() {
+function HotelCard2({ hotel }) {
   const [showPayment, setShowPayment] = useState(false);
+
+  // --- 1. Setup Defaults (Use DB data if available, else use Dummy Data) ---
+  const name = hotel?.h_name || "The Grand Plaza Hotel";
+  const location = hotel?.h_location || "Manhattan, New York";
+  const price = hotel?.price || 299;
+  const description = hotel?.h_description || "Luxurious 5-star hotel in the heart of the city with stunning views.";
+  const rating = hotel?.h_rating || 9.2;
+  const starCount = hotel?.h_stars ? parseInt(hotel.h_stars) : 5;
+  // Use a fallback image if your DB image URL is empty or null
+  const image = hotel?.h_image_url || "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80";
 
   const [paymentData, setPaymentData] = useState({
     name: "",
@@ -81,8 +91,10 @@ function HotelCard2() {
     if (!validate()) return;
 
     // mock payment success
+    console.log("Processing payment for:", name);
+    console.log("Amount:", price);
     console.log("Payment data:", paymentData);
-    alert("Payment successful (mock)");
+    alert(`Payment of $${price} successful for ${name}!`);
     handleClose();
   }
 
@@ -91,35 +103,34 @@ function HotelCard2() {
       <div className="hotel-card">
         <div className="hotel-image">
           <img 
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80" 
-            alt="Hotel lobby interior"
+            src={image} 
+            alt={name}
           />
         </div>
         
         <div className="hotel-details">
           <div className="header-section">
             <div>
-              <h1 className="hotel-name">The Grand Plaza Hotel</h1>
+              <h1 className="hotel-name">{name}</h1>
               <div className="star-rating">
-                <span className="star filled">★</span>
-                <span className="star filled">★</span>
-                <span className="star filled">★</span>
-                <span className="star filled">★</span>
-                <span className="star">★</span>
+                {/* Dynamically render stars based on DB rating */}
+                {[...Array(5)].map((_, i) => (
+                    <span key={i} className={`star ${i < starCount ? 'filled' : ''}`}>★</span>
+                ))}
               </div>
             </div>
-            <div className="rating-badge">9.2</div>
+            <div className="rating-badge">{rating}</div>
           </div>
 
           <div className="location">
             <svg className="location-icon" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
             </svg>
-            <span>Manhattan, New York</span>
+            <span>{location}</span>
           </div>
 
           <p className="description">
-            Luxurious 5-star hotel in the heart of Manhattan with stunning city views, world-class dining, and exceptional service.
+            {description}
           </p>
 
           <div className="amenities">
@@ -131,7 +142,7 @@ function HotelCard2() {
 
           <div className="pricing">
             <div className="price">
-              <span className="amount">299$</span>
+              <span className="amount">{price}$</span>
               <span className="per-night">/ night</span>
             </div>
             <div className="total">
@@ -149,6 +160,8 @@ function HotelCard2() {
         <div className="payment-modal">
           <div className="payment-content">
             <h2>Payment Details</h2>
+            <p style={{marginBottom: '15px', color: '#666'}}>Booking: <strong>{name}</strong></p>
+            
             <form className="payment-form" onSubmit={handleSubmit}>
               <label>
                 Cardholder Name
@@ -202,7 +215,7 @@ function HotelCard2() {
               </div>
 
               <button type="submit" className="pay-btn">
-                Pay 299$
+                Pay {price}$
               </button>
             </form>
             <button className="close-btn" onClick={handleClose}>

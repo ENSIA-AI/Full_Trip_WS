@@ -1,270 +1,252 @@
 import React, { useState } from "react";
-import "./css/FlightCard.css";
+import "./css/FlightCard.css"; 
+// ✅ Import the SignUpForm so we can show it if they aren't logged in
+import SignUpForm from "../landingPage/components/SignUpForm"; 
 
-function FlightCard() {
+function formatTime(isoString) {
+  if (!isoString) return "";
+  const d = new Date(isoString);
+  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+}
+
+function formatDate(isoString) {
+  if (!isoString) return "";
+  const d = new Date(isoString);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function FlightCard({ flight, returnDate = null, onBooked }) {
+  // --- STATE ---
   const [showPayment, setShowPayment] = useState(false);
+  const [showLogin, setShowLogin] = useState(false); // ✅ Controls the Login Popup
 
+  // Payment Form State
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
-
   const [errors, setErrors] = useState({});
 
-  const handleReserve = () => {
-    setShowPayment(true);
+  // --- 1. USER CHECK HELPER ---
+  const getUserId = () => {
+    const storedUser = localStorage.getItem("FT_user");
+    if (!storedUser) return null;
+    try {
+      const userObj = JSON.parse(storedUser);
+      return userObj.user_id || userObj.id || null;
+    } catch (e) {
+      return null;
+    }
   };
 
+  // --- 2. HANDLE RESERVE CLICK ---
+  const handleReserveClick = () => {
+    const userId = getUserId();
+    if (userId) {
+      // User is logged in, go straight to payment
+      setShowPayment(true);
+    } else {
+      // User is NOT logged in, show Sign Up form
+      setShowLogin(true);
+    }
+  };
+
+  // --- 3. HANDLE LOGIN SUCCESS ---
+  const handleLoginSuccess = () => {
+    setShowLogin(false);
+    setShowPayment(true); // Open payment immediately after login
+  };
+
+  // --- DATA MAPPING ---
+  const f = flight ? {
+    id: flight.flight_id || flight.id,
+    departure_time: flight.departure_full_iso || new Date().toISOString(), 
+    arrival_time: flight.arrival_full_iso || new Date().toISOString(),
+    departure_code: flight.depart_airport || "DEP",
+    departure_city: flight.depart_country || "Departure City",
+    arrival_code:   flight.des_airport    || "ARR",
+    arrival_city:   flight.des_country    || "Arrival City",
+    airline_name:   flight.airline_name || `Flight #${flight.flight_id}`,
+    flight_number:  `FL-${flight.flight_id}`,
+    duration:       flight.duration_formatted || "0h",
+    stops:          flight.stops === 0 ? "Non-Stop" : `${flight.stops} Stop(s)`,
+    price:          Number(flight.price) || 0,
+    class:          flight.class || "Economy",
+    status:         flight.status || "Scheduled"
+  } : null;
+
+  if (!f) return null;
+
+  // --- PAYMENT HANDLERS ---
   const handleClose = () => {
     setShowPayment(false);
-    setCardName("");
-    setCardNumber("");
-    setExpiry("");
-    setCvv("");
-    setErrors({});
-  };
-
-  const handleNameChange = (e) => {
-    const value = e.target.value;
-    // allow letters and spaces only
-    setCardName(value);
-    setErrors((prev) => ({ ...prev, cardName: "" }));
-  };
-
-  const handleNumberChange = (e) => {
-    const value = e.target.value;
-    // allow digits only
-    const digitsOnly = value.replace(/\D/g, "").slice(0, 16);
-    setCardNumber(digitsOnly);
-    setErrors((prev) => ({ ...prev, cardNumber: "" }));
-  };
-
-  const handleExpiryChange = (e) => {
-    const value = e.target.value;
-    setExpiry(value);
-    setErrors((prev) => ({ ...prev, expiry: "" }));
-  };
-
-  const handleCvvChange = (e) => {
-    const value = e.target.value;
-    const digitsOnly = value.replace(/\D/g, "").slice(0, 3);
-    setCvv(digitsOnly);
-    setErrors((prev) => ({ ...prev, cvv: "" }));
+    setCardName(""); setCardNumber(""); setExpiry(""); setCvv(""); setErrors({});
   };
 
   const validate = () => {
     const newErrors = {};
-
-    // Name: required + letters and spaces only
-    if (!cardName.trim()) {
-      newErrors.cardName = "Cardholder name is required";
-    } else if (!/^[A-Za-z\s]+$/.test(cardName.trim())) {
-      newErrors.cardName = "Name must contain only letters";
-    }
-
-    // Card number: 16 digits
-    if (!cardNumber) {
-      newErrors.cardNumber = "Card number is required";
-    } else if (!/^\d{16}$/.test(cardNumber)) {
-      newErrors.cardNumber = "Card number must be 16 digits";
-    }
-
-    // Expiry: MM/YY and not in past
-    if (!expiry.trim()) {
-      newErrors.expiry = "Expiry is required";
-    } else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
-      newErrors.expiry = "Expiry must be MM/YY";
-    } else {
-      const [m, y] = expiry.split("/").map(Number);
-      const expDate = new Date(2000 + y, m - 1, 1);
-      const now = new Date();
-      now.setDate(1);
-      if (expDate < now) {
-        newErrors.expiry = "Expiry date cannot be in the past";
-      }
-    }
-
-    // CVV: 3 digits
-    if (!cvv.trim()) {
-      newErrors.cvv = "CVV is required";
-    } else if (!/^\d{3}$/.test(cvv)) {
-      newErrors.cvv = "CVV must be 3 digits";
-    }
-
+    if (!cardName.trim()) newErrors.cardName = "Required";
+    if (!cardNumber || cardNumber.length < 16) newErrors.cardNumber = "Invalid Card";
+    if (!expiry) newErrors.expiry = "Required";
+    if (!cvv || cvv.length < 3) newErrors.cvv = "Invalid CVV";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    alert("Flight reserved successfully! ✈️");
+    const paymentData = { cardName, cardNumber, expiry, cvv };
+
+    if (onBooked) {
+        await onBooked(f.id, f.price, paymentData);
+    }
     handleClose();
   };
 
+  const dateLabel = returnDate
+    ? `${formatDate(f.departure_time)} - ${formatDate(returnDate)}`
+    : formatDate(f.departure_time);
+
   return (
     <>
+      {/* --- ORIGINAL UI PRESERVED --- */}
       <div className="flight-card">
-        <div className="date-header">
-          02 November 2025 - 03 November 2025
-        </div>
+        <div className="date-header">{dateLabel}</div>
 
         <div className="flight-content">
+          {/* AIRLINE */}
           <div className="airline-section">
             <div className="airline-logo">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
-              </svg>
+               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
             </div>
             <div className="airline-info">
-              <h2 className="airline-name">Emirates Airlines</h2>
-              <p className="flight-number">E2-460</p>
+              <h2 className="airline-name">{f.airline_name}</h2>
+              <p className="flight-number">{f.flight_number}</p>
             </div>
           </div>
 
+          {/* FLIGHT DETAILS */}
           <div className="flight-details">
             <div className="location-section">
-              <h3 className="location-label">Emirates</h3>
-              <p className="location-name">Dubai Airport</p>
+              <h3 className="location-label">{f.departure_code}</h3>
+              <p className="location-name">{f.departure_city}</p>
               <div className="departure-dot"></div>
-              <p className="time">8:00 AM</p>
+              <p className="time">{formatTime(f.departure_time)}</p>
             </div>
 
             <div className="flight-path">
               <div className="duration-container">
-                <svg className="plane-icon" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
-                </svg>
-                <span className="duration">6h30m</span>
+                <svg className="plane-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+                <span className="duration">{f.duration}</span>
               </div>
               <div className="path-line"></div>
               <div className="stop-indicator">
                 <div className="stop-dot"></div>
-                <span className="stop-label">Non-Stop</span>
+                <span className="stop-label">{f.stops}</span>
               </div>
             </div>
 
             <div className="location-section">
-              <h3 className="location-label">UK</h3>
-              <p className="location-name">London Airport</p>
+              <h3 className="location-label">{f.arrival_code}</h3>
+              <p className="location-name">{f.arrival_city}</p>
               <div className="arrival-dot"></div>
-              <p className="time">2:00 PM</p>
+              <p className="time">{formatTime(f.arrival_time)}</p>
             </div>
           </div>
 
+          {/* PRICE & BUTTON */}
           <div className="booking-info">
             <div className="info-group">
               <span className="info-label">Price</span>
-              <span className="price">399$</span>
+              <span className="price">${f.price.toFixed(0)}</span>
             </div>
             <div className="info-group">
               <span className="info-label">Class</span>
-              <span className="class-badge">Economy</span>
+              <span className="class-badge">{f.class}</span>
             </div>
             <div className="info-group">
               <span className="info-label">Status</span>
-              <span className="status-badge">Active</span>
+              <span className={`status-badge ${f.status === 'Scheduled' ? 'green' : 'gray'}`} 
+                    style={{color: f.status === 'Scheduled' ? 'green' : 'gray'}}>
+                {f.status}
+              </span>
             </div>
           </div>
         </div>
 
         <div className="action-section">
-          <button className="reserve-btn" onClick={handleReserve}>
-            Reserve
-          </button>
+          {/* ✅ Changed onClick to check login first */}
+          <button className="reserve-btn" onClick={handleReserveClick}>Reserve</button>
         </div>
       </div>
+      
+      {/* --- LOGIN OVERLAY (Shows if user not logged in) --- */}
+      {showLogin && (
+        <div className="flight-payment-overlay"> 
+           {/* Wrapping SignUpForm in your overlay style so it centers correctly */}
+           <SignUpForm 
+             formAppearing={setShowLogin} 
+             SetLoggedIn={handleLoginSuccess}
+             SetUserInfo={() => {}} 
+           />
+        </div>
+      )}
 
+      {/* --- PAYMENT MODAL (Uses YOUR original structure) --- */}
       {showPayment && (
         <div className="flight-payment-overlay">
-          <div className="flight-payment-modal">
-            <button className="flight-payment-close" onClick={handleClose}>
-              ×
-            </button>
-            <h2>Payment Details</h2>
-            <form
-              className="flight-payment-form"
-              onSubmit={handleSubmit}
-              noValidate
-            >
-              <div className="flight-payment-group">
-                <label>
-                  Cardholder Name
-                  <input
-                    type="text"
-                    value={cardName}
-                    onChange={handleNameChange}
-                    placeholder="John Doe"
-                  />
-                </label>
-                {errors.cardName && (
-                  <span className="flight-payment-error">
-                    {errors.cardName}
-                  </span>
-                )}
-              </div>
-
-              <div className="flight-payment-group">
-                <label>
-                  Card Number
-                  <input
-                    type="text"
-                    value={cardNumber}
-                    onChange={handleNumberChange}
-                    placeholder="1234567890123456"
-                    maxLength={16}
-                  />
-                </label>
-                {errors.cardNumber && (
-                  <span className="flight-payment-error">
-                    {errors.cardNumber}
-                  </span>
-                )}
-              </div>
-
-              <div className="flight-payment-row">
+           <div className="flight-payment-modal">
+             <button className="flight-payment-close" onClick={handleClose}>×</button>
+             <h2>Payment Details</h2>
+             
+             <form className="flight-payment-form" onSubmit={handleSubmit}>
+                {/* Wrapped inputs in divs to match your CSS .flight-payment-group */}
                 <div className="flight-payment-group">
-                  <label>
-                    Expiry
-                    <input
-                      type="text"
-                      value={expiry}
-                      onChange={handleExpiryChange}
-                      placeholder="MM/YY"
+                    <label>Card Name</label>
+                    <input 
+                        value={cardName} 
+                        onChange={(e) => setCardName(e.target.value)} 
+                        placeholder="John Doe"
                     />
-                  </label>
-                  {errors.expiry && (
-                    <span className="flight-payment-error">
-                      {errors.expiry}
-                    </span>
-                  )}
                 </div>
 
                 <div className="flight-payment-group">
-                  <label>
-                    CVV
-                    <input
-                      type="text"
-                      value={cvv}
-                      onChange={handleCvvChange}
-                      placeholder="123"
-                      maxLength={3}
+                    <label>Card Number</label>
+                    <input 
+                        value={cardNumber} 
+                        onChange={(e) => setCardNumber(e.target.value)} 
+                        maxLength="16"
+                        placeholder="0000 0000 0000 0000"
                     />
-                  </label>
-                  {errors.cvv && (
-                    <span className="flight-payment-error">
-                      {errors.cvv}
-                    </span>
-                  )}
                 </div>
-              </div>
-
-              <button type="submit" className="flight-pay-btn">
-                Pay 399$
-              </button>
-            </form>
-          </div>
+                
+                <div className="flight-payment-row">
+                    <div className="flight-payment-group" style={{width: '100%'}}>
+                        <label>Expiry</label>
+                        <input 
+                            value={expiry} 
+                            onChange={(e) => setExpiry(e.target.value)} 
+                            placeholder="MM/YY"
+                        />
+                    </div>
+                    <div className="flight-payment-group" style={{width: '100%'}}>
+                        <label>CVV</label>
+                        <input 
+                            value={cvv} 
+                            onChange={(e) => setCvv(e.target.value)} 
+                            maxLength="3"
+                            placeholder="123"
+                        />
+                    </div>
+                </div>
+                
+                <button type="submit" className="flight-pay-btn">
+                    Pay ${f.price.toFixed(0)}
+                </button>
+             </form>
+           </div>
         </div>
       )}
     </>

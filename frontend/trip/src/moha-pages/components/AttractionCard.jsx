@@ -1,5 +1,5 @@
 import React from "react";
-import "./css/CarRentalCard.css"; // same CSS as CarRentalCard
+import "./css/CarRentalCard.css"; 
 import cardimg from '../img/Card.jpg'
 function AttractionCard({ id, image, name, type, entryFee, rating, location }) {
   return (
