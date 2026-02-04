@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import FlightCard from "../components/FlightCard.jsx";
 import Footer2 from "../components/Footer2"
-import Searcharea from "../components/SearchbarF.jsx"; // Assuming this is your file name
-import { useLocation } from "react-router-dom";
+import Searcharea from "../components/SearchbarF.jsx"; 
+import { useLocation, useNavigate } from "react-router-dom"; // Added useNavigate
 
 // Images
 import top1 from './pics/Atop1.jpg'
@@ -22,6 +22,7 @@ import './css/page.css'
 
 function Flights() {
     const { state } = useLocation();
+    const navigate = useNavigate(); // For redirecting to login if needed
     const refrence = useRef(null);
     
     // State
@@ -38,12 +39,11 @@ function Flights() {
         }
     }, [state]);
 
-    // --- 1. THE FETCH FUNCTION ---
+    // --- 1. THE FETCH FLIGHTS FUNCTION ---
     const fetchFlights = async (params = {}) => {
         setIsLoading(true);
         setError(null);
         try {
-            // ✅ UPDATED URL: Matches your folder structure
             const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/flightssearch.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -54,12 +54,10 @@ function Flights() {
 
             const data = await response.json();
 
-            // PHP returns { outbound: [...], return: [...] }
             if (data.outbound || data.return) {
                 setFlights(data.outbound || []);
                 setReturnFlights(data.return || []);
             } else if (Array.isArray(data)) {
-                 // Fallback if PHP returns simple array
                 setFlights(data);
                 setReturnFlights([]);
             } else {
@@ -75,9 +73,8 @@ function Flights() {
         }
     };
 
-    // --- 2. LOAD INITIAL FLIGHTS (Optional) ---
+    // --- 2. LOAD INITIAL FLIGHTS ---
     useEffect(() => {
-        // Automatically fetch all flights when page loads (empty params)
         fetchFlights({}); 
     }, []);
 
@@ -91,9 +88,43 @@ function Flights() {
         }
     };
 
-    // Placeholder for Booking (You can implement the fetch for booking later)
-    const handleBookFlight = async (flightId) => {
-        alert(`Booking Flight ID: ${flightId} for ${searchParams?.passengers || 1} passengers. (Backend pending)`);
+    // --- 4. HANDLE BOOKING (UPDATED) ---
+    const handleBookFlight = async (flightId, price, paymentDetails) => {
+        // ✅ A. Check if user is logged in
+        // Assuming you store 'user_id' in localStorage after login
+        const userId = localStorage.getItem("user_id");
+
+        if (!userId) {
+            alert("You must be logged in to book a flight.");
+            // Optional: navigate('/login'); 
+            return;
+        }
+
+        // ✅ B. Send Booking Request to PHP
+        try {
+            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/book_flight.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: userId,
+                    flight_id: flightId,
+                    price: price, // Sending the price to the backend
+                    payment: paymentDetails
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert("Reservation Successful! Your Booking ID is: " + (data.booking_id || "Confirmed"));
+            } else {
+                alert("Booking Failed: " + data.error);
+            }
+
+        } catch (err) {
+            console.error("Booking Error:", err);
+            alert("An error occurred while connecting to the server.");
+        }
     };
 
     function handleScroll() {
@@ -120,7 +151,6 @@ function Flights() {
                             <img id="slide-2" src={top2} alt="top2" />
                             <div className="pic-overlay"><h2>2. Hamad International Airport (Doha, Qatar)</h2></div>
                         </div>
-                        {/* ... Add other slides as needed ... */}
                          <div className="slide">
                             <img id="slide-3" src={top3} alt="top3" />
                              <div className="pic-overlay"><h2>3. Tokyo International Airport (Haneda)</h2></div>
@@ -154,7 +184,8 @@ function Flights() {
                         <FlightCard 
                             key={flight.flight_id || flight.id} 
                             flight={flight} 
-                            onBooked={() => handleBookFlight(flight.flight_id || flight.id)}
+                            // ✅ UPDATED: Pass params (id, price, payment) to the handler
+                            onBooked={(id, price, payment) => handleBookFlight(id, price, payment)}
                         />
                     ))}
 
@@ -167,7 +198,8 @@ function Flights() {
                                 <FlightCard 
                                     key={flight.flight_id || flight.id} 
                                     flight={flight} 
-                                    onBooked={() => handleBookFlight(flight.flight_id || flight.id)}
+                                    // ✅ UPDATED: Pass params (id, price, payment) to the handler
+                                    onBooked={(id, price, payment) => handleBookFlight(id, price, payment)}
                                 />
                             ))}
                         </>

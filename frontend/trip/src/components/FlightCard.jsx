@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import "./css/FlightCard.css";
+import "./css/FlightCard.css"; 
+// ✅ Import the SignUpForm so we can show it if they aren't logged in
+import SignUpForm from "../landingPage/components/SignUpForm"; 
 
 function formatTime(isoString) {
   if (!isoString) return "";
@@ -14,8 +16,10 @@ function formatDate(isoString) {
 }
 
 function FlightCard({ flight, returnDate = null, onBooked }) {
+  // --- STATE ---
   const [showPayment, setShowPayment] = useState(false);
-  
+  const [showLogin, setShowLogin] = useState(false); // ✅ Controls the Login Popup
+
   // Payment Form State
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -23,60 +27,61 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
   const [cvv, setCvv] = useState("");
   const [errors, setErrors] = useState({});
 
-  // --- DATA MAPPING FOR YOUR TABLE STRUCTURE ---
-  const f = flight ? {
-    id: flight.flight_id,
-    
-    // Use the combined ISO strings we created in PHP
-    departure_time: flight.departure_full_iso, 
-    arrival_time: flight.arrival_full_iso,
+  // --- 1. USER CHECK HELPER ---
+  const getUserId = () => {
+    const storedUser = localStorage.getItem("FT_user");
+    if (!storedUser) return null;
+    try {
+      const userObj = JSON.parse(storedUser);
+      return userObj.user_id || userObj.id || null;
+    } catch (e) {
+      return null;
+    }
+  };
 
-    // Location Info
+  // --- 2. HANDLE RESERVE CLICK ---
+  const handleReserveClick = () => {
+    const userId = getUserId();
+    if (userId) {
+      // User is logged in, go straight to payment
+      setShowPayment(true);
+    } else {
+      // User is NOT logged in, show Sign Up form
+      setShowLogin(true);
+    }
+  };
+
+  // --- 3. HANDLE LOGIN SUCCESS ---
+  const handleLoginSuccess = () => {
+    setShowLogin(false);
+    setShowPayment(true); // Open payment immediately after login
+  };
+
+  // --- DATA MAPPING ---
+  const f = flight ? {
+    id: flight.flight_id || flight.id,
+    departure_time: flight.departure_full_iso || new Date().toISOString(), 
+    arrival_time: flight.arrival_full_iso || new Date().toISOString(),
     departure_code: flight.depart_airport || "DEP",
     departure_city: flight.depart_country || "Departure City",
     arrival_code:   flight.des_airport    || "ARR",
     arrival_city:   flight.des_country    || "Arrival City",
-
-    // Flight Info
     airline_name:   flight.airline_name || `Flight #${flight.flight_id}`,
     flight_number:  `FL-${flight.flight_id}`,
     duration:       flight.duration_formatted || "0h",
     stops:          flight.stops === 0 ? "Non-Stop" : `${flight.stops} Stop(s)`,
-    
-    // Cost & Status
-    price:  flight.price,
-    class:  flight.class,
-    status: flight.status
-  } : {
-    // Demo Fallback
-    id: 999,
-    airline_name: 'Demo Airlines',
-    flight_number: 'D-123',
-    departure_code: 'DXB',
-    departure_city: 'Dubai',
-    arrival_code: 'LHR',
-    arrival_city: 'London',
-    departure_time: new Date().toISOString(),
-    arrival_time: new Date().toISOString(),
-    duration: '6h 30m',
-    stops: 'Non-Stop',
-    price: 399,
-    class: 'Economy',
-    status: 'Scheduled'
-  };
+    price:          Number(flight.price) || 0,
+    class:          flight.class || "Economy",
+    status:         flight.status || "Scheduled"
+  } : null;
 
-  const handleReserve = () => setShowPayment(true);
+  if (!f) return null;
 
+  // --- PAYMENT HANDLERS ---
   const handleClose = () => {
     setShowPayment(false);
     setCardName(""); setCardNumber(""); setExpiry(""); setCvv(""); setErrors({});
   };
-
-  // Simple handlers
-  const handleNameChange = (e) => setCardName(e.target.value);
-  const handleNumberChange = (e) => setCardNumber(e.target.value.replace(/\D/g, "").slice(0, 16));
-  const handleExpiryChange = (e) => setExpiry(e.target.value);
-  const handleCvvChange = (e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 3));
 
   const validate = () => {
     const newErrors = {};
@@ -91,8 +96,12 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    if (onBooked) await onBooked(f.id);
-    alert("Flight Reserved Successfully!");
+
+    const paymentData = { cardName, cardNumber, expiry, cvv };
+
+    if (onBooked) {
+        await onBooked(f.id, f.price, paymentData);
+    }
     handleClose();
   };
 
@@ -102,6 +111,7 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
 
   return (
     <>
+      {/* --- ORIGINAL UI PRESERVED --- */}
       <div className="flight-card">
         <div className="date-header">{dateLabel}</div>
 
@@ -150,7 +160,7 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
           <div className="booking-info">
             <div className="info-group">
               <span className="info-label">Price</span>
-              <span className="price">${Number(f.price).toFixed(0)}</span>
+              <span className="price">${f.price.toFixed(0)}</span>
             </div>
             <div className="info-group">
               <span className="info-label">Class</span>
@@ -167,24 +177,74 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
         </div>
 
         <div className="action-section">
-          <button className="reserve-btn" onClick={handleReserve}>Reserve</button>
+          {/* ✅ Changed onClick to check login first */}
+          <button className="reserve-btn" onClick={handleReserveClick}>Reserve</button>
         </div>
       </div>
       
-      {/* Payment Modal (Simplified for brevity - keep your existing modal JSX here) */}
+      {/* --- LOGIN OVERLAY (Shows if user not logged in) --- */}
+      {showLogin && (
+        <div className="flight-payment-overlay"> 
+           {/* Wrapping SignUpForm in your overlay style so it centers correctly */}
+           <SignUpForm 
+             formAppearing={setShowLogin} 
+             SetLoggedIn={handleLoginSuccess}
+             SetUserInfo={() => {}} 
+           />
+        </div>
+      )}
+
+      {/* --- PAYMENT MODAL (Uses YOUR original structure) --- */}
       {showPayment && (
         <div className="flight-payment-overlay">
            <div className="flight-payment-modal">
              <button className="flight-payment-close" onClick={handleClose}>×</button>
              <h2>Payment Details</h2>
+             
              <form className="flight-payment-form" onSubmit={handleSubmit}>
-                <input placeholder="Name" value={cardName} onChange={handleNameChange} className="flight-payment-group" />
-                <input placeholder="Card Number" value={cardNumber} onChange={handleNumberChange} className="flight-payment-group" />
-                <div className="flight-payment-row">
-                    <input placeholder="MM/YY" value={expiry} onChange={handleExpiryChange} />
-                    <input placeholder="CVV" value={cvv} onChange={handleCvvChange} />
+                {/* Wrapped inputs in divs to match your CSS .flight-payment-group */}
+                <div className="flight-payment-group">
+                    <label>Card Name</label>
+                    <input 
+                        value={cardName} 
+                        onChange={(e) => setCardName(e.target.value)} 
+                        placeholder="John Doe"
+                    />
                 </div>
-                <button type="submit" className="flight-pay-btn">Pay ${Number(f.price).toFixed(0)}</button>
+
+                <div className="flight-payment-group">
+                    <label>Card Number</label>
+                    <input 
+                        value={cardNumber} 
+                        onChange={(e) => setCardNumber(e.target.value)} 
+                        maxLength="16"
+                        placeholder="0000 0000 0000 0000"
+                    />
+                </div>
+                
+                <div className="flight-payment-row">
+                    <div className="flight-payment-group" style={{width: '100%'}}>
+                        <label>Expiry</label>
+                        <input 
+                            value={expiry} 
+                            onChange={(e) => setExpiry(e.target.value)} 
+                            placeholder="MM/YY"
+                        />
+                    </div>
+                    <div className="flight-payment-group" style={{width: '100%'}}>
+                        <label>CVV</label>
+                        <input 
+                            value={cvv} 
+                            onChange={(e) => setCvv(e.target.value)} 
+                            maxLength="3"
+                            placeholder="123"
+                        />
+                    </div>
+                </div>
+                
+                <button type="submit" className="flight-pay-btn">
+                    Pay ${f.price.toFixed(0)}
+                </button>
              </form>
            </div>
         </div>

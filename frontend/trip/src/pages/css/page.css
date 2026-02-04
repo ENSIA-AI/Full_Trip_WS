@@ -316,6 +316,85 @@
   }
 }
 
+/* --- Modal Overlay (Black Background) --- */
+.flight-payment-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark see-through background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Stays on top of everything */
+}
 
+/* --- Modal Box --- */
+.flight-payment-modal {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    color: #333;
+}
+
+/* --- Close Button --- */
+.flight-payment-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+/* --- Form Styles --- */
+.flight-payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.flight-payment-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box; /* Ensures padding doesn't break width */
+}
+
+.flight-payment-input.error {
+    border-color: red;
+}
+
+.flight-payment-row {
+    display: flex;
+    gap: 10px;
+}
+
+/* --- Pay Button --- */
+.flight-pay-btn {
+    background-color: #2e74c8; /* Match your theme color */
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.flight-pay-btn:hover {
+    background-color: #1a5494;
+}
 
 
