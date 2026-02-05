@@ -1,18 +1,19 @@
 <?php
-header("Access-Control-Allow-Origin: *", true);
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE", true);
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
-header("Access-Control-Allow-Credentials: true", true);
-header('Content-Type: application/json');
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+require '../Headers.php';
 require '../../Database.php';
 $db = connectDB();
 
+$SESSION_TIMEOUT = 60 * 60 * 24 * 7;
+session_set_cookie_params([
+    'lifetime' => $SESSION_TIMEOUT,
+    'path' => '/',
+    'httponly' => true,
+    'secure' => false,
+    'samesite' => 'Lax'
+]);
+session_save_path(__DIR__ . '/../../sessions');
 session_start();
-$_SESSION['user_id'] = 19;
+
 
 try {
 

@@ -143,6 +143,8 @@ function SideBar_MainWindow() {
                 </NavLink>
 
               </li>
+
+
             </ul>
           </div>
         </div>
@@ -160,12 +162,12 @@ function SideBar_MainWindow() {
               {
                 SideBar.map((item, index) => (
 
-                  <Route key={index} path={`Profile/${item.Section}/*`} element={<Suspense fallback={<h2 style={{textAlign:"center"}}>Loading ...</h2>}><item.Component /></Suspense>} ></Route>
+                  <Route key={index} path={`${item.Section}/*`} element={<Suspense fallback={<h2 style={{textAlign:"center"}}>Loading ...</h2>}><item.Component /></Suspense>} ></Route>
 
                 ))
 
               }
-              <Route path="Profile/Settings/*" element={<Suspense fallback={<h2 style={{textAlign:"center"}}>Loading...</h2>} ><Settings /></Suspense>}></Route>
+              <Route path="Settings/*" element={<Suspense fallback={<h2 style={{textAlign:"center"}}>Loading...</h2>} ><Settings /></Suspense>}></Route>
             </Routes>
 
           </div>

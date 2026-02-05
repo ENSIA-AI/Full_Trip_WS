@@ -1,12 +1,25 @@
 <?php
-
-
 require '../../Database.php';
 require '../Headers.php';
 
 
-$_SESSION['user_id'] = 19;
+
+
+$SESSION_TIMEOUT = 60 * 60 * 24 * 7;
+session_set_cookie_params([
+    'lifetime' => $SESSION_TIMEOUT,
+    'path' => '/',
+    'httponly' => true,
+    'secure' => false,
+    'samesite' => 'Lax'
+]);
+session_save_path(__DIR__ . '/../../sessions');
+session_start();
+
+
 $db = connectDB();
+
+
 
 try {
 

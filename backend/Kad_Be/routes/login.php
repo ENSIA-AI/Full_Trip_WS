@@ -30,6 +30,7 @@ session_set_cookie_params([
   'secure' => false,
   'samesite' => 'Lax'
 ]);
+session_save_path(__DIR__ . '/../../sessions');
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {

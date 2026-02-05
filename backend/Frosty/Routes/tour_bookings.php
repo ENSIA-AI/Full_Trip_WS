@@ -7,7 +7,7 @@ require '../../Database.php';
 $db = connectDB();
 
 
-$_SESSION['user_id'] = 19;
+session_start();
 
 
 try {
