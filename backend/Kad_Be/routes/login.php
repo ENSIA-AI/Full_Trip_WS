@@ -28,7 +28,7 @@ session_set_cookie_params([
   'path' => '/',
   'httponly' => true,
   'secure' => false,
-  'samesite' => 'None'
+  'samesite' => 'Lax'
 ]);
 session_start();
 
@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
   echo json_encode([
     'logged_in' => true,
+    'user_type' =>$_SESSION['user_type'],
     'email' => $_SESSION['email'],
     'user_id' => $_SESSION['user_id']
   ]);
@@ -60,7 +61,7 @@ if (!isset($input->email) || !isset($input->password)) {
 
 try {
   $db = connectDB();
-  $stmt = $db->prepare('SELECT user_id, first_name, last_name, email, country, state, currency, phone_num, password FROM users WHERE email = :email LIMIT 1');
+  $stmt = $db->prepare('SELECT user_id, first_name, last_name,user_type, email, country, state, currency, phone_num, password FROM users WHERE email = :email LIMIT 1');
   $stmt->execute([':email' => $input->email]);
   $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -84,6 +85,7 @@ try {
   session_regenerate_id(true);
   $_SESSION['user_id'] = $user['user_id'];
   $_SESSION['email'] = $user['email'];
+  $_SESSION['user_type'] =$user['user_type'];
 
   echo json_encode($user);
 } catch (Exception $e) {
