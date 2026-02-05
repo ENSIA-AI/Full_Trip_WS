@@ -28,7 +28,7 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
       if (resp.ok) {
         const user = await resp.json();
         SetLoggedIn(true);
-        const uObj = { UserName: (user.first_name || user.username || user.email), UserType: user.role || 'user', ...user };
+        const uObj = { UserName: user.first_name, UserType: user.user_type || 'user', ...user };
         SetUserInfo(uObj);
         localStorage.setItem('FT_user', JSON.stringify(uObj));
         formAppearing(false);
@@ -52,7 +52,7 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
 
     if (foundUser) {
       SetLoggedIn(true);
-      const uObj = { UserName: foundUser.username, UserType: foundUser.role, email: foundUser.email };
+      const uObj = { UserName: foundUser.username, UserType: foundUser.user_type, email: foundUser.email };
       SetUserInfo(uObj);
       localStorage.setItem('FT_user', JSON.stringify(uObj));
       formAppearing(false);

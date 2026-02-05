@@ -8,6 +8,8 @@ export default function Fbacks() {
   const [expandedItems, setExpandedItems] = useState([0]);
   const [feedback, setFeedback] = useState({ email: '', feedback: '' });
   const [sessionChecked, setSessionChecked] = useState(false);
+  const [emailFromSession, setEmailFromSession] = useState(false);
+  const [emailError, setEmailError] = useState('');
 
   function showDetails(index) {
     setExpandedItems((prev) => {
@@ -32,6 +34,7 @@ export default function Fbacks() {
         const data = await resp.json();
 
         setFeedback(f => ({ ...f, email: data.email }));
+        setEmailFromSession(true);
       } catch (err) {
         console.warn('Session check failed', err);
       } finally {
@@ -65,14 +68,24 @@ export default function Fbacks() {
 
   async function handelSubmit(e) {
     e.preventDefault();
+    const emailValue = (feedback.email || '').trim();
+    if (!emailFromSession) {
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+      if (!emailOk) {
+        setEmailError('Please enter a valid email address.');
+        return;
+      }
+    }
     try {
-      await addFeedback(feedback);
+      await addFeedback({ ...feedback, email: emailValue });
       setFeedback({ email: '', feedback: '' });
+      setEmailError('');
       alert('Feedback submitted successfully!');
     } catch (error) {
       alert('Failed to submit feedback. Please try again.');
       console.error(error);
     }
+    console.log(feedback.email);
   }
 
   return (
@@ -103,7 +116,7 @@ export default function Fbacks() {
         <h1 data-aos='fade-up'>Add Feedback Here:</h1>
         <p data-aos='fade-up'>Please fill the form below with your feedbacks.</p>
         <form onSubmit={handelSubmit}>
-          {sessionChecked && !feedback.email && (
+          {!emailFromSession && (
             <input
               type="email"
               data-aos="fade-up-left"
@@ -114,6 +127,11 @@ export default function Fbacks() {
               placeholder="enter your email here"
               required
             />
+          )}
+          {!emailFromSession && emailError && (
+            <small className="email-error" data-aos="fade-up-left">
+              {emailError}
+            </small>
           )}
 
           {sessionChecked && feedback.email && (
@@ -139,8 +157,6 @@ export default function Fbacks() {
           </button>
 
         </form>
-
-
       </div>
     </div >
   )

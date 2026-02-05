@@ -26,7 +26,7 @@ session_set_cookie_params([
   'path' => '/',
   'httponly' => true,
   'secure' => false,
-  'samesite' => 'None'
+  'samesite' => 'Lax'
 ]);
 session_start();
 
@@ -36,13 +36,9 @@ session_destroy();
 setcookie(session_name(), '', [
   'expires' => time() - 3600,
   'path' => '/',
-  'domain' => $_SERVER['HTTP_HOST'] ?? '',
   'secure' => false,
   'httponly' => true,
-  'samesite' => 'None'
+  'samesite' => 'Lax'
 ]);
-
-setcookie(session_name(), '', time() - 3600, '/', 'localhost');
-setcookie(session_name(), '', time() - 3600, '/');
 
 echo json_encode(['success' => true]);

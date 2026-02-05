@@ -1,22 +1,94 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faUser, faA, faM, faBolt, faGasPump, 
-    faClock, faMapLocation, faSpinner 
+    faClock, faMapLocation, faSpinner, faTriangleExclamation,
+    faPenToSquare 
 } from '@fortawesome/free-solid-svg-icons';
 import './Styles/CarRentals.css';
-
-// Fallback image
 import DefaultCar from './Images/bmw.svg'; 
 
-function CarCard({ Car, onCancel }) {
-    // 1. Calculate Days and Total Price dynamically
-    const start = new Date(Car.pickup_d);
-    const end = new Date(Car.return_d);
+// -------------------------------------------------------------------
+// 1. CONFIRMATION MODAL COMPONENT
+// -------------------------------------------------------------------
+function CancelModal({ onClose, onConfirm, isExpiredAction }) {
+    return (
+        <div className="paymentform-overlay">
+            <div className="Section" style={{ 
+                backgroundColor: "white", 
+                padding: "30px", 
+                borderRadius: "12px", 
+                maxWidth: "400px", 
+                textAlign: "center",
+                boxShadow: "0 4px 15px rgba(0,0,0,0.3)"
+            }}>
+                <div style={{ color: "#e74c3c", fontSize: "40px", marginBottom: "15px" }}>
+                    <FontAwesomeIcon icon={faTriangleExclamation} />
+                </div>
+                <h2>{isExpiredAction ? "Delete from History?" : "Cancel Reservation?"}</h2>
+                <p style={{ color: "#666", marginBottom: "25px" }}>
+                    {isExpiredAction 
+                        ? "This rental period has ended. Would you like to remove it from your history?" 
+                        : "Are you sure you want to cancel this booking? This action cannot be undone."}
+                </p>
+                
+                <div style={{ display: "flex", gap: "15px", justifyContent: "center" }}>
+                    <button 
+                        onClick={onClose}
+                        style={{
+                            padding: "10px 20px",
+                            border: "1px solid #ccc",
+                            backgroundColor: "white",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        Keep it
+                    </button>
+                    <button 
+                        onClick={onConfirm}
+                        style={{
+                            padding: "10px 20px",
+                            border: "none",
+                            backgroundColor: "#e74c3c",
+                            color: "white",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        {isExpiredAction ? "Yes, Delete" : "Yes, Cancel"}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// -------------------------------------------------------------------
+// 2. CAR CARD COMPONENT
+// -------------------------------------------------------------------
+function CarCard({ Car, onActionClick, onEditClick }) {
+    // FIX: Replace space with T to ensure Safari/Firefox parse MySQL dates correctly
+    // Example: "2024-10-10 10:00:00" -> "2024-10-10T10:00:00"
+    const safePickup = Car.pickup_d ? Car.pickup_d.replace(" ", "T") : new Date().toISOString();
+    const safeReturn = Car.return_d ? Car.return_d.replace(" ", "T") : new Date().toISOString();
+
+    const start = new Date(safePickup);
+    const end = new Date(safeReturn);
+    const now = new Date();
+
+    // LOGIC 1: Edit is allowed only BEFORE the pickup date starts
+    const isEditable = now < start;
+
+    // LOGIC 2: If the current date is PAST the return date, it's "Expired" (Delete logic)
+    const isExpired = now > end;
+
     const diffTime = Math.abs(end - start);
-    // Ensure at least 1 day is counted
     const daysRented = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
-    const totalPrice = daysRented * Car.price;
+    const totalPrice = daysRented * Number(Car.price);
 
     return (
         <div className="Section" style={{ backgroundColor: "white", marginBottom: "20px" }}>
@@ -27,27 +99,18 @@ function CarCard({ Car, onCancel }) {
                     onError={(e) => {e.target.src = DefaultCar}} 
                 />
                 <div className='CarDetails'>
-
-                    <div className='CarType'>
-                        {Car.car_type}
-                    </div>
-
+                    <div className='CarType'>{Car.car_type}</div>
                     <h2>{`${Car.car_brand} ${Car.model}`}</h2>
 
                     <div className='Amenities'>
-                        {/* car_passengers from cars table */}
                         <div className='Amenitie'> 
                             <FontAwesomeIcon icon={faUser} /> 
                             {`${Car.car_passengers} Passenger${(Car.car_passengers > 1) ? "s" : ""}`}
                         </div>
-                        
-                        {/* transmission from cars table */}
                         <div className='Amenitie'> 
                             <FontAwesomeIcon icon={(Car.transmission === "Automatic") ? faA : faM} /> 
                             {Car.transmission}
                         </div>
-                        
-                        {/* fuel_type from cars table */}
                         <div className='Amenitie'> 
                             <FontAwesomeIcon icon={(Car.fuel_type === "Electric" ? faBolt : faGasPump)} /> 
                             {Car.fuel_type}
@@ -68,13 +131,11 @@ function CarCard({ Car, onCancel }) {
                         </div>
                         <div className="DateIn">
                             <h4>Pick up:</h4>
-                            {/* pickup_d and pickup_l from car_reservations */}
                             <p><FontAwesomeIcon icon={faClock} className='Icon' /> {Car.pickup_d}</p>
                             <p><FontAwesomeIcon icon={faMapLocation} className='Icon' /> {Car.pickup_l}</p>
                         </div>
                         <div className="DateOut">
                             <h4>Return:</h4>
-                            {/* return_d and return_l from car_reservations */}
                             <p><FontAwesomeIcon icon={faClock} className='Icon' /> {Car.return_d}</p>
                             <p><FontAwesomeIcon icon={faMapLocation} className='Icon' /> {Car.return_l}</p>
                         </div>
@@ -82,31 +143,57 @@ function CarCard({ Car, onCancel }) {
                 </div>
             </div>
             
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+                
+                {/* EDIT BUTTON: Only visible if BEFORE pickup date and NOT cancelled */}
+                {isEditable && Car.status !== 'Cancelled' && (
+                    <button 
+                        className="SecondaryB"
+                        style={{ 
+                            backgroundColor: "#3498db", 
+                            borderColor: "#3498db", 
+                            color: "white",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px"
+                        }}
+                        onClick={() => onEditClick(Car)}
+                    >
+                        <FontAwesomeIcon icon={faPenToSquare} /> Edit
+                    </button>
+                )}
+
+                {/* CANCEL / DELETE BUTTON */}
                 <button 
                     className="SecondaryB RemoveCard" 
-                    onClick={() => onCancel(Car.creservation_id)}
+                    onClick={() => onActionClick(Car.creservation_id, isExpired)}
+                    style={isExpired ? { backgroundColor: "#555", borderColor: "#555" } : {}}
                 >
-                    Cancel Reservation
+                    {isExpired ? "Delete from History" : "Cancel Reservation"}
                 </button>
             </div>
         </div>
     );
 }
 
+// -------------------------------------------------------------------
+// 3. MAIN COMPONENT
+// -------------------------------------------------------------------
 function CarRentals() {
+    const navigate = useNavigate(); 
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState(null);
 
-    // 2. Fetch Logic
+    // Modal state
+    const [cancelTargetId, setCancelTargetId] = useState(null);
+    const [isExpiredTarget, setIsExpiredTarget] = useState(false);
+
     useEffect(() => {
-        // Getting user ID from localStorage as discussed
         const storedUser = localStorage.getItem("FT_user");
         if (storedUser) {
             try {
                 const userObj = JSON.parse(storedUser);
-                // "user_id" matches your users table PK
                 const uid = userObj.user_id || userObj.id; 
                 setUserId(uid);
                 fetchReservations(uid);
@@ -133,28 +220,39 @@ function CarRentals() {
         }
     };
 
-    // 3. Cancel Logic
-    const handleCancel = async (reservationId) => {
-        if (!window.confirm("Are you sure you want to cancel this reservation?")) return;
+    const confirmAction = async () => {
+        if (!cancelTargetId) return;
 
         try {
             const response = await fetch('http://localhost/FULL_TRIP_WS/backend/Mohammed/Cars/cancel_reservation.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ reservation_id: reservationId })
+                body: JSON.stringify({ reservation_id: cancelTargetId })
             });
             
             const result = await response.json();
             
             if (result.success) {
-                // Remove from UI immediately
-                setReservations(prev => prev.filter(r => r.creservation_id !== reservationId));
+                setReservations(prev => prev.filter(r => r.creservation_id !== cancelTargetId));
+                setCancelTargetId(null);
             } else {
-                alert("Failed to cancel: " + (result.error || "Unknown error"));
+                alert("Action failed: " + (result.error || "Unknown error"));
             }
         } catch (error) {
             alert("Connection error");
         }
+    };
+
+    // NAVIGATE TO FORM WITH DATA
+    const handleEdit = (carData) => {
+        // Navigates to the search/form page, passing the specific reservation data
+        // FIX: Changed path to '/Car Rental' to match App.js
+        navigate('/Car Rental', { 
+            state: { 
+                editMode: true, 
+                reservationToEdit: carData 
+            } 
+        });
     };
 
     if (loading) {
@@ -185,13 +283,25 @@ function CarRentals() {
                     <CarCard 
                         key={res.creservation_id} 
                         Car={res} 
-                        onCancel={handleCancel} 
+                        onEditClick={handleEdit}
+                        onActionClick={(id, isExpired) => {
+                            setCancelTargetId(id);
+                            setIsExpiredTarget(isExpired);
+                        }} 
                     />
                 ))
             ) : (
                 <div style={{textAlign:'center', padding:'40px', color:'#666'}}>
                     <h3>No reservations found.</h3>
                 </div>
+            )}
+
+            {cancelTargetId && (
+                <CancelModal 
+                    isExpiredAction={isExpiredTarget}
+                    onClose={() => setCancelTargetId(null)} 
+                    onConfirm={confirmAction} 
+                />
             )}
         </div>
     );

@@ -26,7 +26,7 @@ session_set_cookie_params([
   'path' => '/',
   'httponly' => true,
   'secure' => false,
-  'samesite' => 'None'
+  'samesite' => 'Lax'
 ]);
 session_start();
 
