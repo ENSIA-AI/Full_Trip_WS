@@ -18,12 +18,15 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
   // --- STATE ---
   const [showPayment, setShowPayment] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false); 
 
-  // Payment Form State
-  const [cardName, setCardName] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [cvv, setCvv] = useState("");
+  // --- 🟢 UPDATED PAYMENT STATE (Consolidated for easier management) ---
+  const [paymentData, setPaymentData] = useState({
+    cardName: "", 
+    cardNumber: "", 
+    expiry: "", 
+    cvv: ""
+  });
   const [errors, setErrors] = useState({});
 
   // --- 1. USER CHECK HELPER ---
@@ -77,30 +80,84 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
   // --- PAYMENT HANDLERS ---
   const handleClose = () => {
     setShowPayment(false);
-    setCardName(""); setCardNumber(""); setExpiry(""); setCvv(""); setErrors({});
+    setPaymentData({ cardName: "", cardNumber: "", expiry: "", cvv: "" });
+    setErrors({});
   };
 
-  // ✅ IMPROVED VALIDATION LOGIC
+  // --- 🟢 NEW: INPUT CHANGE HANDLER (Auto-formatting) ---
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let newValue = value;
+
+    // Card Number: Add space every 4 digits
+    if (name === "cardNumber") {
+        const rawValue = value.replace(/\D/g, ""); 
+        newValue = rawValue.replace(/(\d{4})(?=\d)/g, "$1 ").slice(0, 19); 
+    }
+    
+    // Expiry: Auto-insert slash
+    if (name === "expiry") {
+        if (value.length < paymentData.expiry.length && paymentData.expiry.endsWith('/')) {
+             newValue = value.slice(0, -1); // Handle backspace
+        } else {
+             const rawValue = value.replace(/\D/g, "");
+             if (rawValue.length >= 2) {
+                 newValue = rawValue.slice(0, 2) + '/' + rawValue.slice(2, 4);
+             } else {
+                 newValue = rawValue;
+             }
+        }
+    }
+
+    // CVV: Numbers only
+    if (name === "cvv") {
+        newValue = value.replace(/\D/g, "").slice(0, 3);
+    }
+
+    setPaymentData(p => ({ ...p, [name]: newValue }));
+    
+    // Clear error for this field as user types
+    if (errors[name]) setErrors(e => ({ ...e, [name]: "" }));
+  };
+
+  // --- 🟢 NEW: ROBUST VALIDATION LOGIC ---
   const validate = () => {
     const newErrors = {};
+    const currentYear = new Date().getFullYear() % 100; // Last 2 digits
+    const currentMonth = new Date().getMonth() + 1; 
+
+    // 1. Validate Name
+    if (!paymentData.cardName.trim()) newErrors.cardName = "Name is required";
     
-    // Validate Name
-    if (!cardName.trim()) newErrors.cardName = "Name on card is required";
-    
-    // Validate Card Number (Remove spaces first)
-    const cleanCardNum = cardNumber.replace(/\s/g, "");
-    if (!cleanCardNum || cleanCardNum.length < 16 || isNaN(cleanCardNum)) {
-      newErrors.cardNumber = "Enter a valid 16-digit card number";
+    // 2. Validate Card Number (Length check)
+    const cleanCardNum = paymentData.cardNumber.replace(/\s/g, "");
+    if (cleanCardNum.length !== 16) {
+      newErrors.cardNumber = "Must be 16 digits";
     }
 
-    // Validate Expiry (MM/YY format)
-    if (!expiry || !/^\d{2}\/\d{2}$/.test(expiry)) {
-       newErrors.expiry = "Format: MM/YY";
+    // 3. Validate Expiry (Date Logic)
+    if (!paymentData.expiry) {
+        newErrors.expiry = "Required";
+    } else {
+        const [month, year] = paymentData.expiry.split('/');
+        
+        if (!month || !year || month.length !== 2 || year.length !== 2) {
+            newErrors.expiry = "Format MM/YY";
+        } else {
+            const m = parseInt(month, 10);
+            const y = parseInt(year, 10);
+
+            if (m < 1 || m > 12) {
+                newErrors.expiry = "Invalid Month";
+            } else if (y < currentYear || (y === currentYear && m < currentMonth)) {
+                newErrors.expiry = "Card expired";
+            }
+        }
     }
 
-    // Validate CVV
-    if (!cvv || cvv.length < 3 || isNaN(cvv)) {
-      newErrors.cvv = "Invalid CVV";
+    // 4. Validate CVV
+    if (paymentData.cvv.length !== 3) {
+      newErrors.cvv = "Must be 3 digits";
     }
 
     setErrors(newErrors);
@@ -111,12 +168,17 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
     e.preventDefault();
     if (!validate()) return; // Stop if validation fails
 
-    const paymentData = { cardName, cardNumber, expiry, cvv };
-
     if (onBooked) {
         await onBooked(f.id, f.price, paymentData);
     }
-    handleClose();
+    
+    // Close Payment Modal
+    setShowPayment(false);
+    // Reset Fields
+    setPaymentData({ cardName: "", cardNumber: "", expiry: "", cvv: "" });
+    setErrors({});
+    // Show Success Modal
+    setShowSuccess(true);
   };
 
   const dateLabel = returnDate
@@ -180,7 +242,7 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
             <div className="info-group">
               <span className="info-label">Status</span>
               <span className={`status-badge ${f.status === 'Scheduled' ? 'green' : 'gray'}`} 
-                    style={{color: f.status === 'Scheduled' ? 'green' : 'gray'}}>
+                   style={{color: f.status === 'Scheduled' ? 'green' : 'gray'}}>
                 {f.status}
               </span>
             </div>
@@ -195,11 +257,13 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
       {/* --- LOGIN OVERLAY --- */}
       {showLogin && (
         <div className="flight-payment-overlay"> 
-           <SignUpForm 
-             formAppearing={setShowLogin} 
-             SetLoggedIn={handleLoginSuccess}
-             SetUserInfo={() => {}} 
-           />
+           <div style={{background: 'rgba(0,0,0,0.8)', padding: '20px', borderRadius:'10px'}}>
+               <SignUpForm 
+                 formAppearing={setShowLogin} 
+                 SetLoggedIn={handleLoginSuccess}
+                 SetUserInfo={() => {}} 
+               />
+           </div>
         </div>
       )}
 
@@ -216,12 +280,11 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
                 <div className="flight-payment-group">
                     <label>Card Name</label>
                     <input 
+                        type="text"
+                        name="cardName"
                         className={errors.cardName ? "input-error" : ""}
-                        value={cardName} 
-                        onChange={(e) => {
-                            setCardName(e.target.value);
-                            if (errors.cardName) setErrors({...errors, cardName: null});
-                        }} 
+                        value={paymentData.cardName} 
+                        onChange={handleChange}
                         placeholder="John Doe"
                     />
                     {errors.cardName && <span className="error-text">{errors.cardName}</span>}
@@ -231,12 +294,11 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
                 <div className="flight-payment-group">
                     <label>Card Number</label>
                     <input 
+                        type="text"
+                        name="cardNumber"
                         className={errors.cardNumber ? "input-error" : ""}
-                        value={cardNumber} 
-                        onChange={(e) => {
-                            setCardNumber(e.target.value);
-                            if (errors.cardNumber) setErrors({...errors, cardNumber: null});
-                        }} 
+                        value={paymentData.cardNumber} 
+                        onChange={handleChange}
                         maxLength="19"
                         placeholder="0000 0000 0000 0000"
                     />
@@ -248,12 +310,11 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
                     <div className="flight-payment-group" style={{width: '100%'}}>
                         <label>Expiry</label>
                         <input 
+                            type="text"
+                            name="expiry"
                             className={errors.expiry ? "input-error" : ""}
-                            value={expiry} 
-                            onChange={(e) => {
-                                setExpiry(e.target.value);
-                                if (errors.expiry) setErrors({...errors, expiry: null});
-                            }} 
+                            value={paymentData.expiry} 
+                            onChange={handleChange}
                             placeholder="MM/YY"
                             maxLength="5"
                         />
@@ -264,12 +325,11 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
                     <div className="flight-payment-group" style={{width: '100%'}}>
                         <label>CVV</label>
                         <input 
+                            type="text"
+                            name="cvv"
                             className={errors.cvv ? "input-error" : ""}
-                            value={cvv} 
-                            onChange={(e) => {
-                                setCvv(e.target.value);
-                                if (errors.cvv) setErrors({...errors, cvv: null});
-                            }} 
+                            value={paymentData.cvv} 
+                            onChange={handleChange}
                             maxLength="3"
                             placeholder="123"
                         />
@@ -281,6 +341,26 @@ function FlightCard({ flight, returnDate = null, onBooked }) {
                     Pay ${f.price.toFixed(0)}
                 </button>
              </form>
+           </div>
+        </div>
+      )}
+
+      {/* --- SUCCESS POPUP --- */}
+      {showSuccess && (
+        <div className="flight-payment-overlay">
+           <div className="flight-payment-modal success-content">
+              <div className="success-icon-container">
+                 <svg className="success-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                 </svg>
+              </div>
+              <h2 className="success-title">Payment Successful!</h2>
+              <p className="success-text">
+                 Your flight to <strong>{f.arrival_city}</strong> has been booked successfully.
+              </p>
+              <button className="done-btn" onClick={() => setShowSuccess(false)}>
+                 Done
+              </button>
            </div>
         </div>
       )}
