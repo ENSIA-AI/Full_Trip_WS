@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import FlightCard from "../components/FlightCard.jsx";
 import Footer2 from "../components/Footer2"
 import Searcharea from "../components/SearchbarF.jsx"; 
-import { useLocation, useNavigate } from "react-router-dom"; // Added useNavigate
+import { useLocation, useNavigate } from "react-router-dom"; 
 
 // Images
 import top1 from './pics/Atop1.jpg'
@@ -22,7 +22,7 @@ import './css/page.css'
 
 function Flights() {
     const { state } = useLocation();
-    const navigate = useNavigate(); // For redirecting to login if needed
+    const navigate = useNavigate(); 
     const refrence = useRef(null);
     
     // State
@@ -44,6 +44,7 @@ function Flights() {
         setIsLoading(true);
         setError(null);
         try {
+            // Check this path matches your folder structure exactly
             const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/flightssearch.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -88,19 +89,37 @@ function Flights() {
         }
     };
 
-    // --- 4. HANDLE BOOKING (UPDATED) ---
+    // --- 4. HANDLE BOOKING (UPDATED FOR REFRESH & RED STATUS) ---
     const handleBookFlight = async (flightId, price, paymentDetails) => {
-        // ✅ A. Check if user is logged in
-        // Assuming you store 'user_id' in localStorage after login
-        const userId = localStorage.getItem("user_id");
+        // 1. Check User Session
+        const storedUser = localStorage.getItem("FT_user"); 
 
-        if (!userId) {
-            alert("You must be logged in to book a flight.");
-            // Optional: navigate('/login'); 
+        if (!storedUser) {
+            // ✅ FORCE BROWSER REFRESH TO LOGIN PAGE
+            if (window.confirm("You must be logged in to book a flight. Go to Login page?")) {
+                window.location.href = "/Login"; // This forces a full reload
+            }
             return;
         }
 
-        // ✅ B. Send Booking Request to PHP
+        // 2. Parse User ID
+        let userId = null;
+        try {
+            const userObj = JSON.parse(storedUser);
+            userId = userObj.user_id || userObj.id;
+        } catch (e) {
+            console.error("JSON Parse Error:", e);
+            localStorage.removeItem("FT_user");
+            window.location.reload(); 
+            return;
+        }
+
+        if (!userId) {
+            alert("User ID not found. Please log in again.");
+            return;
+        }
+
+        // 3. Send to Backend (Using book_flight.php)
         try {
             const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/book_flight.php", {
                 method: "POST",
@@ -108,22 +127,40 @@ function Flights() {
                 body: JSON.stringify({
                     user_id: userId,
                     flight_id: flightId,
-                    price: price, // Sending the price to the backend
-                    payment: paymentDetails
+                    amount: price, 
+                    payment_details: paymentDetails
                 }),
             });
 
             const data = await response.json();
 
-            if (data.success) {
-                alert("Reservation Successful! Your Booking ID is: " + (data.booking_id || "Confirmed"));
+            if (data.success || response.ok) {
+                alert("Reservation Successful! Flight Booked.");
+
+                // ✅ UPDATE UI INSTANTLY: Set status to "Reserved" (Red)
+                // This updates the local list without needing to refresh the page
+                setFlights(prevFlights => prevFlights.map(flight => {
+                    if (flight.flight_id === flightId || flight.id === flightId) {
+                        return { ...flight, status: "Reserved" }; 
+                    }
+                    return flight;
+                }));
+
+                // Update Return Flights if they exist
+                setReturnFlights(prev => prev.map(flight => {
+                    if (flight.flight_id === flightId || flight.id === flightId) {
+                        return { ...flight, status: "Reserved" };
+                    }
+                    return flight;
+                }));
+
             } else {
-                alert("Booking Failed: " + data.error);
+                alert("Booking Failed: " + (data.message || data.error || "Unknown error"));
             }
 
         } catch (err) {
-            console.error("Booking Error:", err);
-            alert("An error occurred while connecting to the server.");
+            console.error("Booking Fetch Error:", err);
+            alert("An error occurred. Check if XAMPP is running.");
         }
     };
 
@@ -184,8 +221,8 @@ function Flights() {
                         <FlightCard 
                             key={flight.flight_id || flight.id} 
                             flight={flight} 
-                            // ✅ UPDATED: Pass params (id, price, payment) to the handler
-                            onBooked={(id, price, payment) => handleBookFlight(id, price, payment)}
+                            // Using standard prop 'onBook' as discussed, or keep 'onBooked' if your card uses that
+                            onBook={(id, price, payment) => handleBookFlight(id, price, payment)}
                         />
                     ))}
 
@@ -198,8 +235,7 @@ function Flights() {
                                 <FlightCard 
                                     key={flight.flight_id || flight.id} 
                                     flight={flight} 
-                                    // ✅ UPDATED: Pass params (id, price, payment) to the handler
-                                    onBooked={(id, price, payment) => handleBookFlight(id, price, payment)}
+                                    onBook={(id, price, payment) => handleBookFlight(id, price, payment)}
                                 />
                             ))}
                         </>

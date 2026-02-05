@@ -4,7 +4,6 @@
   box-sizing: border-box;
 }
 
-
 .hotel-card {
   display: flex;
   flex-direction: row;
@@ -14,6 +13,7 @@
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  margin-bottom: 30px;
 }
 
 .hotel-image {
@@ -125,6 +125,7 @@
 .pricing {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 30px;
   padding: 20px 0;
   border-top: 2px solid #f0f0f0;
@@ -135,6 +136,7 @@
   display: flex;
   align-items: baseline;
   gap: 6px;
+  flex-direction: column;
 }
 
 .amount {
@@ -144,74 +146,32 @@
 }
 
 .per-night {
-  font-size: 16px;
+  font-size: 14px;
   color: #666;
 }
 
 .total {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
 }
 
 .total-label {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  color: #1a1a1a;
-}
-
-.total-amount {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1a1a1a;
-}
-
-.reservation-info {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.value {
-  font-size: 16px;
   color: #666;
 }
 
-.nights-badge {
-  background: #fef3e7;
-  color: #d68a4a;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  display: inline-block;
-  width: fit-content;
-}
-
-.status-badge {
-  background: #c8f4d5;
-  color: #2d6a3e;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  display: inline-block;
-  width: fit-content;
+.total-amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2ecc71;
 }
 
 .reserve-btn {
   margin-top: 20px;
-  background: #ff6b35 ;
+  background: #ff6b35;
   color: white;
   border: none;
   padding: 16px 32px;
@@ -220,102 +180,34 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  align-self: stretch;
+  width: 100%;
   text-align: center;
-  display: inline-block;
-  min-width: 180px;
-  box-sizing: border-box;
 }
 
 .reserve-btn:hover {
-  background: #ff6b35;
+  background: #e05a2b;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
 }
 
-/* RESPONSIVE FIXES */
-@media (max-width: 768px) {
-  .reserve-btn {
-    width: 100%;
-    padding: 16px;
-    font-size: 16px;
-  }
+.reserve-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
-@media (max-width: 576px) {
-  .reserve-btn {
-    width: 100%;
-    font-size: 14px;
-    padding: 14px;
-  }
-}
-
-
-/* RESPONSIVE STYLES */
-@media (max-width: 1000px) {
-  .hotel-image {
-    display: none;
-  }
-
-  .hotel-card {
-    flex-direction: column;
-  }
-
-  .hotel-details {
-    padding: 30px 20px;
-  }
-
-  .reservation-info {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 576px) {
-  .hotel-details {
-    padding: 20px;
-    gap: 16px;
-  }
-
-  .hotel-name {
-    font-size: 22px;
-  }
-
-  .amenities {
-    gap: 8px;
-  }
-
-  .amenity {
-    padding: 8px 14px;
-    font-size: 13px;
-  }
-
-  .reservation-info {
-    grid-template-columns: 1fr;
-  }
-
-  .pricing {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .reserve-btn {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-
+/* --- PAYMENT MODAL --- */
 .payment-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 
@@ -323,16 +215,17 @@
   background: #fff;
   padding: 30px 40px;
   border-radius: 16px;
-  width: 400px;
+  width: 420px;
   max-width: 90%;
   position: relative;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
 .payment-content h2 {
   margin-bottom: 20px;
   font-size: 22px;
   text-align: center;
+  color: #333;
 }
 
 .payment-form {
@@ -356,6 +249,7 @@
   border: 2px solid #f0f0f0;
   font-size: 14px;
   outline: none;
+  width: 100%;
 }
 
 .payment-form input:focus {
@@ -367,48 +261,210 @@
   gap: 10px;
 }
 
+.row > label {
+    flex: 1;
+}
+
 .pay-btn {
-  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
-  color: white;
+  width: 100%;
+  padding: 12px;
   border: none;
-  padding: 12px 0;
-  border-radius: 10px;
+  border-radius: 8px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #ff5722 !important; 
+  color: white !important;
+}
+
+.pay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
+  background-color: white !important;
+  color: #ff5722 !important;
+  border: 1px solid #ff5722 !important;
 }
 
 .close-btn {
   position: absolute;
   top: 10px;
   right: 15px;
-  font-size: 24px;
+  font-size: 28px;
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #333;
+  color: #999;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.input-error {
+   border-color: #e74c3c !important;
+   background-color: #fdf2f2;
+}
+
+.error {
+   color: #e74c3c;
+   font-size: 0.75rem;
+   margin-top: 2px;
+   font-weight: 600;
+}
+
+@media (max-width: 1000px) {
+  .hotel-image {
+    display: none;
+  }
+  .hotel-card {
+    flex-direction: column;
+  }
+  .hotel-details {
+    padding: 30px 20px;
+  }
 }
 
 @media (max-width: 576px) {
-  .payment-content {
-    padding: 20px;
-  }
-
-  .row {
+  .pricing {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .total {
+    align-items: flex-start;
   }
 }
 
-.payment-form .error {
-  font-size: 0.8rem;
-  margin-top: 4px;
-  display: block;
-  color: #d32f2f;
+/* =========================================
+   PAYMENT SUMMARY BOX (Hotel Specific)
+   ========================================= */
+
+.payment-summary-box {
+  background: #f8f9fa; /* Light Gray Background */
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  border: 1px solid #edf2f7;
 }
 
-.payment-form .error {
-  font-size: 0.8rem;
-  margin-top: 4px;
-  display: block;
-  color: #d32f2f;
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #a0aec0; /* Muted Gray Label */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748; /* Dark Gray Value */
+}
+
+.summary-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 15px 0;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-due-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: #a0aec0;
+}
+
+.total-due-amount {
+  font-size: 24px;
+  font-weight: 800;
+  color: #2ecc71; /* VIBRANT GREEN for Price */
+}
+
+
+/* =========================================
+   SUCCESS POPUP STYLES
+   ========================================= */
+
+.success-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 30px !important;
+}
+
+.success-icon-container {
+  width: 80px;
+  height: 80px;
+  background: #2ecc71; /* Green background */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 25px rgba(46, 204, 113, 0.4);
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.success-check {
+  color: white;
+  width: 40px;
+  height: 40px;
+}
+
+.success-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.success-text {
+  font-size: 15px;
+  color: #7f8c8d;
+  margin-bottom: 30px;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+.done-btn {
+  background: #2c3e50;
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.done-btn:hover {
+  background: #34495e;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
