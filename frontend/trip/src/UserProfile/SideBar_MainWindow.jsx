@@ -72,7 +72,7 @@ function SideBar_MainWindow() {
     { Section: "Costumers", icon: faUsers, Component: Ag_Costumers }
   ]
 
-  const SideBar = (UserInfo.U_type === "Agency") ? AgencySideBar : RegUserSideBar;
+  const SideBar = (UserInfo.U_type === "agency") ? AgencySideBar : RegUserSideBar;
 
   //SideBar Functions
 
@@ -143,13 +143,6 @@ function SideBar_MainWindow() {
                 </NavLink>
 
               </li>
-              <li>
-                <NavLink to="/" className={({ isActive }) => (isActive ? "MainLink active" : "MainLink")}>
-                  <FontAwesomeIcon icon={BottomMenu[1].icon} className="Icon" style={{ fontSize: DashBoard ? "1.2em" : "1.3em" }}></FontAwesomeIcon>
-                  <p style={{ display: DashBoard ? "" : "none" }}>{BottomMenu[1].Section}</p>
-                </NavLink>
-              </li>
-
             </ul>
           </div>
         </div>
@@ -162,7 +155,7 @@ function SideBar_MainWindow() {
           } U_type={UserInfo.U_type}></ProfileHeader>
           <div style={{ padding: "20px" }}>
             <Routes>
-              <Route index element={<Navigate to={(UserInfo.U_type === "Agency") ? "Overview" : "Flights"} replace />} />
+              <Route index element={<Navigate to={(UserInfo.U_type === "agency") ? "Overview" : "Flights"} replace />} />
 
               {
                 SideBar.map((item, index) => (
