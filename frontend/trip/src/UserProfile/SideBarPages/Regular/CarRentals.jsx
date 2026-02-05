@@ -245,10 +245,9 @@ function CarRentals() {
 
     // NAVIGATE TO FORM WITH DATA
     const handleEdit = (carData) => {
-        // ⚠️ CRITICAL: Ensure '/car-rental' matches the route path in your App.js for the Search Page
-        // If your App.js says <Route path="/car-rentals" element={<CarRentals />} />, then change this line to '/car-rentals'
-        // If the page goes blank, it usually means this path is wrong.
-        navigate('/car-rental', { 
+        // Navigates to the search/form page, passing the specific reservation data
+        // FIX: Changed path to '/Car Rental' to match App.js
+        navigate('/Car Rental', { 
             state: { 
                 editMode: true, 
                 reservationToEdit: carData 
