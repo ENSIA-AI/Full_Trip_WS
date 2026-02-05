@@ -2,7 +2,7 @@ import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faShield, faCreditCard, faWallet, faLocationDot, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import './Styles/Settings.css'
 import api from "../../API/PHP_API";
 
@@ -51,22 +51,31 @@ function Settings() {
     );
 }
 
-
-
-
-const response = await api.get('./Settings.php');
-const result = response.data;
-const user_data = result.data;
-
-
-
-
-
-
 function Profile() {
+    const [user, setuser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await api.get('./Settings.php');
+                const result = response.data;
+                const user_data = result.data;
+                setuser(user_data);
+                console.log(user_data);
+            } catch (err) {
+                setError(err.message);
+                console.error('Error fetching user data:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
 
-    const [user, setuser] = useState(user_data);
 
 
 
@@ -77,12 +86,24 @@ function Profile() {
     const addressIn = useRef();
 
     const [formData, setFormData] = useState({
-        firstName: user.first_name,
-        lastName: user.last_name,
-        email: user.email,
-        phoneNumber: user.phone_num,
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
     });
     const [errors, setErrors] = useState({});
+
+    // Update formData when user data is loaded
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                firstName: user.first_name || '',
+                lastName: user.last_name || '',
+                email: user.email || '',
+                phoneNumber: user.phone_num || '',
+            });
+        }
+    }, [user]);
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -143,7 +164,7 @@ function Profile() {
 
 
         // Phone
-        const phoneRegex = /^\+?(05|06|07|2135|2136|2137)[0-9]{8}$/;
+        const phoneRegex = /^\+?(0|213|213\s?)([567])[0-9]{8}$/;
 
         if (!values.phoneNumber.trim()) {
             newErrors.phoneNumber = "Phone number is required.";
@@ -179,10 +200,10 @@ function Profile() {
     }
     function handleReset() {
         setFormData({
-            firstName: user.first_name,
-            lastName: user.last_name,
-            email: user.email,
-            phoneNumber: user.phone_num,
+            firstName: user?.first_name || '',
+            lastName: user?.last_name || '',
+            email: user?.email || '',
+            phoneNumber: user?.phone_num || '',
 
         });
 
@@ -196,6 +217,10 @@ function Profile() {
     }
 
 
+
+    if (loading) return <h2 style={{ textAlign: 'center' }}>Loading...</h2>;
+    if (error) return <h2 style={{ textAlign: 'center', color: 'red' }}>Error: {error}</h2>;
+    if (!user) return <h2 style={{ textAlign: 'center' }}>No user data found</h2>;
 
     return (<>
 
@@ -290,7 +315,7 @@ function Security() {
             if (response.data === "password updated") {
                 alert("Password Updated!");
             }
-            else{
+            else {
                 alert("Failed to update password");
             }
 

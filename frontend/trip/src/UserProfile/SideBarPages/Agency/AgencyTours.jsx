@@ -306,14 +306,6 @@ function AddTour() {
                                     {errors.description && <small className="error">{errors.description}</small>}
                                 </div>
                             </div>
-                            <div >
-                                <label className="Upload" htmlFor="upload">
-                                    <input id="upload" type="file" style={{ display: "none" }}></input>
-                                    <FontAwesomeIcon className="Icon" icon={faUpload}></FontAwesomeIcon>
-                                    <p> Click to Upload or drag and Drop</p>
-                                    <p>PNG, JPG, or WebP (max. 5MB)</p>
-                                </label>
-                            </div>
 
                         </div>
 
