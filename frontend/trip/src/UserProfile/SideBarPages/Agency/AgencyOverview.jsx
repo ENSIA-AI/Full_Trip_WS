@@ -4,6 +4,7 @@ import './styles/AgencyOverview.css'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { faUsers, faCompass, faDollar, faXmark } from '@fortawesome/free-solid-svg-icons';
 import StatsCard from '../../UI/StatCard';
+import api from '../../API/PHP_API';
 
 const data = [
     { Month: "Jan", count: 68 },
@@ -30,52 +31,32 @@ const bookings = [
 
 
 
+const response = await api.get('./overview.php');
+
+
+const result=response.data;
+
+let recent_Bookings;
+
+if(result.status==="success"){
+    recent_Bookings=result.data;
+}
+else{
+    console.error(result.ERR);
+}
+
+
 
 
 
 
 function AgencyOverview() {
 
+    console.log(recent_Bookings);
+
     return (<>
 
         <div className='S_Container'>
-            <div className='Stats'>
-                <StatsCard Title="Total Bookings" Number={213} Icon={faUsers} Change_rate={-8} ></StatsCard>
-                <StatsCard Title="Tours" Number={2} Icon={faCompass} ></StatsCard>
-                <StatsCard Title="Revenu" Number={49123} Icon={faDollar} ></StatsCard>
-                <StatsCard Title="Cancelations" Number={213} Icon={faXmark} ></StatsCard>
-            </div>
-            {/*Graph-------------------------------------------- */}
-            <div className=' Section'>
-                <div className='SecHeader'>
-                    <h2>Costumers Statistics:</h2>
-                    <p>Review your Agency Statistics</p>
-                </div>
-                <div className="Graph">
-                    <ResponsiveContainer width={1000} height={500}>
-                        <LineChart data={data}>
-                            <CartesianGrid stroke="#ccc" />
-                            <XAxis dataKey="Month" />
-                            <YAxis domain={[0, 'dataMax + 20']} />
-                            <Tooltip
-                                wrapperStyle={{ backgroundColor: "#222", border: "1px solid #555", borderRadius: "0.625em" }}
-                                contentStyle={{ backgroundColor: "#333", color: "#fff", borderRadius: "0.625em" }}
-                                itemStyle={{ color: "#0ff" }}
-                                labelStyle={{ color: "#ccc", fontWeight: "bold" }}
-                            />
-                            <Line type={"linear"} dataKey="count" stroke="#e74211" strokeWidth={3} />
-                        </LineChart>
-                    </ResponsiveContainer>
-
-                    <div className="GraphKeys">
-                        <div className="Key">
-                            <div className="square" style={{ backgroundColor: "#e74211" }}></div>
-                            <p>Costumers</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
 
             {/*LastBookings-------------------------------------*/}
             <div className='Section'>
@@ -90,17 +71,16 @@ function AgencyOverview() {
                             <th>Costumer</th>
                             <th>Tour</th>
                             <th>Date</th>
-                            <th>Amount</th>
+
                             <th>Status</th>
                         </tr>
-                        {bookings.map((Booking, index) => (
+                        {recent_Bookings.map((Booking, index) => (
                             <tr key={index}>
-                                <td>{Booking.BookingID}</td>
-                                <td>{Booking.Customer}</td>
-                                <td>{Booking.Tour}</td>
-                                <td>{Booking.Date}</td>
-                                <td className='Money'>{Booking.Amount} $</td>
-                                <td><div className={Booking.Status}>{Booking.Status}</div></td>
+                                <td>{Booking.id}</td>
+                                <td>{Booking.first_name}</td>
+                                <td>{Booking.tour_name}</td>
+                                <td>{Booking.reserved_at.split(' ')[0]}</td>
+                                <td><div className={Booking.status}>{Booking.status}</div></td>
                             </tr>
                         ))}
                     </table>
