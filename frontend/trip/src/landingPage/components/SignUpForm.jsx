@@ -1,7 +1,7 @@
 import '../styles/header&signUp.css'
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Users from '../../../Temp/TempUsers.json';
+
 
 function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
   const [emailAppear, setEmailAppear] = useState(false);
