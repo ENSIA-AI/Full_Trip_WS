@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 require '../../Database.php';
 session_start();
-$_SESSION['user_id'] = 19;
+
 
 
 $db = connectDB();

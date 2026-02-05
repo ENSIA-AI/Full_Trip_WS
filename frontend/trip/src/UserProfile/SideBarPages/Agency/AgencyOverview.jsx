@@ -33,8 +33,10 @@ const bookings = [
 
 const response = await api.get('./overview.php');
 
+console.log(response);
 
 const result=response.data;
+
 
 let recent_Bookings;
 
@@ -52,13 +54,13 @@ else{
 
 function AgencyOverview() {
 
-    console.log(recent_Bookings);
+
 
     return (<>
 
         <div className='S_Container'>
 
-            {/*LastBookings-------------------------------------*/}
+            {/* LastBookings------------------------------------- */}
             <div className='Section'>
                 <div className='SecHeader'>
                     <h2>Recent Bookings:</h2>
