@@ -47,8 +47,8 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
       console.warn('Login request failed, falling back to local users file', err);
     }
 
-    const usersList = Users;
-    const foundUser = usersList.users.find(u => u.email === email && u.password === Password);
+    const usersList = InContent;
+    const foundUser = usersList?.users?.find(u => u.email === email && u.password === Password);
 
     if (foundUser) {
       SetLoggedIn(true);
