@@ -111,9 +111,9 @@ const CarRentalForm = ({ onSearch }) => {
                         {...register("carType", { required: "Car type is required" })}
                     >
                         <option value="">Select a car</option>
-                        <option value="economy">Economy</option>
-                        <option value="sedan">Sedan</option>
-                        <option value="suv">SUV</option>
+                        <option value="Economy">Economy</option>
+                        <option value="Comfort">Comfort</option>
+                        <option value="Luxury">Luxury</option>
                     </select>
                 </div>
                 {errors.carType && <span className="error-message">{errors.carType.message}</span>}

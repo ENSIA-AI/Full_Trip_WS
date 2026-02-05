@@ -1,7 +1,6 @@
 <?php
 // File: backend/Mohammed/Cars/get_my_reservations.php
 
-// 1. Allow React to talk to this file
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -14,24 +13,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/db.php';
 
 try {
-    // 2. Check for User ID
     if (!isset($_GET['user_id'])) {
         throw new Exception("User ID is required");
     }
-    $userId = $_GET['user_id'];
-
+    
+    $userId = intval($_GET['user_id']); 
     $db = connectDB();
 
-    // 3. Auto-Update Status (Pending -> Complete if date passed)
-    // We update this first so the user sees the correct status immediately
+    // ---------------------------------------------------------
+    // LOGIC FIX: Update status from 'active' to 'Complete'
+    // ---------------------------------------------------------
     $updateSql = "UPDATE car_reservations 
                   SET status = 'Complete' 
                   WHERE return_d < CURRENT_DATE 
-                  AND status = 'Pending'";
+                  AND status = 'active'";
     $db->query($updateSql);
 
-    // 4. Fetch Reservations
-    // We use LEFT JOIN so we get the reservation even if the car info is missing
+    // 4. Fetch Reservations with JOIN
     $sql = "SELECT 
                 r.creservation_id, 
                 r.pickup_d, 
@@ -57,7 +55,8 @@ try {
     $stmt->execute([':uid' => $userId]);
     $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    echo json_encode($reservations);
+    // If no reservations, return empty array instead of null
+    echo json_encode($reservations ? $reservations : []);
 
 } catch (Exception $e) {
     http_response_code(500);

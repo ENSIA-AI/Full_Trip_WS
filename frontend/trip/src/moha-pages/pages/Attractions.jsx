@@ -55,7 +55,6 @@ function Attractions() {
 
   return (
     <div className="attractions-main-container">
-      <NavBar />
       
       <h1 className="attractions-scroll-h1" onClick={scrollToForm}>
         Explore Attractions
