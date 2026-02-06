@@ -224,7 +224,7 @@ function CarRentals() {
         if (!cancelTargetId) return;
 
         try {
-            const response = await fetch('http://localhost/FULL_TRIP_WS/backend/Mohammed/Cars/cancel_reservation.php', {
+            const response = await fetch('https://full-trip.onrender.com/Mohammed/Cars/cancel_reservation.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ reservation_id: cancelTargetId })

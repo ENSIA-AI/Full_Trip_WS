@@ -11,7 +11,7 @@ session_set_cookie_params([
     'path' => '/',
     'httponly' => true,
     'secure' => true,
-    'samesite' => 'Lax'
+    'samesite' => 'None'
 ]);
 session_save_path(__DIR__ . '/../../sessions');
 session_start();
@@ -19,6 +19,11 @@ session_start();
 
 $db = connectDB();
 
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(["status" => "Failed", "message" => "User not logged in"]);
+    exit(); // Stop the script! Don't run the SQL.
+}
 
 
 try {
