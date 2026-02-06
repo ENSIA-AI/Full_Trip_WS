@@ -11,7 +11,7 @@ session_set_cookie_params([
     'secure' => true,
     'samesite' => 'None'
 ]);
-session_save_path(__DIR__ . '/../../sessions');
+
 
 session_start();
 $db = connectDB();
