@@ -1,20 +1,11 @@
 <?php
 
+// Only allow production origin
 $allowed_origins = [
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-  'http://localhost:3000'
+  'https://full-trip-ws-i6fv.onrender.com'
 ];
-
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-if (in_array($origin, $allowed_origins, true)) {
-  header('Access-Control-Allow-Origin: ' . $origin);
-  header('Vary: Origin');
-} else {
-  if ($origin) {
-    header('Access-Control-Allow-Origin: ' . $origin);
-  }
-}
+header('Access-Control-Allow-Origin: https://full-trip-ws-i6fv.onrender.com');
+header('Vary: Origin');
 
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');

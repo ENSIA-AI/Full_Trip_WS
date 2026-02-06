@@ -1,7 +1,7 @@
 <?php
 // backend/oussama_Be/flights/flight_search.php
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://full-trip-ws-i6fv.onrender.com");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Content-Type: application/json; charset=UTF-8");
