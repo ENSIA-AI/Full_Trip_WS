@@ -7,7 +7,6 @@ require '../../Database.php';
 $db = connectDB();
 
 
-session_start();
 
 
 try {
