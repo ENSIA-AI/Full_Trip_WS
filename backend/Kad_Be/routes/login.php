@@ -22,7 +22,7 @@ session_set_cookie_params([
   'lifetime' => $SESSION_TIMEOUT,
   'path' => '/',
   'httponly' => true,
-  'secure' => false,
+  'secure' => true,
   'samesite' => 'Lax'
 ]);
 session_save_path(__DIR__ . '/../../sessions');
