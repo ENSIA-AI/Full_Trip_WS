@@ -41,7 +41,7 @@ export default function Header({ setUserInfo, userInfo }) {
           return;
         }
 
-        const resp = await fetch('/Full_Trip_WS/backend/Kad_Be/routes/me.php', {
+        const resp = await fetch('https://full-trip.onrender.com/Frosty/Routes', {
           method: 'GET',
           credentials: 'include'
         });
