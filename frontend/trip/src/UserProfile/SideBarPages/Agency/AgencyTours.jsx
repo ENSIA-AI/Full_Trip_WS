@@ -591,7 +591,12 @@ function ToursManagement() {
 
     useEffect(() => {
         function handleClickOutside(e) {
-            if (!e.target.closest(".ActionsWrap")) {
+            const target = e.target;
+            if (!target || typeof target.closest !== "function") {
+                setOpenMenuId(null);
+                return;
+            }
+            if (!target.closest(".ActionsWrap")) {
                 setOpenMenuId(null);
             }
         }
