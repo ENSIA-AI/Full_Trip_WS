@@ -3,7 +3,7 @@ import Searcharea from "../components/Searchbar";
 import Hotelcard2 from "../components/HotelCard2";
 import Footer2 from "../components/Footer2";
 import hotelIcon from './pics/hotel.png';
-import top1 from './pics/top1.jpg';
+import top1 from './pics/Top1.jpg';
 import top2 from './pics/top2.avif';
 import { useRef, useState, useEffect } from "react";
 import './css/page.css';
