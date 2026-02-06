@@ -615,12 +615,26 @@ function ToursManagement() {
             , document.body)
     }
     function DeleteTour(idToRemove) {
-        SetToursList(prev =>
-            prev.filter(tour => tour.tour_id !== idToRemove)
-        );
-
-        setopen(false);
-
+        // Call backend to delete then update state
+        (async () => {
+            try {
+                const response = await api.delete(`/Del_Tour.php?id=${idToRemove}`);
+                if (response.data && response.data.success) {
+                    SetToursList(prev => prev.filter(tour => tour.tour_id !== idToRemove));
+                    // close actions menu
+                    setopen(false);
+                    // also clear any open portals for this tour
+                    SetopenCustomers((prev) => ({ ...prev, [idToRemove]: false }));
+                    setManageDatesOpen((prev) => ({ ...prev, [idToRemove]: false }));
+                } else {
+                    console.error('Delete failed', response.data);
+                    alert('Delete failed');
+                }
+            } catch (error) {
+                console.error('Error deleting tour', error);
+                alert('Error deleting tour');
+            }
+        })();
 
     }
     //GET Cosutmers Per Tour-------------------------------------------------------
