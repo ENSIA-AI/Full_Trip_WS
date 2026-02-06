@@ -1,20 +1,19 @@
 <?php
 
-// Only allow production origin
-$allowed_origins = [
-  'https://full-trip-ws-i6fv.onrender.com'
-];
-header('Access-Control-Allow-Origin: https://full-trip-ws-i6fv.onrender.com');
-header('Vary: Origin');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Credentials: true');
-header('Content-Type: application/json');
+// 1. Set Headers
+header("Access-Control-Allow-Origin: https://full-trip-ws-i6fv.onrender.com");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Credentials: true");
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-  http_response_code(204);
-  exit(0);
+// 2. IMPORTANT: Handle the Preflight Check
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit(); // Stop the script here! Don't let it run the database code.
 }
+
+// 3. Your Database connection and Logic goes below here...
+header('Content-Type: application/json');
 
 require_once __DIR__ . '/../db.php';
 
