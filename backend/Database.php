@@ -6,7 +6,7 @@ define("DB_USER", "postgres.hmfopukitqzankwplsjf");
 define("DB_PWD", "5d!&cgfvs6!uCNU");
 
 
-
+echo "Hello onrender";
 
 function connectDB()
 {
