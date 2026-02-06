@@ -23,9 +23,8 @@ session_set_cookie_params([
   'path' => '/',
   'httponly' => true,
   'secure' => true,
-  'samesite' => 'Lax'
+  'samesite' => 'None'
 ]);
-session_save_path(__DIR__ . '/../../sessions');
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {

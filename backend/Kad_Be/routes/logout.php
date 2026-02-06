@@ -22,7 +22,7 @@ session_set_cookie_params([
   'path' => '/',
   'httponly' => true,
   'secure' => true,
-  'samesite' => 'Lax'
+  'samesite' => 'None'
 ]);
 session_start();
 
@@ -34,7 +34,7 @@ setcookie(session_name(), '', [
   'path' => '/',
   'secure' => false,
   'httponly' => true,
-  'samesite' => 'Lax'
+  'samesite' => 'None'
 ]);
 
 echo json_encode(['success' => true]);
