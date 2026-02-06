@@ -109,8 +109,6 @@ if (!empty($errors)) {
             'rate_count'     => 0,
             'location'       => $destination,
             'description'    => $description,
-            'total_tickets'  => 30,
-            'booked_tickets' => 0,
             'duration'       => $duration,
             'price'          => $amount,
             'flight'         => (int)in_array("Flight", $inclusions),
