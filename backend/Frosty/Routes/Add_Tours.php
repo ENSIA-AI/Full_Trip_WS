@@ -92,8 +92,7 @@ if (!empty($errors)) {
         $db->beginTransaction();
         // 1. The SQL with named placeholders
         $sql = "INSERT INTO tours ( user_id,
-            tour_name, rating, rate_count, location,description, total_tickets, 
-            booked_tickets, duration, price, flight, hotel, meals, guided_tours
+            tour_name, rating, rate_count, location,description, duration, price, flight, hotel, meals, guided_tours
         ) VALUES (:user_id,
             :tour_name, :rating, :rate_count, :location,:description, :total_tickets, 
             :booked_tickets, :duration, :price, :flight, :hotel, :meals, :guided_tours
