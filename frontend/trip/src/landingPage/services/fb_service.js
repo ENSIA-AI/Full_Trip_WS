@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost/Full_Trip_WS/backend/Kad_Be/index.php?endpoint=feedback';
+const API_URL = 'https://full-trip.onrender.com/Kad_Be/index.php?endpoint=feedback';
 
 export async function addFeedback(data) {
   try {

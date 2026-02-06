@@ -84,7 +84,7 @@ function PaymentForm({ car, searchParams, onClose }) {
     };
 
     try {
-        const response = await fetch('http://localhost/FULL_TRIP_WS/backend/Mohammed/Cars/reserve_car.php', {
+        const response = await fetch('https://full-trip.onrender.com/Mohammed/Cars/reserve_car.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(bookingData)

@@ -88,7 +88,7 @@ export default function Header({ setUserInfo, userInfo }) {
   async function handleLogout() {
     localStorage.removeItem('FT_user');
     try {
-      await fetch('http://localhost/Full_Trip_WS/backend/Kad_Be/routes/logout.php', {
+      await fetch('https://full-trip.onrender.com/Kad_Be/routes/logout.php', {
         method: 'POST',
         credentials: 'include'
       });

@@ -23,7 +23,7 @@ export default function Fbacks() {
     async function loadSessionEmail() {
       try {
         const resp = await fetch(
-          'http://localhost/Full_Trip_WS/backend/Kad_Be/routes/login.php',
+          'https://full-trip.onrender.com/Kad_Be/routes/login.php',
           { credentials: 'include' }
         );
 

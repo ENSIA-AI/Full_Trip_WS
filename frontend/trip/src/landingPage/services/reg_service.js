@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost/Full_Trip_WS/backend/Kad_Be/index.php?endpoint=users';
+const API_URL = 'https://full-trip.onrender.com/Kad_Be/index.php?endpoint=users';
 
 export async function addUser(userData) {
   try {
@@ -32,7 +32,7 @@ export async function addUser(userData) {
     }
 
     try {
-      await fetch('http://localhost/Full_Trip_WS/backend/Kad_Be/index.php?endpoint=login', {
+      await fetch('https://full-trip.onrender.com/Kad_Be/index.php?endpoint=login', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

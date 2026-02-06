@@ -31,7 +31,7 @@ function Attractions() {
   const handleSearch = async (searchData) => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost/FULL_TRIP_WS/backend/Mohammed/Attractions/search_attractions.php", {
+      const response = await fetch("https://full-trip.onrender.com/Mohammed/Attractions/search_attractions.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

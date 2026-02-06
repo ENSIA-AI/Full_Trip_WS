@@ -18,7 +18,7 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
     setEmailAppear(true);
 
     try {
-      const resp = await fetch('http://localhost/Full_Trip_WS/backend/Kad_Be/routes/login.php', {
+      const resp = await fetch('https://full-trip.onrender.com/Kad_Be/routes/login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
