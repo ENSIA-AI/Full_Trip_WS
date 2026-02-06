@@ -379,12 +379,12 @@ function AddTour() {
                                     <label className="CostumeLabel inputIcon"><FontAwesomeIcon className="Icon" icon={faCamera}></FontAwesomeIcon></label>
                                     <input id={Highlight.id} type="text" value={Highlight.Highlight_Detail} onChange={(e) => HandleHighlightChange(Highlight.id, e)} className="CostumeInput SmoothAppear" placeholder="Highlight"  ></input>
                                 </div>
-                                <button onClick={() => RemoveHighlight(Highlight.id)} style={{ display: HighlightsCount > 1 ? "block" : "none" }} className="SecondaryB"><FontAwesomeIcon icon={faX}></FontAwesomeIcon></button>
+                                <button type="button" onClick={() => RemoveHighlight(Highlight.id)} style={{ display: HighlightsCount > 1 ? "block" : "none" }} className="SecondaryB"><FontAwesomeIcon icon={faX}></FontAwesomeIcon></button>
                             </div>
 
                         ))}
 
-                        <button className="PrimaryB FlexH" onClick={AddHighlight}><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>ADD a Highlight</button>
+                        <button type="button" className="PrimaryB FlexH" onClick={AddHighlight}><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>ADD a Highlight</button>
 
                     </div>
                     <div className="div6 Section">
@@ -407,7 +407,7 @@ function AddTour() {
                                 </div>
                             </div>
                         </label>
-                        <button onClick={AddDepartureDate} className="PrimaryB FlexH"><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>ADD Date</button>
+                        <button type="button" onClick={AddDepartureDate} className="PrimaryB FlexH"><FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>ADD Date</button>
                         {DDates.map(Date => (
                             <div key={Date.id} className="Section ">
                                 <div className="FlexH_spaceBetween">
@@ -418,7 +418,7 @@ function AddTour() {
                                             <div className="Spots" >{Date.SpotsTaken}/{Date.Spots} Spots</div>
                                         </div>
                                     </div>
-                                    <button className="SecondaryB" onClick={() => DeleteDate(Date.id)}><FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon></button>
+                                    <button type="button" className="SecondaryB" onClick={() => DeleteDate(Date.id)}><FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon></button>
                                 </div>
                             </div>
                         ))}
@@ -439,19 +439,18 @@ function ToursManagement() {
     const [ToursList, SetToursList] = useState({});
 
     //Actions Menu-------------------------------
-    const btnref = useRef();
     const [openCustomer, SetopenCustomers] = useState({});
     const [openManageDates, setManageDatesOpen] = useState({});
-
-    const [open, setopen] = useState(false);
-    const [menuindex, setmenuindex] = useState();
+    const [openMenuId, setOpenMenuId] = useState(null);
 
     // Fetch tours on mount
     useEffect(() => {
         let mounted = true;
         api.get('/ToursManagment.php')
             .then((response) => {
-                const data = response?.data?.data || [];
+                const data = Array.isArray(response?.data)
+                    ? response.data
+                    : (response?.data?.data || []);
                 if (!mounted) return;
                 const obj = data.reduce((acc, item) => {
                     acc[item.tour_id] = item;
@@ -591,22 +590,17 @@ function ToursManagement() {
     //--------------------------------------------
 
     useEffect(() => {
-
         function handleClickOutside(e) {
-
-            if (!btnref.current.contains(e.target)) {
-
-                setopen(false);
-            };
+            if (!e.target.closest(".ActionsWrap")) {
+                setOpenMenuId(null);
+            }
         }
 
         document.addEventListener("click", handleClickOutside);
-
         return () => {
-            // Cleanup
             document.removeEventListener("click", handleClickOutside);
         };
-    }, [])
+    }, []);
 
     function Portal({ isOpen, onClose, children }) {
         if (!isOpen) return null;
@@ -640,7 +634,7 @@ function ToursManagement() {
             return copy;
         });
 
-        setopen(false);
+        setOpenMenuId(null);
     }
     //GET Cosutmers Per Tour-------------------------------------------------------
 
@@ -690,20 +684,15 @@ return (<>
                     <h4>{Tour.tour_name}</h4>
 
                     {/*Actions Menu--------------------------------- */}
-                    <div style={{ position: "relative" }}>
-                        <button ref={btnref} className="ActionsB" onClick={(e) => {
-
-
-                            e.stopPropagation();// prevent document click from immediately closing it
-                            setmenuindex(Tour.tour_id);
-                            setopen((prev) => (Tour.tour_id === menuindex ? !prev : true));
-
-
+                    <div className="ActionsWrap" style={{ position: "relative" }}>
+                        <button className="ActionsB" onClick={(e) => {
+                            e.stopPropagation();
+                            setOpenMenuId((prev) => (prev === Tour.tour_id ? null : Tour.tour_id));
                         }}><FontAwesomeIcon icon={faEllipsisV}></FontAwesomeIcon></button>
-                        {open && (menuindex == Tour.tour_id) &&
+                        {openMenuId === Tour.tour_id &&
 
 
-                            (<div className="ActionsMenu FlexV" style={{ gap: 0, translate: "-100% 90%" }}>
+                            (<div className="ActionsMenu FlexV" style={{ gap: 0, translate: "-100% 90%" }} onClick={(e) => e.stopPropagation()}>
                                 <h4>Actions</h4>
                                 <button onClick={() => OpenCostumers_list(Tour.tour_id)} className="FlexH"> <FontAwesomeIcon className="Icon" icon={faUsers}></FontAwesomeIcon><p>View Costumers</p></button>
 
@@ -774,7 +763,7 @@ return (<>
 
                             {bookings.map((costumer, index) => (
                                 <tr key={index} style={{ color: "brown" }}>
-                                    <td style={{ color: "black" }}><div ><p>{costumer.first_name + costumer.last_name}</p><p style={{ color: "red" }}>{costumer.user_id}</p></div></td>
+                                    <td style={{ color: "black" }}><div ><p>{costumer.first_name + " " + costumer.last_name}</p><p style={{ color: "red" }}>{costumer.user_id}</p></div></td>
                                     <td><div className="Contact">
                                         <p><FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon> {costumer.email}</p>
                                         <p><FontAwesomeIcon icon={faPhone}></FontAwesomeIcon> {costumer.phone_num}</p>
