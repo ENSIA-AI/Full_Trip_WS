@@ -620,7 +620,15 @@ function ToursManagement() {
             try {
                 const response = await api.delete(`/Del_Tour.php?id=${idToRemove}`);
                 if (response.data && response.data.success) {
-                    SetToursList(prev => prev.filter(tour => tour.tour_id !== idToRemove));
+                    alert("Tour Deleted")
+                    // re-fetch authoritative tours list from server
+                    try {
+                        const resp = await api.get('/ToursManagment.php');
+                        SetToursList(resp.data || []);
+                    } catch (err) {
+                        // fallback to removing locally
+                        SetToursList(prev => prev.filter(tour => tour.tour_id !== idToRemove));
+                    }
                     // close actions menu
                     setopen(false);
                     // also clear any open portals for this tour
