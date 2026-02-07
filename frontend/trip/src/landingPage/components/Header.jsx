@@ -35,14 +35,13 @@ export default function Header({ setUserInfo, userInfo }) {
 
     async function checkSession() {
       try {
-        // Prefer parent-supplied userInfo if available
         if (typeof userInfo !== 'undefined' && userInfo && userInfo.UserName && userInfo.UserName !== 'Default') {
           SetLoggedIn(true);
           if (typeof setUserInfo === 'function') setUserInfo(userInfo);
           return;
         }
 
-        const resp = await fetch('/Full_Trip_WS/backend/Kad_Be/routes/me.php', {
+        const resp = await fetch('https://full-trip.onrender.com/Frosty/Routes', {
           method: 'GET',
           credentials: 'include'
         });
@@ -57,17 +56,15 @@ export default function Header({ setUserInfo, userInfo }) {
         if (body.logged_in && body.user) {
           const u = body.user;
           const uObj = { UserName: u.first_name || u.email, UserType: u.role || 'user', ...u };
-          try { localStorage.setItem('FT_user', JSON.stringify(uObj)); } catch (e) { /* ignore */ }
+          localStorage.setItem('FT_user', JSON.stringify(uObj));
           SetLoggedIn(true);
           if (typeof setUserInfo === 'function') setUserInfo(uObj);
         } else {
-          // Clear any stale client session if server indicates no session
-          try { localStorage.removeItem('FT_user'); } catch (e) { /* ignore */ }
+          localStorage.removeItem('FT_user');
           SetLoggedIn(false);
           if (typeof setUserInfo === 'function') setUserInfo({ UserName: 'Default', UserType: 'Agency' });
         }
       } catch (e) {
-        // On error, fall back to client local storage
         try {
           const s = localStorage.getItem('FT_user');
           if (s) {
@@ -91,7 +88,7 @@ export default function Header({ setUserInfo, userInfo }) {
   async function handleLogout() {
     localStorage.removeItem('FT_user');
     try {
-      await fetch('/Full_Trip_WS/backend/Kad_Be/routes/logout.php', {
+      await fetch('https://full-trip.onrender.com/Kad_Be/routes/logout.php', {
         method: 'POST',
         credentials: 'include'
       });

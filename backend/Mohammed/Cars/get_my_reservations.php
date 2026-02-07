@@ -1,7 +1,7 @@
 <?php
 // File: backend/Mohammed/Cars/get_my_reservations.php
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://full-trip-ws-i6fv.onrender.com");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");

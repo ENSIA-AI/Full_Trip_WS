@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Suspense, lazy } from "react";
 
 import {
   faBars,
@@ -16,16 +17,19 @@ import "./SideBar._MainWindow.css";
 import { Component, useContext, useEffect, useState } from "react";
 import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
 //Regular-------------------------------------
-import Flights from './SideBarPages/Regular/Flights'
-import Hotels from './SideBarPages/Regular/Hotels'
-import CarRentals from "./SideBarPages/Regular/CarRentals"
-import Tours from './SideBarPages/Regular/Tours'
-//Agency--------------------------------------
-import AgencyOverview from "./SideBarPages/Agency/AgencyOverview";
-import AgencyTours from "./SideBarPages/Agency/AgencyTours";
-import Ag_Costumers from "./SideBarPages/Agency/AgencyCostumers";
-//Mutual--------------------------------------
-import Settings from "./SideBarPages/Regular/Settings"
+// Regular Pages
+const Flights = lazy(() => import('./SideBarPages/Regular/Flights'));
+const Hotels = lazy(() => import('./SideBarPages/Regular/Hotels'));
+const CarRentals = lazy(() => import('./SideBarPages/Regular/CarRentals'));
+const Tours = lazy(() => import('./SideBarPages/Regular/Tours'));
+
+// Agency Pages
+const AgencyOverview = lazy(() => import('./SideBarPages/Agency/AgencyOverview'));
+const AgencyTours = lazy(() => import('./SideBarPages/Agency/AgencyTours'));
+const Ag_Costumers = lazy(() => import('./SideBarPages/Agency/AgencyCostumers'));
+
+// Mutual
+const Settings = lazy(() => import('./SideBarPages/Regular/Settings'));
 import ProfileHeader from "./ProfileHeader";
 
 
@@ -52,7 +56,7 @@ function SideBar_MainWindow() {
   const BottomMenu = [
     { Section: "Settings", icon: faGear, Component: Settings },
     { Section: "Logout", icon: faRightFromBracket, Component: Settings },
-    
+
   ];
   const RegUserSideBar = [
 
@@ -68,7 +72,7 @@ function SideBar_MainWindow() {
     { Section: "Costumers", icon: faUsers, Component: Ag_Costumers }
   ]
 
-  const SideBar = (UserInfo.U_type === "Agency") ? AgencySideBar : RegUserSideBar;
+  const SideBar = (UserInfo.U_type === "agency") ? AgencySideBar : RegUserSideBar;
 
   //SideBar Functions
 
@@ -131,7 +135,7 @@ function SideBar_MainWindow() {
               ))}
             </ul>
             {/* Bottom List ------------------------------------------------------------------------------------- */}
-            <ul className="BottomMenu"style={{ padding: DashBoard ? "15px" : "15px 10px"}}>
+            <ul className="BottomMenu" style={{ padding: DashBoard ? "15px" : "15px 10px" }}>
               <li>
                 <NavLink to={`/Profile/${BottomMenu[0].Section}`} className="MainLink">
                   <FontAwesomeIcon icon={BottomMenu[0].icon} className="Icon" style={{ fontSize: DashBoard ? "1.2em" : "1.3em" }}></FontAwesomeIcon>
@@ -139,12 +143,7 @@ function SideBar_MainWindow() {
                 </NavLink>
 
               </li>
-              <li>
-                <NavLink to="/" className={({ isActive }) => (isActive ? "MainLink active" : "MainLink")}>
-                  <FontAwesomeIcon icon={BottomMenu[1].icon} className="Icon" style={{ fontSize: DashBoard ? "1.2em" : "1.3em" }}></FontAwesomeIcon>
-                  <p style={{ display: DashBoard ? "" : "none" }}>{BottomMenu[1].Section}</p>
-                </NavLink>
-              </li>
+
 
             </ul>
           </div>
@@ -158,15 +157,17 @@ function SideBar_MainWindow() {
           } U_type={UserInfo.U_type}></ProfileHeader>
           <div style={{ padding: "20px" }}>
             <Routes>
-              <Route index element={<Navigate to={(UserInfo.U_type === "Agency")?"Overview":"Flights"} replace />} />
+              <Route index element={<Navigate to={(UserInfo.U_type === "agency") ? "Overview" : "Flights"} replace />} />
 
               {
                 SideBar.map((item, index) => (
-                  <Route key={index} path={`${item.Section}/*`} element={<item.Component />} ></Route>
+
+                  <Route key={index} path={`${item.Section}/*`} element={<Suspense fallback={<h2 style={{textAlign:"center"}}>Loading ...</h2>}><item.Component /></Suspense>} ></Route>
+
                 ))
 
               }
-              <Route path="Settings/*" element={<Settings />}></Route>
+              <Route path="Settings/*" element={<Suspense fallback={<h2 style={{textAlign:"center"}}>Loading...</h2>} ><Settings /></Suspense>}></Route>
             </Routes>
 
           </div>

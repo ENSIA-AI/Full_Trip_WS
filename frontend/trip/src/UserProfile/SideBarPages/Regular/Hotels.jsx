@@ -1,155 +1,181 @@
-import { faStar, faMapLocation, faWifi, faParking, faCoffee, faDumbbell } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import './Styles/Hotels.css'
-
-const MaxRating = 5;
-const HotelInfo_1 = {
-
-    name: "The Grand Plaza Hotel",
-    location: "Manhattan, New York",
-    rating: 9.2,
-    stars: 4,
-    imageUrl: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGxvYmJ5fGVufDF8fHx8MTc2MjM5NjYxNXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    amenities: [{
-        name: "Free-Wifi",
-        icon: faWifi
-    }, {
-        name: "Parking",
-        icon: faParking
-    }, {
-        name: "Breakfast",
-        icon: faCoffee
-    }, {
-        name: "Gym",
-        icon: faDumbbell
-    }],
-    price: 299,
-    NightsReserved: 3,
-    Status: "Active",
-    description: "Luxurious 5-star hotel in the heart of Manhattan with stunning city views, world-class dining, and exceptional service.",
-
-    date_in: "02 / 05 / 2025",
-    date_out: "05 / 05 / 2025"
-
-}
-
-
-function HotelCard({ HotelInfo }) {
+import { faSpinner, faClock, faMapLocation } from "@fortawesome/free-solid-svg-icons";
+import "./Styles/Hotels.css";
 
 
 
+/* ================= Hotel Card ================= */
 
-    return (<>
-        <div className="Section" style={{ backgroundColor: "white" }}>
+function HotelCard({ Hotel, onCancel }) {
+
+    return (
+        <div className="Section" style={{ backgroundColor: "white", marginBottom: "20px" }}>
             <div className="Hotel">
-
-                <img src={HotelInfo.imageUrl}></img>
+                <img
+                    src={Hotel.h_image_url || "https://images.unsplash.com/photo-1501117716987-c8e9c1a0b1c3?crop=entropy&cs=tinysrgb&fit=max&w=1080"}
+                    alt={Hotel.h_name}
+                    onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1501117716987-c8e9c1a0b1c3?crop=entropy&cs=tinysrgb&fit=max&w=1080" }}    
+                />
 
                 <div className="HotelDetails">
+                    <h2>{Hotel.h_name}</h2>
+                    <p className="Location">{Hotel.h_location}</p>
 
+                    <p className="Price">
+                        Price/Night: <span>{Hotel.price} DA</span>
+                    </p>
+                    <p className="Price">
+                        Total: <span>{Hotel.total} DA</span>
+                    </p>
 
-
-                    <div className="CardHeader">
-                        <div>
-                            <h3>{HotelInfo.name}</h3>
-                            <div className="stars">
-                                {[...Array(HotelInfo.stars)].map((_, i) => (
-                                    <FontAwesomeIcon key={i} icon={faStar}></FontAwesomeIcon>
-                                ))}
-                                <span>
-                                    {[...Array(MaxRating - HotelInfo.stars)].map((_, i) => (
-                                        <FontAwesomeIcon key={i} icon={faStar}></FontAwesomeIcon>
-                                    ))}
-                                </span>
-                            </div>
-                        </div>
-                        <div className="Rating">
-                            {HotelInfo.rating}
-                        </div>
-                    </div>
-
-                    <div className="Location">
-
-                        <FontAwesomeIcon icon={faMapLocation}></FontAwesomeIcon>
-                        <p>{HotelInfo.location}</p>
-
-                    </div>
-
-                    <p> {HotelInfo.description}</p>
-
-
-
-
-
-                    <div className="Amenities">
-                        {HotelInfo.amenities.map((amenitie, index) => (
-
-                            <div className="Amenitie" key={index}>
-                                <FontAwesomeIcon icon={amenitie.icon}></FontAwesomeIcon>
-                                <p>{amenitie.name}</p>
-                            </div>
-                        ))}
-                    </div>
-
-
-
-
-                    <p className="Price"><span>{HotelInfo.price}$</span> / night</p>
-                    <p className="Price">Total: <span>{HotelInfo.price * HotelInfo.NightsReserved}$</span></p>
                     <div className="Res_info">
-                        <div className="NightsRes">
-                            <h4>Nights Reserved:</h4>
-                            <p>{HotelInfo.NightsReserved}</p>
+                        <div>
+                            <h4>Nights:</h4>
+                            <p>{Hotel.nights}</p>
                         </div>
-                        <div className="HStatus">
-                            <h4> Status: </h4>
-                            <div className={HotelInfo.Status}>{HotelInfo.Status}</div>
+
+                        <div>
+                            <h4>Status:</h4>
+                            <div className={Hotel.status}>{Hotel.status}</div>
                         </div>
-                        <div className="DateIn">
-                            <h4> From: </h4>
-                            <p>{HotelInfo.date_in}</p>
+
+                        <div>
+                            <h4>Check In:</h4>
+                            <p>
+                                <FontAwesomeIcon icon={faClock} /> {Hotel.start_d}
+                            </p>
                         </div>
-                        <div className="DateOut">
-                            <h4> To: </h4>
-                            <p>{HotelInfo.date_out}</p>
+
+                        <div>
+                            <h4>Check Out:</h4>
+                            <p>
+                                <FontAwesomeIcon icon={faClock} /> {Hotel.end_d}
+                            </p>
                         </div>
                     </div>
-
                 </div>
-
-
-
-
             </div>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <button className="SecondaryB RemoveCard">Cancel Reservation</button>
-            </div>
+
+            {Hotel.status === "Active" && (
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <button
+                        className="SecondaryB RemoveCard"
+                        onClick={() => onCancel(Hotel.hreservation_id)}
+                    >
+                        Cancel Reservation
+                    </button>
+                </div>
+            )}
         </div>
-
-
-    </>)
-
-
-
+    );
 }
 
+/* ================= Hotels Page ================= */
 
 function Hotels() {
+    const [reservations, setReservations] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [userId, setUserId] = useState(null);
 
-    return (<>
-        <div className="S_Container Section">
-            <div className="SecHeader" >
-                <h1>My Hotel Reservation</h1>
-                <p>Manage your Current Hotel Reservation</p>
+    useEffect(() => {
+        const storedUser = localStorage.getItem("FT_user");
+
+        if (storedUser) {
+            try {
+                const userObj = JSON.parse(storedUser);
+                const uid = userObj.user_id || userObj.id;
+                setUserId(uid);
+                fetchReservations(uid);
+            } catch (e) {
+                setLoading(false);
+            }
+        } else {
+            setLoading(false);
+        }
+    }, []);
+
+    const fetchReservations = async (uid) => {
+        try {
+            const response = await fetch(
+                `http://localhost/FULL_TRIP_WS/backend/oussama/hotels/get_my_reservations.php?user_id=${uid}`
+            );
+            const data = await response.json();
+            if (Array.isArray(data)) setReservations(data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCancel = async (reservationId) => {
+        if (!window.confirm("Cancel this reservation?")) return;
+
+        try {
+            const response = await fetch(
+                "http://localhost/FULL_TRIP_WS/backend/oussama/hotels/cancel_reservation.php",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ reservation_id: reservationId }),
+                }
+            );
+
+            const result = await response.json();
+
+            if (result.success) {
+                setReservations((prev) =>
+                    prev.filter((r) => r.hreservation_id !== reservationId)
+                );
+            } else {
+                alert(result.error || "Cancel failed");
+            }
+        } catch {
+            alert("Connection error");
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="S_Container Section" style={{ textAlign: "center" }}>
+                <h2>
+                    <FontAwesomeIcon icon={faSpinner} spin /> Loading...
+                </h2>
             </div>
-            <HotelCard HotelInfo={HotelInfo_1}></HotelCard>
-            <HotelCard HotelInfo={HotelInfo_1}></HotelCard>
-            <HotelCard HotelInfo={HotelInfo_1}></HotelCard>
+        );
+    }
 
+    if (!userId) {
+        return (
+            <div className="S_Container Section" style={{ textAlign: "center" }}>
+                <h2>Please log in to view your hotel reservations.</h2>
+            </div>
+        );
+    }
+
+    return (
+        <div className="S_Container Section">
+            <div className="SecHeader">
+                <h1>My Hotel Reservations</h1>
+                <p>Manage your hotel bookings</p>
+            </div>
+
+            {reservations.length > 0 ? (
+                reservations.map((res) => (
+                    <HotelCard
+                        key={res.hreservation_id}
+                        Hotel={res}
+                        onCancel={handleCancel}
+                    />
+                ))
+            ) : (
+                <div style={{ textAlign: "center", padding: "40px" }}>
+                    <h3>No reservations found.</h3>
+                </div>
+            )}
         </div>
-    </>)
+    );
 }
 
 export default Hotels;
-

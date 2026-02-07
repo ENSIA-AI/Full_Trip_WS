@@ -45,7 +45,7 @@ function Flights() {
         setError(null);
         try {
             // Check this path matches your folder structure exactly
-            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/flightssearch.php", {
+            const response = await fetch("https://full-trip.onrender.com/oussama/flights/flightssearch.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(params),
@@ -121,7 +121,7 @@ function Flights() {
 
         // 3. Send to Backend (Using book_flight.php)
         try {
-            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/flights/book_flight.php", {
+            const response = await fetch("https://full-trip.onrender.com/oussama/flights/flightres.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

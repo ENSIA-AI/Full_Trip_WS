@@ -1,7 +1,7 @@
 import '../styles/header&signUp.css'
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Users from '../../../Temp/TempUsers.json';
+
 
 function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
   const [emailAppear, setEmailAppear] = useState(false);
@@ -18,7 +18,7 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
     setEmailAppear(true);
 
     try {
-      const resp = await fetch('http://localhost/Full_Trip_WS/backend/Kad_Be/routes/login.php', {
+      const resp = await fetch('https://full-trip.onrender.com/Kad_Be/routes/login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -28,7 +28,7 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
       if (resp.ok) {
         const user = await resp.json();
         SetLoggedIn(true);
-        const uObj = { UserName: (user.first_name || user.username || user.email), UserType: user.role || 'user', ...user };
+        const uObj = { UserName: user.first_name, UserType: user.user_type || 'user', ...user };
         SetUserInfo(uObj);
         localStorage.setItem('FT_user', JSON.stringify(uObj));
         formAppearing(false);
@@ -47,12 +47,12 @@ function SignUpForm({ formAppearing, InContent, SetUserInfo, SetLoggedIn }) {
       console.warn('Login request failed, falling back to local users file', err);
     }
 
-    const usersList = Users;
-    const foundUser = usersList.users.find(u => u.email === email && u.password === Password);
+    const usersList = InContent;
+    const foundUser = usersList?.users?.find(u => u.email === email && u.password === Password);
 
     if (foundUser) {
       SetLoggedIn(true);
-      const uObj = { UserName: foundUser.username, UserType: foundUser.role, email: foundUser.email };
+      const uObj = { UserName: foundUser.username, UserType: foundUser.user_type, email: foundUser.email };
       SetUserInfo(uObj);
       localStorage.setItem('FT_user', JSON.stringify(uObj));
       formAppearing(false);

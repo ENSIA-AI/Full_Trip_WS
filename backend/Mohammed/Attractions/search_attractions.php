@@ -2,7 +2,7 @@
 // backend/Mohammed/Attractions/search_attractions.php
 
 // 1. Handle CORS first
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://full-trip-ws-i6fv.onrender.com");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json; charset=UTF-8");

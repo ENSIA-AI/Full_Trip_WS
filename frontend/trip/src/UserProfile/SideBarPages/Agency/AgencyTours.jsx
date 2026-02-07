@@ -1,6 +1,7 @@
 import { faN, faCompass, faPlus, faSave, faD, faPen, faClock, faDollar, faUpload, faCamera, faPlane, faPlaneUp, faC, faBed, faUtensils, faCalendar, faUser, faEllipsisV, faCaretDown, faEye, faTrashCan, faUsers, faX, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavLink, Routes, Route, Navigate, Form } from "react-router-dom";
+import { NavLink, Routes, Route, Navigate, Form, data } from "react-router-dom";
+
 
 import './styles/AgencyTours.css'
 import { faMap } from "@fortawesome/free-regular-svg-icons";
@@ -8,7 +9,18 @@ import { useEffect, useRef, useState } from "react";
 
 import { createPortal } from 'react-dom';
 
+import api from "../../API/PHP_API";
+
+
+
+
 const today = new Date().toISOString().split("T")[0];
+
+
+
+
+
+
 
 function AddTour() {
 
@@ -19,8 +31,34 @@ function AddTour() {
     const durationIn = useRef();
     const amountIn = useRef();
 
+    //Iclusions:
+    const [SelectedOptions, setSelectedOptions] = useState([]);
+
+    function handleCheckBoxChange(e) {
+
+        const value = e.target.value;
+        const checked = e.target.checked;
+
+
+
+
+        if (checked) {
+
+            setSelectedOptions([...SelectedOptions, value]);
+        }
+        else {
+
+            setSelectedOptions(SelectedOptions.filter((item) => item !== value));
+        }
+
+
+    }
+
+
+
 
     const [formData, setFormData] = useState({
+
         tourName: "",
         destination: "",
         description: "",
@@ -86,7 +124,8 @@ function AddTour() {
     }
 
 
-    function HandleSubmit(e) {
+
+    async function HandleSubmit(e) {
 
         e.preventDefault();
 
@@ -97,6 +136,34 @@ function AddTour() {
             return;
         }
 
+
+        const data = {
+            ...formData,
+            Departure_Dates: DDates,
+            Highlights: Highlights,
+            Inclusions: SelectedOptions
+        };
+
+
+
+        try {
+
+            const response = await api.post('/Add_Tours.php', data)
+
+            console.log("Data Sent Succefully:", response.data);
+
+            if (response.data === "Transaction Completed") {
+
+                alert("Tour Published");
+            };
+        }
+
+        catch (error) {
+
+            console.log("Data Not Sent:", error);
+        }
+
+
     }
     function handleReset() {
         setFormData(
@@ -105,7 +172,7 @@ function AddTour() {
                 destination: "",
                 description: "",
                 duration: "",
-                highlight: ""
+                amount: ""
             }
         )
         tourNameIn.current.classList.remove("InvalidIn");
@@ -115,13 +182,16 @@ function AddTour() {
         amountIn.current.classList.remove("InvalidIn");
         setErrors({});
 
+        setDDates([]);
+
+
     }
 
 
 
     const [HighlightsCount, SetHighlightsCount] = useState(1);
     const [HighlightsIDCount, SetHighlightsIDCount] = useState(1);
-    const [Highlights, SetHighlights] = useState([{ id: 0 }]);
+    const [Highlights, SetHighlights] = useState([{ id: 0, Highlight_Detail: "" }]);
 
     //Dates Management:
     const [DDates, setDDates] = useState([]);
@@ -132,7 +202,8 @@ function AddTour() {
 
     const Dateinput = useRef();
     const Spotsinput = useRef();
-    function AddDepartureDate() {
+    function AddDepartureDate(e) {
+        e.preventDefault();
         const date = Dateinput.current.value.trim();
         const spots = Spotsinput.current.value.trim();
         var Valid = true;
@@ -164,26 +235,36 @@ function AddTour() {
     }
     //--------------------------------------------
 
-    function AddHighlight() {
+    function AddHighlight(e) {
+        e.preventDefault();
 
         SetHighlightsCount(HighlightsCount + 1);
-        SetHighlights(prev => [...prev, { id: HighlightsIDCount }]);
+        SetHighlights(prev => [...prev, { id: HighlightsIDCount, Highlight_Detail: "" }]);
         SetHighlightsIDCount(HighlightsIDCount + 1);
 
     }
     function RemoveHighlight(idToRemove) {
 
-        SetHighlights(prev => prev.filter(i => i.id !== idToRemove));
+        SetHighlights(prev => prev.filter((i) => i.id !== idToRemove));
         SetHighlightsCount(HighlightsCount - 1);
+
+    }
+    function HandleHighlightChange(id, event) {
+        const text = event.target.value;
+
+        SetHighlights(prev =>
+            prev.map(hgh =>
+                hgh.id === id ? { ...hgh, Highlight_Detail: text } : hgh
+            )
+        );
 
     }
 
 
 
-
     return (<>
         <div className="Section">
-            <form onSubmit={HandleSubmit} onReset={handleReset} className="FlexV">
+            <form action onSubmit={HandleSubmit} onReset={handleReset} className="FlexV">
 
 
                 <div className="SecHeader FlexH_spaceBetween">
@@ -225,14 +306,6 @@ function AddTour() {
                                     {errors.description && <small className="error">{errors.description}</small>}
                                 </div>
                             </div>
-                            <div >
-                                <label className="Upload" htmlFor="upload">
-                                    <input id="upload" type="file" style={{ display: "none" }}></input>
-                                    <FontAwesomeIcon className="Icon" icon={faUpload}></FontAwesomeIcon>
-                                    <p> Click to Upload or drag and Drop</p>
-                                    <p>PNG, JPG, or WebP (max. 5MB)</p>
-                                </label>
-                            </div>
 
                         </div>
 
@@ -242,10 +315,12 @@ function AddTour() {
                             <h3> Pricing And Duration:</h3>
                         </div>
                         <div className="InputContainer">
+
+                            {/* Duration ----------------------- */}
                             <label> Duration (Days) :</label>
                             <div>
                                 <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faClock}></FontAwesomeIcon></label>
-                                <input ref={durationIn} type="number" min={1} name="duration" value={formData.duration} className="CostumeInput" placeholder="0"></input>
+                                <input ref={durationIn} onChange={handleChange} type="number" min={1} name="duration" className="CostumeInput" placeholder="0"></input>
                             </div>
                             {errors.duration && <small className="error">{errors.duration}</small>}
                         </div>
@@ -265,28 +340,28 @@ function AddTour() {
 
                         <div className="FlexV">
                             <div className="FlexH">
-                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <input onChange={handleCheckBoxChange} value="Flight" className="CostumeCheckBox" type="checkbox"></input>
                                 <FontAwesomeIcon className="Icon" icon={faPlaneUp}></FontAwesomeIcon>
                                 Flight
                             </div>
                         </div>
                         <div className="FlexV">
                             <div className="FlexH">
-                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <input onChange={handleCheckBoxChange} value="Hotel" className="CostumeCheckBox" type="checkbox"></input>
                                 <FontAwesomeIcon className="Icon" icon={faBed}></FontAwesomeIcon>
                                 Hotel
                             </div>
                         </div>
                         <div className="FlexV">
                             <div className="FlexH">
-                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <input onChange={handleCheckBoxChange} value="Guided_Tours" className="CostumeCheckBox" type="checkbox"></input>
                                 <FontAwesomeIcon className="Icon" icon={faCamera}></FontAwesomeIcon>
                                 Guided Tours
                             </div>
                         </div>
                         <div className="FlexV">
                             <div className="FlexH">
-                                <input className="CostumeCheckBox" type="checkbox"></input>
+                                <input onChange={handleCheckBoxChange} value="Meals" className="CostumeCheckBox" type="checkbox"></input>
                                 <FontAwesomeIcon className="Icon" icon={faUtensils}></FontAwesomeIcon>
                                 Meals
                             </div>
@@ -302,14 +377,14 @@ function AddTour() {
                             <div id={Highlight.id} className="InputContainer FlexH" key={Highlight.id}>
                                 <div style={{ flexGrow: "1" }}>
                                     <label className="CostumeLabel inputIcon"><FontAwesomeIcon className="Icon" icon={faCamera}></FontAwesomeIcon></label>
-                                    <input type="Text" className="CostumeInput SmoothAppear" placeholder="Higlight" ></input>
+                                    <input id={Highlight.id} type="Text" onChange={() => HandleHighlightChange(Highlight.id, event)} className="CostumeInput SmoothAppear" placeholder="Highlight"  ></input>
                                 </div>
                                 <button onClick={() => RemoveHighlight(Highlight.id)} style={{ display: HighlightsCount > 1 ? "block" : "none" }} className="SecondaryB"><FontAwesomeIcon icon={faX}></FontAwesomeIcon></button>
                             </div>
 
                         ))}
 
-                        <button className="PrimaryB FlexH" onClick={AddHighlight}><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>ADD a Higlight</button>
+                        <button className="PrimaryB FlexH" onClick={AddHighlight}><FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>ADD a Highlight</button>
 
                     </div>
                     <div className="div6 Section">
@@ -327,8 +402,8 @@ function AddTour() {
                             <div className="InputContainer">
                                 <label>Spots:</label>
                                 <div>
-                                    <label className="CostumeLabel inputIcon"><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
-                                    <input ref={Spotsinput} type="number" min={2} className={`CostumeInput ${SpotsValid ? "" : "InvalidIn"}`} placeholder="1"></input>
+                                    <label className=" inputIcon" ><FontAwesomeIcon icon={faUsers}></FontAwesomeIcon></label>
+                                    <input ref={Spotsinput} type="number" min={2} className={`CostumeInput ${SpotsValid ? "" : "InvalidIn"}`} placeholder="1" ></input>
                                 </div>
                             </div>
                         </label>
@@ -340,7 +415,7 @@ function AddTour() {
                                         <FontAwesomeIcon className="DateIcon" icon={faCalendar}></FontAwesomeIcon>
                                         <div>
                                             <h4>{Date.Date}</h4>
-                                            <div className="Spots">{Date.SpotsTaken}/{Date.Spots} Spots</div>
+                                            <div className="Spots" >{Date.SpotsTaken}/{Date.Spots} Spots</div>
                                         </div>
                                     </div>
                                     <button className="SecondaryB" onClick={() => DeleteDate(Date.id)}><FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon></button>
@@ -355,131 +430,35 @@ function AddTour() {
     </>)
 }
 
-const Tours = [{
-
-    TourId: 0,
-
-    name: "Paris: City of Lights",
-    rating: 4.9,
-    RateCount: 234,
-    Agency: "MMA Travel",
-    location: "Paris, France",
-
-
-    //!ADD This:
-    TotalTickets: 10,
-    TicketsBought: 8,
-
-    TotalTickets: 28,
-
-    Includes: [{
-        name: "Flight",
-        icon: faPlane
-    }, {
-        name: "Hotel",
-        icon: faBed
-    }, {
-        name: "Meals",
-        icon: faUtensils
-    }, {
-        name: "Tours",
-        icon: faCamera
-    }],
-
-    Highlights: ["Eiffel Tower", "Seine River cruise with dinner", "Day Trip to Versailles Palace", "Louis Museuem Tour"],
-
-    TourDuration: "7 Days / 6 nights",
-    DepartureDate: "Dec 15 2025",
-
-    price: 2999,
-    N_Tickets: 2,
-
-
-    Status: "Active",
-
-}, {
-    TourId: 2,
-    name: "Paris:",
-    rating: 4.9,
-    RateCount: 234,
-    Agency: "MMA Travel",
-    location: "Paris, France",
-
-    //!ADD This:
-    TotalTickets: 10,
-    TicketsBought: 8,
-
-    TotalTickets: 28,
-
-    Includes: [{
-        name: "Flight",
-        icon: faPlane
-    }, {
-        name: "Hotel",
-        icon: faBed
-    }, {
-        name: "Meals",
-        icon: faUtensils
-    }, {
-        name: "Tours",
-        icon: faCamera
-    }],
-
-    Highlights: ["Eiffel Tower", "Seine River cruise with dinner", "Day Trip to Versailles Palace", "Louis Museuem Tour"],
-
-    TourDuration: "7 Days / 6 nights",
-    DepartureDate: "Dec 15 2025",
-
-    price: 2999,
-    N_Tickets: 2,
-
-
-    Status: "Active",
-}]
-const bookings = [
-    {
-        customerId: "C001",
-        customer: "Ahmed Benali",
-        email: "ahmed.benali@example.com",
-        phone: "+213 555 12 34 56",
-        departureDate: "2025-12-20",
-        bookingDate: "2025-11-10",
-        tickets: 2,
-        paid: 60000, // DA
-        status: "Confirmed",
-    },
-    {
-        customerId: "C002",
-        customer: "Sara Bouzid",
-        email: "sara.bouzid@example.com",
-        phone: "+213 556 98 76 54",
-        departureDate: "2026-01-05",
-        bookingDate: "2025-11-15",
-        tickets: 4,
-        paid: 120000,
-        status: "Pending",
-    },
-    {
-        customerId: "C002",
-        customer: "Yacine Haddad",
-        email: "yacine.haddad@example.com",
-        phone: "+213 557 44 55 66",
-        departureDate: "2025-12-31",
-        bookingDate: "2025-11-12",
-        tickets: 1,
-        paid: 25000,
-        status: "Cancelled",
-    },
-];
+const response = await api.get('/ToursManagment.php');
+const ToursData = response['data'];
 
 
 function ToursManagement() {
 
+    // Keep tours as an array so we can map/filter it naturally
+    const [ToursList, SetToursList] = useState(() => {
+        return Array.isArray(ToursData) ? ToursData : [];
+    });
+
+
 
     //Actions Menu-------------------------------
-    const btnref = useRef();
-    const [openCustomer, SetopenCustomers] = useState(false);
-    const [openManageDates, SetManageDatesOpen] = useState(false);
+    const [openCustomer, SetopenCustomers] = useState(() => {
+        return ToursData.reduce((acc, item) => {
+            acc[item.tour_id] = false;
+            return acc;
+        }, {});
+    });
+    const [openManageDates, setManageDatesOpen] = useState(() => {
+        return ToursData.reduce((acc, item) => {
+            acc[item.tour_id] = false;
+            return acc;
+        }, {});
+    });
+
+
+
     const [open, setopen] = useState(false);
     const [menuindex, setmenuindex] = useState();
     //Dates Management:
@@ -487,7 +466,8 @@ function ToursManagement() {
     const [IdCount, setIdCount] = useState(0);
     const Dateinput = useRef();
     const Spotsinput = useRef();
-    function AddDepartureDate() {
+    async function AddDepartureDate(tour_id) {
+
         const date = Dateinput.current.value.trim();
         const spots = Spotsinput.current.value.trim();
         if (date === "") {
@@ -499,27 +479,106 @@ function ToursManagement() {
             Spotsinput.current.className += " InvalidIn";
         }
         else {
-            console.log(date);
-            setDDates(prev => [...prev, { Date: date, Spots: spots, id: IdCount, SpotsTaken: 0 }]);
-            setIdCount(IdCount + 1);
+            const data = {
+                Date: date,
+                Spots: spots,
+                tour_id: tour_id
+            }
+
+            try {
+
+                const response = await api.post('/Add_DDate.php', data)
+                if (response.data.success) {
+                    alert("Departure Date Added!");
+                    setManageDatesOpen((prev) => ({ ...prev, [tour_id]: true }));
+
+                    // Update tours list (array) by appending the new date to the correct tour
+                    SetToursList(prev => {
+                        const found = prev.some(t => t.tour_id === tour_id);
+                        if (!found) {
+                            console.warn(`Tour with ID ${tour_id} not found in state.`);
+                            return prev;
+                        }
+
+                        return prev.map(t =>
+                            t.tour_id === tour_id
+                                ? {
+                                    ...t,
+                                    departure_dates: [
+                                        ...(Array.isArray(t.departure_dates) ? t.departure_dates : []),
+                                        {
+                                            ddate_id: response.data.date_id,
+                                            tour_id: tour_id,
+                                            date: date,
+                                            spot: spots,
+                                            reserved_spots: 0
+                                        }
+                                    ]
+                                }
+                                : t
+                        );
+                    });
+
+
+
+
+
+
+
+                }
+                else {
+                    console.log("Inertion failed:", response.data)
+                }
+
+
+            } catch (error) {
+                console.error("There was an error inserting the Date:", error);
+            }
+
+
+
         }
     }
-    function DeleteDate(id) {
 
-        setDDates(prev => prev.filter(Date => Date.id !== id));
+
+    async function DeleteDate(date_id, tour_id) {
+
+
+        try {
+            const response = await api.delete(`/Del_DDate.php?id=${date_id}`);
+            console.log(response.data);
+
+
+            if (response.data.success) {
+                alert("Deleted successfully!");
+                setDDates(prev => prev.filter(d => d.id !== date_id));
+
+                // Update tours list (array) by removing the date from the correct tour
+                SetToursList(prev => prev.map(t =>
+                    t.tour_id === tour_id
+                        ? { ...t, departure_dates: (t.departure_dates || []).filter(date => date.ddate_id !== date_id) }
+                        : t
+                ));
+
+                setManageDatesOpen((prev) => ({ ...prev, [tour_id]: true }))
+            }
+        } catch (error) {
+            console.error("There was an error deleting the record:", error);
+        }
+
+
+
+
     }
     //--------------------------------------------
-
-    const [ToursList, SetToursList] = useState(Tours);
 
     useEffect(() => {
 
         function handleClickOutside(e) {
-
-            if (!btnref.current.contains(e.target)) {
-
+            // Close actions menu when clicking outside any ActionsB button or ActionsMenu
+            if (!e.target.closest('.ActionsB') && !e.target.closest('.ActionsMenu')) {
                 setopen(false);
-            };
+            }
         }
 
         document.addEventListener("click", handleClickOutside);
@@ -556,47 +615,105 @@ function ToursManagement() {
             , document.body)
     }
     function DeleteTour(idToRemove) {
-        SetToursList(prev =>
-            prev.filter(tour => tour.TourId !== idToRemove)
-        );
-
-        setopen(false);
-
+        // Call backend to delete then update state
+        (async () => {
+            try {
+                const response = await api.delete(`/Del_Tour.php?id=${idToRemove}`);
+                if (response.data.success) {
+                    alert("Tour Deleted")
+                    // re-fetch authoritative tours list from server
+                    try {
+                        SetToursList(resp.data || []);
+                        const resp = await api.get('/ToursManagment.php');
+                    } catch (err) {
+                        // fallback to removing locally
+                        SetToursList(prev => prev.filter(tour => tour.tour_id !== idToRemove));
+                    }
+                    // close actions menu
+                    setopen(false);
+                    // also clear any open portals for this tour
+                    SetopenCustomers((prev) => ({ ...prev, [idToRemove]: false }));
+                    setManageDatesOpen((prev) => ({ ...prev, [idToRemove]: false }));
+                } else {
+                    console.error('Delete failed', response.data);
+                    alert('Delete failed');
+                }
+            } catch (error) {
+                console.error('Error deleting tour', error);
+                alert('Error deleting tour');
+            }
+        })();
 
     }
-    //ShowDepartureDates---------------------------
+    //GET Cosutmers Per Tour-------------------------------------------------------
 
+    const [bookings, setbookings] = useState([]);
+
+
+    async function GetCostumers(tour_id) {
+
+
+
+        try {
+            const response = await api.get('/tour_bookings.php', {
+                params: { id: tour_id }
+            });
+
+            const result = response.data;
+            return result.data;
+        } catch (error) {
+            console.error('Error fetching customers for tour', tour_id, error);
+            return [];
+        }
+    }
+
+
+    async function OpenCostumers_list(tour_id) {
+        const result = await GetCostumers(tour_id);
+        console.log(result)
+
+
+        setbookings(result);
+
+        SetopenCustomers((prev) => ({ ...prev, [tour_id]: true }));
+    }
+
+
+
+
+
+
+    console.log(ToursList);
     return (<>
         <div className="Section" >
-
             {ToursList.map((Tour) => (
 
-                <div key={Tour.TourId} className="Section">
+                <div key={Tour.tour_id} className="Section">
                     <div className="FlexH_spaceBetween" >
-                        <h4>{Tour.name}</h4>
-
+                        <h4>{Tour.tour_name}</h4>
 
                         {/*Actions Menu--------------------------------- */}
                         <div style={{ position: "relative" }}>
-                            <button ref={btnref} className="ActionsB" onClick={(e) => {
-
-
+                            <button className="ActionsB" onClick={(e) => {
                                 e.stopPropagation();// prevent document click from immediately closing it
-                                setmenuindex(Tour.TourId);
-                                setopen((prev) => (Tour.TourId === menuindex ? !prev : true));
-
+                                if (menuindex === Tour.tour_id) {
+                                    setopen(prev => !prev);
+                                } else {
+                                    setmenuindex(Tour.tour_id);
+                                    setopen(true);
+                                }
 
                             }}><FontAwesomeIcon icon={faEllipsisV}></FontAwesomeIcon></button>
-                            {open && (menuindex == Tour.TourId) &&
+                            {open && (menuindex == Tour.tour_id) &&
 
 
                                 (<div className="ActionsMenu FlexV" style={{ gap: 0, translate: "-100% 90%" }}>
                                     <h4>Actions</h4>
-                                    <button onClick={() => SetopenCustomers(true)} className="FlexH"> <FontAwesomeIcon className="Icon" icon={faUsers}></FontAwesomeIcon><p>View Costumers</p></button>
+                                    <button onClick={() => OpenCostumers_list(Tour.tour_id)} className="FlexH"> <FontAwesomeIcon className="Icon" icon={faUsers}></FontAwesomeIcon><p>View Costumers</p></button>
 
-                                    <button onClick={() => SetManageDatesOpen(true)} className="FlexH"> <FontAwesomeIcon className="Icon" icon={faCalendar}></FontAwesomeIcon><p>Manage Dates</p></button>
+                                    <button onClick={() => setManageDatesOpen((prev) => ({ ...prev, [Tour.tour_id]: true }))} className="FlexH"> <FontAwesomeIcon className="Icon" icon={faCalendar}></FontAwesomeIcon><p>Manage Dates</p></button>
 
-                                    <div onClick={() => DeleteTour(Tour.TourId)} className="FlexH DeleteC"> <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon><p>Delete Tour</p></div>
+                                    <div onClick={() => DeleteTour(Tour.tour_id)} className="FlexH DeleteC"> <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon><p>Delete Tour</p></div>
                                 </div>)
 
 
@@ -604,9 +721,9 @@ function ToursManagement() {
 
                         </div>
 
-                        <Portal isOpen={openManageDates} onClose={() => (SetManageDatesOpen(false))}>
+                        <Portal isOpen={openManageDates[Tour.tour_id]} onClose={() => (setManageDatesOpen((prev) => ({ ...prev, [Tour.tour_id]: false })))}>
                             <div className="SecHeader">
-                                <h3>Manage Departure Dates - {Tour.name}</h3>
+                                <h3>Manage Departure Dates - {Tour.tour_name}</h3>
                                 <p>Add or remove departure dates for this tour</p>
                             </div>
                             <h4>Add a New Departure Date:</h4>
@@ -619,31 +736,31 @@ function ToursManagement() {
                                     </div>
                                 </div>
 
-                                <button className="PrimaryB FlexH" onClick={AddDepartureDate}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>Add</button>
+                                <button className="PrimaryB FlexH" onClick={() => AddDepartureDate(Tour.tour_id)}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>Add</button>
                             </div>
                             <h4>Current DepartureDates:</h4>
 
                             <hr style={{ width: "100%", margin: "0" }}></hr>
-                            {DDates.map(Date => (
-                                <div key={Date.id} className="Section ">
+                            {Tour.departure_dates.map(Date => (
+                                <div key={Date.ddate_id} className="Section ">
                                     <div className="FlexH_spaceBetween">
                                         <div className="FlexH">
                                             <FontAwesomeIcon className="DateIcon" icon={faCalendar}></FontAwesomeIcon>
                                             <div>
-                                                <h4>{Date.Date}</h4>
-                                                <div className="Spots">{Date.SpotsTaken}/{Date.Spots} Spots</div>
+                                                <h4>{Date.date}</h4>
+                                                <div className="Spots">{Date.reserved_spots}/{Date.spot} Spots</div>
                                             </div>
                                         </div>
-                                        <button className="SecondaryB" onClick={() => DeleteDate(Date.id)}><FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon></button>
+                                        <button className="SecondaryB" onClick={() => DeleteDate(Date.ddate_id, Tour.tour_id)}><FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon></button>
                                     </div>
                                 </div>
                             ))}
 
                         </Portal>
-                        <Portal isOpen={openCustomer} onClose={() => (SetopenCustomers(false))}>
+                        <Portal isOpen={openCustomer[Tour.tour_id]} onClose={() => (SetopenCustomers((prev) => ({ ...prev, [Tour.tour_id]: false })))}>
                             <div className="SecHeader">
                                 <h3>
-                                    Booked Customers - {Tour.name}
+                                    Booked Customers - {Tour.tour_name}
                                 </h3>
                                 <p>View all customers who have booked this tour</p>
                             </div>
@@ -652,23 +769,19 @@ function ToursManagement() {
                                     <th>Costumer</th>
                                     <th>Contact</th>
                                     <th>DepartureDate</th>
-                                    <th>bookingDate</th>
-                                    <th>Tickets</th>
-                                    <th>Paid</th>
                                     <th>Status</th>
                                 </tr>
+
+
                                 {bookings.map((costumer, index) => (
                                     <tr key={index} style={{ color: "brown" }}>
-                                        <td style={{ color: "black" }}><div ><p>{costumer.customer}</p><p style={{ color: "red" }}>{costumer.customerId}</p></div></td>
+                                        <td style={{ color: "black" }}><div ><p>{costumer.first_name + costumer.last_name}</p><p style={{ color: "red" }}>{costumer.user_id}</p></div></td>
                                         <td><div className="Contact">
                                             <p><FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon> {costumer.email}</p>
-                                            <p><FontAwesomeIcon icon={faPhone}></FontAwesomeIcon> {costumer.phone}</p>
+                                            <p><FontAwesomeIcon icon={faPhone}></FontAwesomeIcon> {costumer.phone_num}</p>
 
                                         </div></td>
-                                        <td><FontAwesomeIcon icon={faCalendar} style={{ color: "red" }}></FontAwesomeIcon> {costumer.departureDate}</td>
-                                        <td >{costumer.bookingDate}</td>
-                                        <td style={{ textAlign: "center", color: "black" }}>{costumer.tickets}</td>
-                                        <td className="Money">{costumer.paid}DA</td>
+                                        <td><FontAwesomeIcon icon={faCalendar} style={{ color: "red" }}></FontAwesomeIcon> {costumer.date}</td>
                                         <td>
                                             <div className={costumer.status}>
                                                 {costumer.status}
@@ -690,15 +803,19 @@ function ToursManagement() {
 
                         <div>
                             <p> Total Bookings: </p>
-                            <p> {Tour.TotalTickets} </p>
+
+
+
+
+                            <p> {Tour.departure_dates.length > 0 ? String(Tour.departure_dates[0]['reserved_spots']) + " / " + String(Tour.departure_dates[0]['spot']) : 0}   </p>
                         </div>
                         <div>
                             <p> Revenu: </p>
-                            <p> {Tour.TotalTickets * Tour.price} $ </p>
+                            <p>  {Tour.departure_dates.length > 0 ? Tour.departure_dates[0]['reserved_spots'] * Number(Tour.price) : 0} </p>
                         </div>
                         <div>
-                            <p> Departure Dates: </p>
-                            <p> {Tour.TotalTickets} </p>
+                            <p> Next Departure Date: </p>
+                            <p> {Tour.departure_dates.length > 0 ? Tour.departure_dates[0]['date'] : "none"} </p>{/*  upcoming departuer dates*/}
                         </div>
                     </div>
                 </div>

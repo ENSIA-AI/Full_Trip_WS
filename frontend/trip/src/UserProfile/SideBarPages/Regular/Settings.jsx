@@ -2,8 +2,13 @@ import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faShield, faCreditCard, faWallet, faLocationDot, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import './Styles/Settings.css'
+import api from "../../API/PHP_API";
+
+
+
+
 
 
 function Settings() {
@@ -13,7 +18,6 @@ function Settings() {
     const SettingsNavItems = [
         { Section: "Personal Info", Icon: faUser },
         { Section: "Security", Icon: faShield },
-        { Section: "Billing", Icon: faWallet },
     ];
 
     return (
@@ -41,17 +45,38 @@ function Settings() {
                     <Route index element={<Navigate to="Personal Info" replace />} />
                     <Route path="Personal Info" element={<Profile />} />
                     <Route path="Security" element={<Security />} />
-                    <Route path="Billing" element={<Billing />} />
                 </Routes>
             </div>
         </>
     );
 }
 
-
-
-
 function Profile() {
+    const [user, setuser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await api.get('./Settings.php');
+                const result = response.data;
+                const user_data = result.data;
+                setuser(user_data);
+                console.log(user_data);
+            } catch (err) {
+                setError(err.message);
+                console.error('Error fetching user data:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+
+
 
 
     const firstNameIn = useRef();
@@ -61,13 +86,24 @@ function Profile() {
     const addressIn = useRef();
 
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phoneNumber: "",
-        address: "",
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
     });
     const [errors, setErrors] = useState({});
+
+    // Update formData when user data is loaded
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                firstName: user.first_name || '',
+                lastName: user.last_name || '',
+                email: user.email || '',
+                phoneNumber: user.phone_num || '',
+            });
+        }
+    }, [user]);
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -89,7 +125,7 @@ function Profile() {
 
             firstNameIn.current.classList.add("InvalidIn");
         }
-        else if(values.firstName){
+        else if (values.firstName) {
 
         }
         else {
@@ -128,7 +164,7 @@ function Profile() {
 
 
         // Phone
-        const phoneRegex = /^(05|06|07)[0-9]{8}$/;
+        const phoneRegex = /^\+?(0|213|213\s?)([567])[0-9]{8}$/;
 
         if (!values.phoneNumber.trim()) {
             newErrors.phoneNumber = "Phone number is required.";
@@ -142,23 +178,10 @@ function Profile() {
 
         }
 
-        // Address
-        if (!values.address.trim()) {
-            newErrors.address = "Address is required.";
-            addressIn.current.classList.add("InvalidIn");
-        } else if (values.address.trim().length < 3) {
-            newErrors.address = "Address is too short.";
-            addressIn.current.classList.add("InvalidIn");
-        }
-        else {
-            addressIn.current.classList.remove("InvalidIn");
-
-        }
-
         return newErrors;
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         const validationErrors = validate(formData);
@@ -167,14 +190,21 @@ function Profile() {
             setErrors(validationErrors);
             return;
         }
+        else {
+
+            const response = await api.post('./Settings.php', formData);
+            if (response.data === "success") {
+                alert("User Updated!");
+            }
+        }
     }
     function handleReset() {
         setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            phoneNumber: "",
-            address: "",
+            firstName: user?.first_name || '',
+            lastName: user?.last_name || '',
+            email: user?.email || '',
+            phoneNumber: user?.phone_num || '',
+
         });
 
         addressIn.current.classList.remove("InvalidIn");
@@ -187,6 +217,10 @@ function Profile() {
     }
 
 
+
+    if (loading) return <h2 style={{ textAlign: 'center' }}>Loading...</h2>;
+    if (error) return <h2 style={{ textAlign: 'center', color: 'red' }}>Error: {error}</h2>;
+    if (!user) return <h2 style={{ textAlign: 'center' }}>No user data found</h2>;
 
     return (<>
 
@@ -207,7 +241,7 @@ function Profile() {
 
                     <div className="InfoFormInput">
                         <label>Last Name</label>
-                        <input name="lastName" value={FormData.lastName} ref={lastNameIn} onChange={handleChange} type="text"></input>
+                        <input name="lastName" value={formData.lastName} ref={lastNameIn} onChange={handleChange} type="text"></input>
                         {errors.lastName && <small className="error">{errors.lastName}</small>}
 
                     </div>
@@ -215,22 +249,17 @@ function Profile() {
                     <div className="InfoFormInput" style={{ gridColumn: "span 2" }}>
                         <label>Email</label>
                         <FontAwesomeIcon icon={faEnvelope} className="InfoFormIcon" ></FontAwesomeIcon>
-                        <input name="email" value={FormData.email} ref={emailIn} onChange={handleChange} type="email" style={{ paddingLeft: "40px" }} placeholder="example@gmail.com"></input>
+                        <input name="email" value={formData.email} ref={emailIn} onChange={handleChange} type="email" style={{ paddingLeft: "40px" }} placeholder="example@gmail.com"></input>
                         {errors.lastName && <small className="error">{errors.lastName}</small>}
 
                     </div>
                     <div className="InfoFormInput" >
                         <label>Phone Number</label>
                         <FontAwesomeIcon icon={faPhone} className="InfoFormIcon"></FontAwesomeIcon>
-                        <input name="phoneNumber" value={FormData.phoneNumber} ref={phoneNumberIn} onChange={handleChange} type="text" style={{ paddingLeft: "40px" }} placeholder="0540493067"></input>
+                        <input name="phoneNumber" value={formData.phoneNumber} ref={phoneNumberIn} onChange={handleChange} type="text" style={{ paddingLeft: "40px" }} placeholder="0540493067"></input>
                         {errors.phoneNumber && <small className="error">{errors.phoneNumber}</small>}
                     </div>
-                    <div className="InfoFormInput">
-                        <label>Address</label>
-                        <FontAwesomeIcon icon={faLocationDot} className="InfoFormIcon"></FontAwesomeIcon>
-                        <input name="address" value={FormData.address} ref={addressIn} onChange={handleChange} type="text" style={{ paddingLeft: "40px" }} placeholder="Algeirs"></input>
-                        {errors.address && <small className="error">{errors.address}</small>}
-                    </div>
+
                 </div>
                 <div className="Submition" style={{}}>
                     <input type="reset" className="SecondaryB" />
@@ -247,7 +276,57 @@ function Profile() {
 
     </>);
 }
+
+
+
+
 function Security() {
+
+    const curr_pass = useRef();
+    const new_passRef = useRef();
+    const confirmed_passRef = useRef();
+
+
+    async function UpdatePassword(e) {
+
+
+        e.preventDefault();
+
+        const current_pass = curr_pass.current.value;
+
+        const response = await api.get('./Password_update.php', {
+            params: {
+                curr_pass: current_pass
+            }
+        });
+
+        if (response.data === "Password Match") {
+
+            const new_password = new_passRef.current.value;
+            const confirmed_pass = confirmed_passRef.current.value;
+
+
+            const response = await api.post('./Password_update.php', {
+                new_password: new_password,
+                confirmed_pass: confirmed_pass
+            }
+            )
+
+            if (response.data === "password updated") {
+                alert("Password Updated!");
+            }
+            else {
+                alert("Failed to update password");
+            }
+
+        }
+        else {
+            alert(response.data);
+        }
+
+
+
+    }
 
 
     return <>
@@ -256,18 +335,18 @@ function Security() {
                 <h3>Change Password</h3>
                 <p>Update your password to keep your account secure</p>
             </div>
-            <form className="PassChangeForm">
+            <form className="PassChangeForm" onSubmit={UpdatePassword}>
                 <div className="InfoFormInput">
                     <label>Current Password</label>
-                    <input type="text" required></input>
+                    <input ref={curr_pass} type="text" required></input>
                 </div>
                 <div className="InfoFormInput">
                     <label>New Password</label>
-                    <input type="text" required ></input>
+                    <input ref={new_passRef} type="text" required ></input>
                 </div>
                 <div className="InfoFormInput">
                     <label>Confirm New Password</label>
-                    <input type="text" required ></input>
+                    <input ref={confirmed_passRef} type="text" required ></input>
                 </div>
                 <div>
                     <input type="submit" className="PrimaryB" value={"Update Password"}></input>
@@ -279,69 +358,6 @@ function Security() {
 }
 
 
-/*Billing----------------------------------------------------------------------- */
-const Cards = [
-    { CardNum: "0545 4534 3454 3453", isDefault: true, expiringDate: "02/27" },
-    { CardNum: "0545 4534 3454 4829", isDefault: false, expiringDate: "03/29" }
-]
-
-function CreditCard({ CardNum, isDefault, expiringDate }) {
-
-    function DefaultIndicator() {
-        return (
-            <p className="DefaultInd">Default</p>
-        )
-    }
-
-    let maskedNum = ".... .... .... " + CardNum.slice(-4);
-    return (<>
-        <div className={`Section ${isDefault ? "Default" : ""}`}>
-            <div className="CreditCard">
-                <div style={{ display: "flex", alignItems: "Center", gap: "20px" }}>
-                    <FontAwesomeIcon icon={faCreditCard} className={isDefault ? "CardI Default" : "CardI"}></FontAwesomeIcon>
-                    <div>
-
-                        <h3>{maskedNum}</h3>
-                        <p>Expires {expiringDate}</p>
-                    </div>
-
-                </div>
-                <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
-                    {isDefault && <DefaultIndicator />}
-                    <button className=" SecondaryB EditCard">Edit</button>
-                    <button className="SecondaryB RemoveCard">Remove</button>
-                </div>
-            </div>
-        </div>
-
-    </>)
-
-}
-function Billing() {
-
-    return (<>
-
-        <div className="Section" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <div className="SecHeader" >
-                <h3>Payment Methodes</h3>
-                <p>Manage your saved payment methods</p>
-            </div>
-            {
-                Cards.map((item, index) => (
-                    <CreditCard key={index} CardNum={item.CardNum} isDefault={item.isDefault} expiringDate={item.expiringDate}></CreditCard>
-                ))
-            }
-
-            <button className="PrimaryB"> <FontAwesomeIcon icon={faCreditCard} />Add Payment Method</button>
-        </div>
-        {/* ADD Billing History */}
-
-
-
-
-    </>)
-
-}
 
 
 

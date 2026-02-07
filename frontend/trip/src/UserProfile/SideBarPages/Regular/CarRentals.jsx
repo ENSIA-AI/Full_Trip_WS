@@ -1,77 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faUser, faA, faM, faBolt, faGasPump, 
-    faClock, faMapLocation, faSpinner, faTriangleExclamation 
+    faClock, faMapLocation, faSpinner 
 } from '@fortawesome/free-solid-svg-icons';
 import './Styles/CarRentals.css';
 import DefaultCar from './Images/bmw.svg'; 
 
-// -------------------------------------------------------------------
-// 1. CONFIRMATION MODAL COMPONENT (Internal)
-// -------------------------------------------------------------------
-function CancelModal({ onClose, onConfirm }) {
-    return (
-        <div className="paymentform-overlay"> {/* Reusing your overlay class */}
-            <div className="Section" style={{ 
-                backgroundColor: "white", 
-                padding: "30px", 
-                borderRadius: "12px", 
-                maxWidth: "400px", 
-                textAlign: "center",
-                boxShadow: "0 4px 15px rgba(0,0,0,0.3)"
-            }}>
-                <div style={{ color: "#e74c3c", fontSize: "40px", marginBottom: "15px" }}>
-                    <FontAwesomeIcon icon={faTriangleExclamation} />
-                </div>
-                <h2 style={{ marginBottom: "10px" }}>Cancel Reservation?</h2>
-                <p style={{ color: "#666", marginBottom: "25px" }}>
-                    Are you sure you want to cancel this booking? This action cannot be undone.
-                </p>
-                
-                <div style={{ display: "flex", gap: "15px", justifyContent: "center" }}>
-                    <button 
-                        onClick={onClose}
-                        style={{
-                            padding: "10px 20px",
-                            border: "1px solid #ccc",
-                            backgroundColor: "white",
-                            borderRadius: "6px",
-                            cursor: "pointer",
-                            fontWeight: "bold"
-                        }}
-                    >
-                        No, Keep it
-                    </button>
-                    <button 
-                        onClick={onConfirm}
-                        style={{
-                            padding: "10px 20px",
-                            border: "none",
-                            backgroundColor: "#e74c3c",
-                            color: "white",
-                            borderRadius: "6px",
-                            cursor: "pointer",
-                            fontWeight: "bold"
-                        }}
-                    >
-                        Yes, Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-// -------------------------------------------------------------------
-// 2. CAR CARD COMPONENT
-// -------------------------------------------------------------------
-function CarCard({ Car, onCancelClick }) { // Changed prop name to onCancelClick
+function CarCard({ Car, onCancel }) {
+    // 1. Calculate Days and Total Price dynamically
     const start = new Date(Car.pickup_d);
     const end = new Date(Car.return_d);
     const diffTime = Math.abs(end - start);
     const daysRented = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
-    const totalPrice = daysRented * Car.price;
+    const totalPrice = daysRented * Number(Car.price);
 
     return (
         <div className="Section" style={{ backgroundColor: "white", marginBottom: "20px" }}>
@@ -127,15 +70,12 @@ function CarCard({ Car, onCancelClick }) { // Changed prop name to onCancelClick
             </div>
             
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                {/* Only show Cancel button if status is not already Complete or Cancelled */}
-                {Car.status !== 'Complete' && (
-                    <button 
-                        className="SecondaryB RemoveCard" 
-                        onClick={() => onCancelClick(Car.creservation_id)}
-                    >
-                        Cancel Reservation
-                    </button>
-                )}
+                <button 
+                    className="SecondaryB RemoveCard" 
+                    onClick={() => onCancel(Car.creservation_id)}
+                >
+                    Cancel Reservation
+                </button>
             </div>
         </div>
     );
@@ -145,13 +85,12 @@ function CarCard({ Car, onCancelClick }) { // Changed prop name to onCancelClick
 // 3. MAIN COMPONENT
 // -------------------------------------------------------------------
 function CarRentals() {
+    const navigate = useNavigate(); 
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState(null);
 
-    // New State for the Modal
-    const [cancelTargetId, setCancelTargetId] = useState(null);
-
+    // 2. Fetch Logic
     useEffect(() => {
         const storedUser = localStorage.getItem("FT_user");
         if (storedUser) {
@@ -183,12 +122,12 @@ function CarRentals() {
         }
     };
 
-    // 4. THE ACTUAL DELETE LOGIC
-    const confirmCancellation = async () => {
-        if (!cancelTargetId) return;
+    // 3. Cancel Logic
+    const handleCancel = async (reservationId) => {
+        if (!window.confirm("Are you sure you want to cancel this reservation?")) return;
 
         try {
-            const response = await fetch('http://localhost/FULL_TRIP_WS/backend/Mohammed/Cars/cancel_reservation.php', {
+            const response = await fetch('https://full-trip.onrender.com/Mohammed/Cars/cancel_reservation.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ reservation_id: cancelTargetId })
@@ -197,15 +136,26 @@ function CarRentals() {
             const result = await response.json();
             
             if (result.success) {
-                // UI Update: Remove item
-                setReservations(prev => prev.filter(r => r.creservation_id !== cancelTargetId));
-                setCancelTargetId(null); // Close modal
+                // Remove from UI immediately
+                setReservations(prev => prev.filter(r => r.creservation_id !== reservationId));
             } else {
-                alert("Failed to cancel: " + (result.error || "Unknown error"));
+                alert("Action failed: " + (result.error || "Unknown error"));
             }
         } catch (error) {
             alert("Connection error");
         }
+    };
+
+    // NAVIGATE TO FORM WITH DATA
+    const handleEdit = (carData) => {
+        // Navigates to the search/form page, passing the specific reservation data
+        // FIX: Changed path to '/Car Rental' to match App.js
+        navigate('/Car Rental', { 
+            state: { 
+                editMode: true, 
+                reservationToEdit: carData 
+            } 
+        });
     };
 
     if (loading) {
@@ -236,22 +186,13 @@ function CarRentals() {
                     <CarCard 
                         key={res.creservation_id} 
                         Car={res} 
-                        // Instead of running logic, we just open the modal
-                        onCancelClick={(id) => setCancelTargetId(id)} 
+                        onCancel={handleCancel} 
                     />
                 ))
             ) : (
                 <div style={{textAlign:'center', padding:'40px', color:'#666'}}>
                     <h3>No reservations found.</h3>
                 </div>
-            )}
-
-            {/* 5. RENDER MODAL IF STATE IS ACTIVE */}
-            {cancelTargetId && (
-                <CancelModal 
-                    onClose={() => setCancelTargetId(null)} 
-                    onConfirm={confirmCancellation} 
-                />
             )}
         </div>
     );

@@ -34,7 +34,7 @@ export default function CityAutocomplete({ value, onChange, onAppearChange, rese
       setLoading(true);
       try {
         const res = await fetch(
-          `http://localhost/Full_Trip_WS/backend/Kad_Be/index.php?endpoint=cities&q=${encodeURIComponent(query)}`,
+          `https://full-trip.onrender.com/Kad_Be/index.php?endpoint=cities&q=${encodeURIComponent(query)}`,
           { signal: controller.signal }
         );
 

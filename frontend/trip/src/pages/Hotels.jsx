@@ -3,7 +3,7 @@ import Searcharea from "../components/Searchbar";
 import Hotelcard2 from "../components/HotelCard2";
 import Footer2 from "../components/Footer2";
 import hotelIcon from './pics/hotel.png';
-import top1 from './pics/top1.jpg';
+import top1 from './pics/Top1.jpg';
 import top2 from './pics/top2.avif';
 import { useRef, useState, useEffect } from "react";
 import './css/page.css';
@@ -27,7 +27,7 @@ function Hotels() {
         setError(null);
         try {
             // Note: Ensure this path matches your XAMPP/WAMP folder structure exactly
-            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/hotels/hotelsearch.php", {
+            const response = await fetch("https://full-trip.onrender.com/oussama/hotels/hotelsearch.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(params),
@@ -70,7 +70,7 @@ function Hotels() {
 
         try {
             // Pointing to your specific PHP path
-            const response = await fetch("http://localhost/Full_Trip_WS/backend/oussama/hotels/hotelres.php", {
+            const response = await fetch("https://full-trip.onrender.com/oussama/hotels/hotelres.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
