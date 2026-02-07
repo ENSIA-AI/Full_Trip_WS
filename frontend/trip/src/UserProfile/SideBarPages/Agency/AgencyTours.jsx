@@ -623,8 +623,8 @@ function ToursManagement() {
                     alert("Tour Deleted")
                     // re-fetch authoritative tours list from server
                     try {
-                        const resp = await api.get('/ToursManagment.php');
                         SetToursList(resp.data || []);
+                        const resp = await api.get('/ToursManagment.php');
                     } catch (err) {
                         // fallback to removing locally
                         SetToursList(prev => prev.filter(tour => tour.tour_id !== idToRemove));
@@ -769,9 +769,6 @@ function ToursManagement() {
                                     <th>Costumer</th>
                                     <th>Contact</th>
                                     <th>DepartureDate</th>
-                                    <th>bookingDate</th>
-                                    <th>Tickets</th>
-                                    <th>Paid</th>
                                     <th>Status</th>
                                 </tr>
 
@@ -785,9 +782,6 @@ function ToursManagement() {
 
                                         </div></td>
                                         <td><FontAwesomeIcon icon={faCalendar} style={{ color: "red" }}></FontAwesomeIcon> {costumer.date}</td>
-                                        <td >{costumer.bookingDate}</td>
-                                        <td style={{ textAlign: "center", color: "black" }}>{costumer.tickets}</td>
-                                        <td className="Money">{costumer.paid}DA</td>
                                         <td>
                                             <div className={costumer.status}>
                                                 {costumer.status}
