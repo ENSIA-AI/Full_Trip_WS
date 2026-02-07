@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+// Removed useNavigate import since Edit logic is gone
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faUser, faA, faM, faBolt, faGasPump, 
@@ -85,7 +85,7 @@ function CarCard({ Car, onCancel }) {
 // 3. MAIN COMPONENT
 // -------------------------------------------------------------------
 function CarRentals() {
-    const navigate = useNavigate(); 
+    // Removed navigate hook
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState(null);
@@ -130,7 +130,8 @@ function CarRentals() {
             const response = await fetch('https://full-trip.onrender.com/Mohammed/Cars/cancel_reservation.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ reservation_id: cancelTargetId })
+                // FIX: Changed cancelTargetId to reservationId so it matches the argument
+                body: JSON.stringify({ reservation_id: reservationId })
             });
             
             const result = await response.json();
@@ -146,17 +147,7 @@ function CarRentals() {
         }
     };
 
-    // NAVIGATE TO FORM WITH DATA
-    const handleEdit = (carData) => {
-        // Navigates to the search/form page, passing the specific reservation data
-        // FIX: Changed path to '/Car Rental' to match App.js
-        navigate('/Car Rental', { 
-            state: { 
-                editMode: true, 
-                reservationToEdit: carData 
-            } 
-        });
-    };
+    // REMOVED: handleEdit function is deleted.
 
     if (loading) {
         return (
