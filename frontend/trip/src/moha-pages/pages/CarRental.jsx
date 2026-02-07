@@ -23,9 +23,8 @@ function CarRental() {
   // 1. STATE MANAGEMENT
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(false);
-  
-  // ✅ NEW: State to store the user's search inputs (Dates/Locations)
   const [currentSearchParams, setCurrentSearchParams] = useState(null);
+  const [sortType, setSortType] = useState("");
 
   // 2. FETCH FUNCTION
   const fetchCars = async (searchCriteria = {}) => {
@@ -41,6 +40,7 @@ function CarRental() {
 
       if (Array.isArray(data)) {
         setCars(data);
+        setSortType(""); 
       } else {
         console.error("PHP Error:", data);
         setCars([]);
@@ -58,15 +58,12 @@ function CarRental() {
 
   // 3. HANDLE SEARCH SUBMIT
   const handleSearch = (formData) => {
-    // A. Prepare Data for PHP (Filtering cars)
     const payload = {
       car_type: formData.carType,       
       location: formData.pickupLocation, 
       brand_model: ""                    
     };
 
-    // B. ✅ SAVE SEARCH DATA FOR THE RESERVATION FORM
-    // We map the form field names to what CarRentalCard/PaymentForm expects
     setCurrentSearchParams({
         startDate: formData.pickupDate,
         endDate: formData.dropoffDate,
@@ -74,8 +71,28 @@ function CarRental() {
         dropoffLocation: formData.dropoffLocation
     });
 
-    console.log("Saving Search Params:", formData); 
     fetchCars(payload);
+  };
+
+  // 4. SORTING LOGIC
+  const handleSortChange = (e) => {
+    const type = e.target.value;
+    setSortType(type);
+
+    const sortedCars = [...cars];
+
+    if (type === "price_asc") {
+        sortedCars.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (type === "price_desc") {
+        sortedCars.sort((a, b) => Number(b.price) - Number(a.price));
+    } else if (type === "name_asc") {
+        sortedCars.sort((a, b) => {
+            const nameA = `${a.car_brand} ${a.model}`.toLowerCase();
+            const nameB = `${b.car_brand} ${b.model}`.toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+    }
+    setCars(sortedCars);
   };
 
   // Slider Logic
@@ -90,6 +107,44 @@ function CarRental() {
 
   const scrollToForm = () => {
     formRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // --- INTERNAL STYLES FOR SORT BAR ---
+  const sortContainerStyle = {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "30px",
+    marginBottom: "10px",
+    position: "relative",
+    zIndex: 10
+  };
+
+  const sortWrapperStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "15px",
+    padding: "10px 25px",
+    // Glassmorphism effect with Orange Border
+    background: "rgba(255, 255, 255, 0.9)", // Increased opacity slightly for better black text contrast
+    border: "2px solid #ff7e5f", 
+    borderRadius: "50px", 
+    backdropFilter: "blur(10px)",
+    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease"
+  };
+
+  const selectStyle = {
+    padding: "8px 10px",
+    borderRadius: "20px",
+    border: "none",
+    outline: "none",
+    backgroundColor: "transparent",
+    color: "black", // ✅ CHANGED TO BLACK
+    fontSize: "1rem",
+    fontWeight: "bold",
+    cursor: "pointer",
+    appearance: "none", 
+    textAlign: "center"
   };
 
   return (
@@ -110,9 +165,45 @@ function CarRental() {
         <CarRentalForm onSearch={handleSearch} />
       </div>
 
+      {/* ✅ SORT BAR */}
+      <div style={sortContainerStyle}>
+          <div 
+            className="sort-bar-hover-effect"
+            style={sortWrapperStyle}
+            onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 126, 95, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 4px 15px rgba(0, 0, 0, 0.2)";
+            }}
+          >
+            <label htmlFor="sortCars" style={{ color: "#ff7e5f", fontSize: "1.1rem", fontWeight: "bold" }}>
+                Sort Results:
+            </label>
+            
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <select 
+                    id="sortCars"
+                    value={sortType}
+                    onChange={handleSortChange}
+                    style={selectStyle}
+                >
+                    <option value="" style={{color: "black"}}>Recommended</option>
+                    <option value="price_asc" style={{color: "black"}}>Price: Low to High</option>
+                    <option value="price_desc" style={{color: "black"}}>Price: High to Low</option>
+                    <option value="name_asc" style={{color: "black"}}>Name: A - Z</option>
+                </select>
+                {/* Arrow */}
+                <span style={{ color: "#ff7e5f", marginLeft: "5px", pointerEvents: "none" }}>▼</span>
+            </div>
+          </div>
+      </div>
+
       <div className="carrental-cards-container">
         {loading ? (
-           <h3 style={{color:'white', textAlign:'center'}}>Loading available cars...</h3>
+           <h3 style={{color:'white', textAlign:'center', marginTop:'30px'}}>Loading available cars...</h3>
         ) : cars.length > 0 ? (
           cars.map((car) => (
             <CarRentalCard
@@ -123,14 +214,11 @@ function CarRental() {
               model={car.car_type} 
               price={car.price}
               location={car.location || "Algeria"}
-              
-              // ✅ CRITICAL UPDATE: Pass the search params to the card
-              // If user hasn't searched yet, this sends 'null' and Card uses defaults
               searchParams={currentSearchParams} 
             />
           ))
         ) : (
-          <h3 style={{color:'white', textAlign:'center'}}>No cars found matching your criteria.</h3>
+          <h3 style={{color:'white', textAlign:'center', marginTop:'30px'}}>No cars found matching your criteria.</h3>
         )}
       </div>
       <Footer></Footer>

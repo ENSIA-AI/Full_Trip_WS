@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"; // Added Check Icon
 import "./css/PaymentForm.css";
 
 function PaymentForm({ car, searchParams, onClose }) {
@@ -7,22 +9,22 @@ function PaymentForm({ car, searchParams, onClose }) {
   const [cvv, setCvv] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  
+  // ✅ NEW: State to control Success View
+  const [isSuccess, setIsSuccess] = useState(false);
 
   // --- 1. GET DATES & LOCATIONS FROM SEARCH PARAMS ---
-  // Ensure we have valid dates from the previous screen
   const startDateStr = searchParams?.startDate || new Date().toISOString().split('T')[0];
   const endDateStr = searchParams?.endDate || new Date(Date.now() + 86400000).toISOString().split('T')[0];
   
   const pickupLoc = searchParams?.location || "";
-  // If your search form has a separate field for dropoff, use it. 
-  // Otherwise, default to pickup location or force user to enter it.
   const dropoffLoc = searchParams?.dropoffLocation || searchParams?.location || ""; 
 
   // --- 2. CALCULATE PRICE ---
   const start = new Date(startDateStr);
   const end = new Date(endDateStr);
   const diffTime = Math.abs(end - start);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1; // Minimum 1 day
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1; 
   const pricePerDay = car.price || car.price_per_day || 0;
   const totalPrice = diffDays * pricePerDay;
 
@@ -30,7 +32,6 @@ function PaymentForm({ car, searchParams, onClose }) {
   const validate = () => {
     const newErrors = {};
 
-    // Critical: Block if no location is set
     if (!pickupLoc || !dropoffLoc) {
         alert("⚠️ Please go back and select a Pickup and Drop-off location.");
         onClose();
@@ -92,8 +93,8 @@ function PaymentForm({ car, searchParams, onClose }) {
         const result = await response.json();
 
         if (result.success) {
-            alert(`✅ Reservation Complete!\nCar: ${car.brand}\nDates: ${startDateStr} to ${endDateStr}\nTotal: ${totalPrice} DA`);
-            onClose();
+            // ✅ CHANGED: Switch to Success View instead of Alert
+            setIsSuccess(true);
         } else {
             alert(`❌ Failed: ${result.error || result.message}`);
         }
@@ -104,12 +105,51 @@ function PaymentForm({ car, searchParams, onClose }) {
     }
   };
 
+  // -----------------------------------------------------------
+  // ✅ 4. RENDER: SUCCESS MODAL VIEW
+  // -----------------------------------------------------------
+  if (isSuccess) {
+    return (
+      <div className="paymentform-overlay">
+        <div className="paymentform-modal" style={{ textAlign: "center", padding: "40px" }}>
+          
+          <div style={{ color: "#28a745", fontSize: "60px", marginBottom: "20px" }}>
+            <FontAwesomeIcon icon={faCheckCircle} />
+          </div>
+
+          <h2 style={{ marginBottom: "10px", color: "#333" }}>Payment Successful!</h2>
+          <p style={{ color: "#666", marginBottom: "25px", fontSize: "16px" }}>
+             Your car has been reserved successfully.
+          </p>
+
+          {/* Recap of the Reservation */}
+          <div style={{ backgroundColor: "#f8f9fa", borderRadius: "8px", padding: "15px", marginBottom: "25px", textAlign: "left", fontSize: "14px", border: "1px solid #eee" }}>
+             <p><strong>🚗 Car:</strong> {car.brand} {car.model}</p>
+             <p><strong>📅 Dates:</strong> {startDateStr} to {endDateStr}</p>
+             <p><strong>💰 Total:</strong> {totalPrice} DA</p>
+          </div>
+
+          <button 
+            onClick={onClose}
+            className="paymentform-submit-btn" // Reusing your existing button class
+            style={{ backgroundColor: "#28a745", marginTop: "0" }}
+          >
+            Done
+          </button>
+
+        </div>
+      </div>
+    );
+  }
+
+  // -----------------------------------------------------------
+  // 5. RENDER: ORIGINAL FORM (Your existing Frontend)
+  // -----------------------------------------------------------
   return (
     <div className="paymentform-overlay">
       <div className="paymentform-modal">
         <h2>Reserve: {car.brand} {car.model}</h2>
 
-        {/* ✅ UPDATED SUMMARY BOX */}
         <div style={{
             backgroundColor: "#f8f9fa", 
             padding: "15px", 
@@ -139,7 +179,6 @@ function PaymentForm({ car, searchParams, onClose }) {
         </div>
 
         <form onSubmit={handleSubmit} noValidate>
-          {/* Inputs remain the same */}
           <div className="paymentform-group">
             <input type="text" placeholder="Card Number" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} />
             <div className="attraction-error">{errors.cardNumber}</div>
