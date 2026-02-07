@@ -619,7 +619,7 @@ function ToursManagement() {
         (async () => {
             try {
                 const response = await api.delete(`/Del_Tour.php?id=${idToRemove}`);
-                if (response.data && response.data.success) {
+                if (response.data.success) {
                     alert("Tour Deleted")
                     // re-fetch authoritative tours list from server
                     try {
