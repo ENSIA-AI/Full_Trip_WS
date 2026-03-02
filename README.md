@@ -1,9 +1,9 @@
 Travel Booking Platform – Semester Project Developers:
 
-Oussama Bouziane
-Mohammed Benadda
-Abdelkadir Megdoud
-Zakarya Bouzid
+Oussama Bouziane ,
+Mohammed Benadda,
+Abdelkadir Megdoud,
+Zakarya Bouzid.
 Project Description Our website is a Travel Booking Platform that allows users to book flights, hotels, car rentals, attractions, and full travel packages published by travel agencies.
 Goal of the Website
 Provide a centralized platform for trip planning.
